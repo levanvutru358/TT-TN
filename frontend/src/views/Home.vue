@@ -29,16 +29,13 @@
     </div>
 
     <div class="mt-8">
-      <router-link
-        to="/stages"
-        class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-      >
-        Go to Stages →
-      </router-link>
+      <StartCard />
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import StartCard from "@/components/StartCard.vue";
+</script>
 
 <style scoped></style>

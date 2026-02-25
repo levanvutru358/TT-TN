@@ -4,6 +4,7 @@ import StageList from "@/views/stages/StageList.vue";
 import StageDetail from "@/views/stages/StageDetail.vue";
 import StageForm from "@/views/stages/StageForm.vue";
 import NotFound from "@/views/NotFound.vue";
+import StageProject from "@/views/stages/StageProject.vue";
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: "/stages/:id/edit",
     name: "StageEdit",
     component: StageForm,
+  },
+  {
+    path: "/project",
+    name: "ProjectDetail",
+    component: StageProject,
   },
   {
     path: "/:pathMatch(.*)*",
