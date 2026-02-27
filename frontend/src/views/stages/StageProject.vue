@@ -11,7 +11,7 @@
           >
             <span class="text-xs font-semibold">T</span>
           </div>
-          <span class="text-sm font-semibold">Trello</span>
+          <span class="text-sm font-semibold">Trolleo</span>
         </div>
 
         <div class="hidden md:flex items-center ml-4">
@@ -31,7 +31,7 @@
         <div
           class="text-[11px] px-2.5 py-1 rounded-full bg-[#f973ff] text-black font-semibold"
         >
-          Còn 14 ngày
+          MỚI
         </div>
         <div
           class="w-8 h-8 rounded-full bg-[#1d2125] flex items-center justify-center text-xs font-semibold"
@@ -100,17 +100,40 @@
         <div class="max-w-6xl mx-auto">
           <!-- Board header -->
           <div class="mb-3 md:mb-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <h1 class="text-lg md:text-xl font-semibold">
-                Bảng Trello của tôi
-              </h1>
+            <div class="flex items-center gap-3 min-w-0">
+              <!-- Editable title -->
+              <div class="min-w-0">
+                <!-- view mode -->
+                <h1
+                  v-if="!isEditingTitle"
+                  class="text-lg md:text-xl font-semibold truncate cursor-text select-none"
+                  :title="boardTitle"
+                  @click="startEditTitle"
+                >
+                  {{ boardTitle }}
+                </h1>
+
+                <!-- edit mode -->
+                <input
+                  v-else
+                  ref="titleInputRef"
+                  v-model="titleDraft"
+                  class="text-lg md:text-xl font-semibold w-full max-w-[28rem] bg-black/30 border border-white/20 rounded px-2 py-1
+                         focus:outline-none focus:ring-2 focus:ring-white/30"
+                  @keydown.enter.prevent="commitTitle"
+                  @keydown.esc.prevent="cancelEditTitle"
+                  @blur="commitTitle"
+                />
+              </div>
+
               <span
-                class="hidden md:inline-flex text-[11px] px-2 py-0.5 rounded-full bg-black/30 border border-white/10"
+                class="hidden md:inline-flex text-[11px] px-2 py-0.5 rounded-full bg-black/30 border border-white/10 shrink-0"
               >
                 TV
               </span>
             </div>
-            <div class="flex items-center gap-2 text-xs">
+
+            <div class="flex items-center gap-2 text-xs shrink-0">
               <button
                 class="px-3 py-1.5 rounded bg-black/30 border border-white/15 hover:bg-black/40"
               >
@@ -126,6 +149,15 @@
               :project="project"
               @update-project="project = $event"
             />
+
+            <div
+              v-else
+              class="h-full rounded-2xl bg-black/20 border border-white/10 flex items-center justify-center"
+            >
+              <div class="text-sm text-white/80">
+                {{ loading ? "Đang tải dự án..." : "Không có dữ liệu dự án" }}
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -134,13 +166,70 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { getProjectDetail } from "@/api/mockApi";
 import KanbanBoard from "@/components/kanban/KanbanBoard.vue";
 
 const project = ref(null);
 const loading = ref(true);
 
+// ===== Board title edit =====
+const isEditingTitle = ref(false);
+const titleDraft = ref("");
+const titleInputRef = ref(null);
+
+const boardTitle = computed(() => {
+  // Ưu tiên name/title từ project; fallback về chữ mặc định
+  const p = project.value;
+  const fromProject =
+    (p?.name && String(p.name).trim()) ||
+    (p?.title && String(p.title).trim()) ||
+    (p?.project_name && String(p.project_name).trim()) ||
+    "";
+  return fromProject || "Bảng Trello của tôi";
+});
+
+function startEditTitle() {
+  // Nếu chưa có project thì không edit
+  if (!project.value) return;
+
+  isEditingTitle.value = true;
+  titleDraft.value = boardTitle.value;
+
+  nextTick(() => {
+    if (titleInputRef.value) {
+      titleInputRef.value.focus();
+      titleInputRef.value.select?.();
+    }
+  });
+}
+
+function cancelEditTitle() {
+  isEditingTitle.value = false;
+  titleDraft.value = "";
+}
+
+function commitTitle() {
+  if (!isEditingTitle.value) return;
+  const nextTitle = String(titleDraft.value || "").trim();
+
+  // Không cho title rỗng -> revert
+  if (!nextTitle) {
+    cancelEditTitle();
+    return;
+  }
+
+  // Update project object (giữ tương thích: ưu tiên field name)
+  const p = project.value || {};
+  project.value = {
+    ...p,
+    name: nextTitle,
+  };
+
+  isEditingTitle.value = false;
+}
+
+// ===== Fetch project =====
 onMounted(async () => {
   try {
     loading.value = true;
@@ -153,4 +242,3 @@ onMounted(async () => {
   }
 });
 </script>
-
