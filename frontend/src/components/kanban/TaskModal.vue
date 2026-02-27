@@ -52,7 +52,7 @@
               <div
                 class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs text-white"
               >
-                {{ task.assignee?.charAt(0) || "?" }}
+                {{ String(task.assignee || "?")[0] }}
               </div>
               <span class="text-sm text-white">{{ task.assignee }}</span>
             </div>

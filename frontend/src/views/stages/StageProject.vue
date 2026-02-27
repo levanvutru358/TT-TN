@@ -33,11 +33,6 @@
         >
           MỚI
         </div>
-        <div
-          class="w-8 h-8 rounded-full bg-[#1d2125] flex items-center justify-center text-xs font-semibold"
-        >
-          TV
-        </div>
       </div>
     </div>
 
@@ -99,7 +94,7 @@
       >
         <div class="max-w-6xl mx-auto">
           <!-- Board header -->
-          <div class="mb-3 md:mb-4 flex items-center justify-between">
+          <div class="mb-3 md:mb-4 flex items-start justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0">
               <!-- Editable title -->
               <div class="min-w-0">
@@ -125,17 +120,12 @@
                   @blur="commitTitle"
                 />
               </div>
-
-              <span
-                class="hidden md:inline-flex text-[11px] px-2 py-0.5 rounded-full bg-black/30 border border-white/10 shrink-0"
-              >
-                TV
-              </span>
             </div>
-
             <div class="flex items-center gap-2 text-xs shrink-0">
+              <!-- NEW: view switcher -->
+              <ViewSwitcher v-model="currentView" />
               <button
-                class="px-3 py-1.5 rounded bg-black/30 border border-white/15 hover:bg-black/40"
+                class="px-3 py-2 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40"
               >
                 Chia sẻ
               </button>
@@ -158,6 +148,9 @@
                 {{ loading ? "Đang tải dự án..." : "Không có dữ liệu dự án" }}
               </div>
             </div>
+
+            <!-- currentView hiện chỉ phục vụ UI menu.
+                 Sau này muốn render Table/Calendar thật thì if theo currentView ở đây -->
           </div>
         </div>
       </main>
@@ -169,9 +162,13 @@
 import { computed, nextTick, onMounted, ref } from "vue";
 import { getProjectDetail } from "@/api/mockApi";
 import KanbanBoard from "@/components/kanban/KanbanBoard.vue";
+import ViewSwitcher from "@/components/kanban/ViewSwitcher.vue";
 
 const project = ref(null);
 const loading = ref(true);
+
+// View switcher state
+const currentView = ref("board");
 
 // ===== Board title edit =====
 const isEditingTitle = ref(false);
@@ -179,7 +176,6 @@ const titleDraft = ref("");
 const titleInputRef = ref(null);
 
 const boardTitle = computed(() => {
-  // Ưu tiên name/title từ project; fallback về chữ mặc định
   const p = project.value;
   const fromProject =
     (p?.name && String(p.name).trim()) ||
@@ -190,7 +186,6 @@ const boardTitle = computed(() => {
 });
 
 function startEditTitle() {
-  // Nếu chưa có project thì không edit
   if (!project.value) return;
 
   isEditingTitle.value = true;
@@ -211,15 +206,13 @@ function cancelEditTitle() {
 
 function commitTitle() {
   if (!isEditingTitle.value) return;
-  const nextTitle = String(titleDraft.value || "").trim();
 
-  // Không cho title rỗng -> revert
+  const nextTitle = String(titleDraft.value || "").trim();
   if (!nextTitle) {
     cancelEditTitle();
     return;
   }
 
-  // Update project object (giữ tương thích: ưu tiên field name)
   const p = project.value || {};
   project.value = {
     ...p,
