@@ -6,7 +6,6 @@
       @click="toggle"
       type="button"
     >
-
       <!-- calendar icon -->
       <svg
         class="w-4 h-4 opacity-90"
