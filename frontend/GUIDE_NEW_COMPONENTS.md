@@ -350,3 +350,37 @@ Có thể thêm sau:
 5. MockApi.js có dữ liệu mẫu - cần update lại khi dùng API thực
 
 Chúc bạn làm việc vui vẻ! 🎉
+
+Cấu trúc code của Thắng cá chép chiệu trách nhiệm phần quản lý chi tiết dự án vừa mới thêm vào 
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── mockApi.js
+│   │   ├── components/
+│   │   │   ├── kanban/
+│   │   │   │   ├── AddTaskModal.vue          ✨ (thêm task)
+│   │   │   │   ├── CommentsSection.vue       ✨ (bình luận - NEW)
+│   │   │   │   ├── EditTaskModal.vue         ✨ (chỉnh sửa task - NEW)
+│   │   │   │   ├── KanbanBoard.vue           (board chính)
+│   │   │   │   ├── KanbanBoardDraggable.vue  ✨ (drag-drop - NEW)
+│   │   │   │   ├── SubtaskList.vue           ✨ (subtask - NEW)
+│   │   │   │   ├── TaskCard.vue              (card trong cột)
+│   │   │   │   ├── TaskModal.vue             (chi tiết task)
+│   │   │   │   └── ViewSwitcher.vue          (chuyển view)
+│   │   │   ├── MemberManageModal.vue         ✨ (modal thành viên - NEW)
+│   │   │   ├── ProjectMembers.vue            ✨ (quản lý thành viên - NEW)
+│   │   │   ├── ProjectStats.vue              ✨ (thống kê - NEW)
+│   │   │   └── StartCard.vue
+│   │   ├── router/
+│   │   │   └── index.js
+│   │   ├── stores/
+│   │   │   ├── stageStore.js
+│   │   │   └── uiStore.js
+│   │   ├── views/
+│   │   │   ├── Home.vue
+│   │   │   ├── NotFound.vue
+│   │   │   └── stages/
+│   │   │       └── StageProject.vue          (UPDATED - integrate new features)
+│   │   ├── App.vue
+│   │   ├── main.js
+│   │   └── style.css
