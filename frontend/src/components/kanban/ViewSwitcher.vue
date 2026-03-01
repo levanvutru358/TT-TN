@@ -4,8 +4,8 @@
     <button
       class="inline-flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40 transition"
       @click="toggle"
-      type="button"
-    >
+      type="button"      aria-label="Chuyển chế độ xem"
+      title="Chuyển chế độ xem"    >
       <!-- dynamic icon (based on selected view) -->
       <span
         class="w-4 h-4 opacity-90 inline-flex items-center justify-center"
@@ -13,7 +13,7 @@
         aria-hidden="true"
       />
 
-      <!-- optional: dynamic label -->
+      <!-- optional: dynamic label (hidden for Trello-style icon only UI) -->
       <!-- <span class="text-white/90">{{ currentLabel }}</span> -->
 
       <!-- chevron -->
@@ -97,8 +97,10 @@
               <button
                 v-for="opt in options"
                 :key="opt.value"
-                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-left"
+                class="w-full flex items-center justify-center px-3 py-2.5 rounded-xl hover:bg-white/5 transition"
                 @click="select(opt.value)"
+                :title="opt.label"
+                :aria-label="opt.label"
                 type="button"
               >
                 <span
@@ -106,10 +108,7 @@
                   v-html="opt.svg"
                 />
 
-                <span class="flex-1 text-sm text-white/90">
-                  {{ opt.label }}
-                </span>
-
+                <!-- icons only, labels are provided as tooltip/aria-label -->
                 <svg
                   v-if="modelValue === opt.value"
                   class="w-4 h-4 text-white/90"

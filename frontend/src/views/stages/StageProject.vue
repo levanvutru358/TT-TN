@@ -90,6 +90,7 @@
 
       <!-- Board area -->
       <main
+        ref="boardWrapper"
         class="flex-1 bg-gradient-to-r from-[#4b3f72] via-[#7b3ea8] to-[#c1558b] p-4 md:p-6 overflow-auto"
       >
         <div class="max-w-6xl mx-auto">
@@ -197,6 +198,7 @@ import ProjectMembers from "@/components/ProjectMembers.vue";
 
 const project = ref(null);
 const loading = ref(true);
+const boardWrapper = ref(null);
 
 // View switcher state
 const currentView = ref("board");
