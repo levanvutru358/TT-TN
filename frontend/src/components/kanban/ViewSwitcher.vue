@@ -6,26 +6,15 @@
       @click="toggle"
       type="button"
     >
-      <!-- calendar icon -->
-      <svg
-        class="w-4 h-4 opacity-90"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+      <!-- dynamic icon (based on selected view) -->
+      <span
+        class="w-4 h-4 opacity-90 inline-flex items-center justify-center"
+        v-html="currentOption.svg"
         aria-hidden="true"
-      >
-        <path
-          d="M8 2V5M16 2V5M3.5 9H20.5"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-        />
-        <path
-          d="M6 4H18C19.6569 4 21 5.34315 21 7V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V7C3 5.34315 4.34315 4 6 4Z"
-          stroke="currentColor"
-          stroke-width="1.6"
-        />
-      </svg>
+      />
+
+      <!-- optional: dynamic label -->
+      <!-- <span class="text-white/90">{{ currentLabel }}</span> -->
 
       <!-- chevron -->
       <svg
@@ -174,40 +163,41 @@ onMounted(() => window.addEventListener("keydown", onKeydown));
 onBeforeUnmount(() => window.removeEventListener("keydown", onKeydown));
 
 const options = [
-  { 
-    value: "board", 
-    label: "Bảng", 
-    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5C4 3.89543 4.89543 3 6 3H10V21H6C4.89543 21 4 20.1046 4 19V5Z" stroke="currentColor" stroke-width="1.6"/><path d="M14 3H18C19.1046 3 20 3.89543 20 5V12H14V3Z" stroke="currentColor" stroke-width="1.6"/><path d="M14 16H20V19C20 20.1046 19.1046 21 18 21H14V16Z" stroke="currentColor" stroke-width="1.6"/></svg>` 
+  {
+    value: "board",
+    label: "Bảng",
+    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5C4 3.89543 4.89543 3 6 3H10V21H6C4.89543 21 4 20.1046 4 19V5Z" stroke="currentColor" stroke-width="1.6"/><path d="M14 3H18C19.1046 3 20 3.89543 20 5V12H14V3Z" stroke="currentColor" stroke-width="1.6"/><path d="M14 16H20V19C20 20.1046 19.1046 21 18 21H14V16Z" stroke="currentColor" stroke-width="1.6"/></svg>`,
   },
-  { 
-    value: "table", 
-    label: "Bảng", 
-    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7C4 5.89543 4.89543 5 6 5H18C19.1046 5 20 5.89543 20 7V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V7Z" stroke="currentColor" stroke-width="1.6"/><path d="M4 10H20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M9 5V19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>` 
+  {
+    value: "table",
+    label: "Bảng",
+    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7C4 5.89543 4.89543 5 6 5H18C19.1046 5 20 5.89543 20 7V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V7Z" stroke="currentColor" stroke-width="1.6"/><path d="M4 10H20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M9 5V19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
   },
-  { 
-    value: "calendar", 
-    label: "Lịch", 
-    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2V5M16 2V5M3.5 9H20.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 4H18C19.6569 4 21 5.34315 21 7V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V7C3 5.34315 4.34315 4 6 4Z" stroke="currentColor" stroke-width="1.6"/></svg>` 
+  {
+    value: "calendar",
+    label: "Lịch",
+    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2V5M16 2V5M3.5 9H20.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 4H18C19.6569 4 21 5.34315 21 7V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V7C3 5.34315 4.34315 4 6 4Z" stroke="currentColor" stroke-width="1.6"/></svg>`,
   },
-  { 
-    value: "dashboard", 
-    label: "Bảng điều khiển", 
-    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12A9 9 0 1 1 3 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 12L16.5 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 20H17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>` 
+  {
+    value: "dashboard",
+    label: "Bảng điều khiển",
+    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12A9 9 0 1 1 3 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 12L16.5 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 20H17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
   },
-  { 
-    value: "timeline", 
-    label: "Lịch trình", 
-    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 12H14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 18H10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M18 12V18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M18 18L20 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>` 
+  {
+    value: "timeline",
+    label: "Lịch trình",
+    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 12H14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 18H10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M18 12V18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M18 18L20 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
   },
-  { 
-    value: "map", 
-    label: "Bản đồ", 
-    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C12 21 18 16.5 18 10.5C18 7.18629 15.3137 4.5 12 4.5C8.68629 4.5 6 7.18629 6 10.5C6 16.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.6"/><path d="M12 11.5C13.1046 11.5 14 10.6046 14 9.5C14 8.39543 13.1046 7.5 12 7.5C10.8954 7.5 10 8.39543 10 9.5C10 10.6046 10.8954 11.5 12 11.5Z" stroke="currentColor" stroke-width="1.6"/></svg>` 
+  {
+    value: "map",
+    label: "Bản đồ",
+    svg: `<svg class="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21C12 21 18 16.5 18 10.5C18 7.18629 15.3137 4.5 12 4.5C8.68629 4.5 6 7.18629 6 10.5C6 16.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.6"/><path d="M12 11.5C13.1046 11.5 14 10.6046 14 9.5C14 8.39543 13.1046 7.5 12 7.5C10.8954 7.5 10 8.39543 10 9.5C10 10.6046 10.8954 11.5 12 11.5Z" stroke="currentColor" stroke-width="1.6"/></svg>`,
   },
 ];
 
-const currentLabel = computed(() => {
-  const found = options.find((x) => x.value === props.modelValue);
-  return found?.label || "Bảng";
+const currentOption = computed(() => {
+  return options.find((x) => x.value === props.modelValue) || options[0];
 });
+
+const currentLabel = computed(() => currentOption.value.label || "Bảng");
 </script>
