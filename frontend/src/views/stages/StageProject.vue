@@ -125,6 +125,20 @@
               <!-- NEW: view switcher -->
               <ViewSwitcher v-model="currentView" />
               <button
+                class="px-3 py-2 rounded-lg"
+                :class="showMembers ? 'bg-[#0c66e4] text-white' : 'bg-black/30 border border-white/15 hover:bg-black/40'"
+                @click="showMembers = !showMembers"
+              >
+                👥 Thành viên
+              </button>
+              <button
+                class="px-3 py-2 rounded-lg"
+                :class="showStats ? 'bg-[#0c66e4] text-white' : 'bg-black/30 border border-white/15 hover:bg-black/40'"
+                @click="showStats = !showStats"
+              >
+                📊 Thống kê
+              </button>
+              <button
                 class="px-3 py-2 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40"
               >
                 Chia sẻ
@@ -133,24 +147,38 @@
           </div>
 
           <!-- Board content -->
-          <div class="h-[calc(100vh-9rem)] md:h-[calc(100vh-8rem)]">
-            <KanbanBoard
-              v-if="project"
-              :project="project"
-              @update-project="project = $event"
-            />
-
-            <div
-              v-else
-              class="h-full rounded-2xl bg-black/20 border border-white/10 flex items-center justify-center"
-            >
-              <div class="text-sm text-white/80">
-                {{ loading ? "Đang tải dự án..." : "Không có dữ liệu dự án" }}
-              </div>
+          <div v-if="!showMembers" class="flex flex-col h-[calc(100vh-9rem)] md:h-[calc(100vh-8rem)] gap-4">
+            <!-- Stats section -->
+            <div v-if="showStats && project" class="animate-in fade-in flex-shrink-0">
+              <ProjectStats :tasks="project.tasks || []" />
             </div>
 
-            <!-- currentView hiện chỉ phục vụ UI menu.
-                 Sau này muốn render Table/Calendar thật thì if theo currentView ở đây -->
+            <!-- Kanban board -->
+            <div class="flex-1 overflow-hidden">
+              <KanbanBoard
+                v-if="project"
+                :project="project"
+                @update-project="project = $event"
+              />
+
+              <div
+                v-else
+                class="h-full rounded-2xl bg-black/20 border border-white/10 flex items-center justify-center"
+              >
+                <div class="text-sm text-white/80">
+                  {{ loading ? "Đang tải dự án..." : "Không có dữ liệu dự án" }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Members panel -->
+          <div v-else class="h-[calc(100vh-9rem)] md:h-[calc(100vh-8rem)] overflow-y-auto">
+            <ProjectMembers
+              v-if="project"
+              :members="project.members || []"
+              @update-members="updateMembers"
+            />
           </div>
         </div>
       </main>
@@ -162,13 +190,20 @@
 import { computed, nextTick, onMounted, ref } from "vue";
 import { getProjectDetail } from "@/api/mockApi";
 import KanbanBoard from "@/components/kanban/KanbanBoard.vue";
+import KanbanBoardDraggable from "@/components/kanban/KanbanBoardDraggable.vue";
 import ViewSwitcher from "@/components/kanban/ViewSwitcher.vue";
+import ProjectStats from "@/components/ProjectStats.vue";
+import ProjectMembers from "@/components/ProjectMembers.vue";
 
 const project = ref(null);
 const loading = ref(true);
 
 // View switcher state
 const currentView = ref("board");
+
+// Show panels state
+const showMembers = ref(false);
+const showStats = ref(true);
 
 // ===== Board title edit =====
 const isEditingTitle = ref(false);
@@ -220,6 +255,16 @@ function commitTitle() {
   };
 
   isEditingTitle.value = false;
+}
+
+// ===== Members management =====
+function updateMembers(updatedMembers) {
+  if (project.value) {
+    project.value = {
+      ...project.value,
+      members: updatedMembers,
+    };
+  }
 }
 
 // ===== Fetch project =====

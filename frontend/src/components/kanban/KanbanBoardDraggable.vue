@@ -11,9 +11,7 @@
               Hướng dẫn cho người mới dùng Trello
             </h3>
           </div>
-          <button
-            class="text-white/80 hover:text-white p-1 rounded hover:bg-white/10"
-          >
+          <button class="text-white/80 hover:text-white p-1 rounded hover:bg-white/10">
             ⋮
           </button>
         </div>
@@ -41,11 +39,13 @@
         </div>
       </div>
 
-      <!-- Task columns -->
+      <!-- Draggable task columns -->
       <div
         v-for="column in computedColumns"
         :key="column.id"
         class="w-80 flex-shrink-0 h-full flex flex-col"
+        @dragover.prevent
+        @drop="handleDrop($event, column.id)"
       >
         <div
           class="mb-3 rounded-xl bg-black/40 border border-white/10 px-3 py-2 flex items-center justify-between shadow-sm"
@@ -73,6 +73,9 @@
               v-for="task in tasksByColumn(column)"
               :key="task.id"
               :task="task"
+              draggable="true"
+              @dragstart="handleDragStart($event, task)"
+              @click="selectTask(task)"
             />
 
             <button
@@ -86,12 +89,11 @@
         </div>
       </div>
 
-      <!-- Add another list (Trello style) -->
+      <!-- Add another list -->
       <div class="w-80 flex-shrink-0 h-full">
         <div
           class="mb-3 rounded-xl bg-black/40 border border-white/10 px-3 py-2 flex items-center justify-between shadow-sm"
         >
-          <!-- Collapsed button -->
           <button
             v-if="!showAddList"
             class="w-full text-left text-white/80 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
@@ -101,8 +103,7 @@
             <span>Thêm danh sách khác</span>
           </button>
 
-          <!-- Expanded form -->
-          <div v-else class="space-y-2">
+          <div v-else class="space-y-2 w-full">
             <input
               v-model.trim="newListTitle"
               class="w-full rounded-lg bg-black/30 border border-white/10 px-3 py-2 text-sm text-white placeholder:text-white/50 outline-none focus:border-white/20"
@@ -148,13 +149,14 @@
       </div>
     </div>
 
-    <AddTaskModal
-      v-if="showAddTask && selectedColumn"
-      :status="selectedColumn.status"
-      :display-status="selectedColumn.label"
-      :members="project.members"
-      @close="showAddTask = false"
-      @add="addTask"
+    <!-- Edit task modal -->
+    <EditTaskModal
+      v-if="selectedTask"
+      :task="selectedTask"
+      :members="project?.members || []"
+      @close="selectedTask = null"
+      @save="updateTask"
+      @delete="deleteTask"
     />
   </div>
 </template>
@@ -163,120 +165,125 @@
 import { computed, ref } from "vue";
 import TaskCard from "./TaskCard.vue";
 import AddTaskModal from "./AddTaskModal.vue";
+import EditTaskModal from "./EditTaskModal.vue";
 
 const props = defineProps({
   project: {
     type: Object,
-    required: true,
+    default: null,
   },
 });
 
 const emit = defineEmits(["update-project"]);
 
-/**
- * Columns mặc định (giữ như bạn)
- * - Lưu ý: status là "Todo", "In Progress", "Done"
- */
-const defaultColumns = [
-  { id: "today", status: "Todo", label: "Hôm nay" },
-  { id: "this-week", status: "In Progress", label: "Tuần này" },
-  { id: "later", status: "Done", label: "Sau này" },
-];
-
-/**
- * Status options để tạo list mới (bạn có thể đổi)
- * - Nếu bạn muốn tạo list có status riêng, bạn có thể cho phép nhập free-text.
- */
-const statusOptions = [
-  { value: "Todo", label: "Todo" },
-  { value: "In Progress", label: "In Progress" },
-  { value: "Done", label: "Done" },
-];
-
-/**
- * computedColumns:
- * - Ưu tiên lấy từ project.columns nếu có
- * - Nếu chưa có thì fallback defaultColumns
- */
-const computedColumns = computed(() => {
-  const cols = props.project?.columns;
-  if (Array.isArray(cols) && cols.length > 0) return cols;
-  return defaultColumns;
-});
-
-/** ============ Add task ============ */
-const showAddTask = ref(false);
-const selectedColumn = ref(null);
-
-const tasksByColumn = (column) =>
-  (props.project.tasks || []).filter((t) => t.status === column.status);
-
-const addTask = (task) => {
-  const updated = {
-    ...props.project,
-    tasks: [...(props.project.tasks || []), task],
-  };
-  emit("update-project", updated);
-  showAddTask.value = false;
-};
-
-const openAddTask = (column) => {
-  selectedColumn.value = column;
-  showAddTask.value = true;
-};
-
-/** ============ Add list (new column) ============ */
 const showAddList = ref(false);
 const newListTitle = ref("");
 const newListStatus = ref("Todo");
 
+const statusOptions = [
+  { label: "Chưa làm", value: "Todo" },
+  { label: "Đang làm", value: "In Progress" },
+  { label: "Hoàn thành", value: "Done" },
+];
+
+const draggedTask = ref(null);
+const selectedTask = ref(null);
+
+const computedColumns = computed(() => {
+  if (!props.project?.columns) {
+    return [
+      { id: "todo", label: "Chưa làm", status: "Todo" },
+      { id: "in-progress", label: "Đang làm", status: "In Progress" },
+      { id: "done", label: "Hoàn thành", status: "Done" },
+    ];
+  }
+  return props.project.columns;
+});
+
+const tasksByColumn = (column) => {
+  if (!props.project?.tasks) return [];
+  return props.project.tasks.filter((t) => t.status === column.status);
+};
+
 const openAddList = () => {
   showAddList.value = true;
-  newListTitle.value = "";
-  newListStatus.value = "Todo";
 };
 
 const closeAddList = () => {
   showAddList.value = false;
+  newListTitle.value = "";
+  newListStatus.value = "Todo";
 };
 
-const slugifyId = (s) =>
-  String(s || "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9\-]/g, "")
-    .slice(0, 40);
-
 const createList = () => {
-  const title = newListTitle.value.trim();
-  if (!title) return;
+  if (!newListTitle.value.trim()) return;
 
-  const baseId = slugifyId(title) || "list";
-  const current = Array.isArray(props.project.columns)
-    ? props.project.columns
-    : computedColumns.value;
-
-  // tạo id không trùng
-  let id = baseId;
-  let i = 2;
-  while (current.some((c) => c.id === id)) {
-    id = `${baseId}-${i++}`;
-  }
-
-  const newCol = {
-    id,
-    label: title,
+  const newColumn = {
+    id: `col-${Date.now()}`,
+    label: newListTitle.value.trim(),
     status: newListStatus.value,
   };
 
-  // LƯU VÀO project.columns
   const updated = {
     ...props.project,
-    columns: [...(Array.isArray(props.project.columns) ? props.project.columns : computedColumns.value), newCol],
+    columns: [...(props.project?.columns || []), newColumn],
   };
 
   emit("update-project", updated);
-  showAddList.value = false;
+  closeAddList();
+};
+
+const openAddTask = (column) => {
+  // Implement in AddTaskModal
+};
+
+const handleDragStart = (event, task) => {
+  draggedTask.value = task;
+  event.dataTransfer.effectAllowed = "move";
+};
+
+const handleDrop = (event, columnId) => {
+  event.preventDefault();
+  if (!draggedTask.value) return;
+
+  const column = computedColumns.value.find((c) => c.id === columnId);
+  if (!column) return;
+
+  // Update task status
+  const updated = {
+    ...props.project,
+    tasks: props.project.tasks.map((t) =>
+      t.id === draggedTask.value.id ? { ...t, status: column.status } : t
+    ),
+  };
+
+  emit("update-project", updated);
+  draggedTask.value = null;
+};
+
+const selectTask = (task) => {
+  selectedTask.value = task;
+};
+
+const updateTask = (updatedTask) => {
+  const updated = {
+    ...props.project,
+    tasks: props.project.tasks.map((t) =>
+      t.id === updatedTask.id ? updatedTask : t
+    ),
+  };
+
+  emit("update-project", updated);
+  selectedTask.value = null;
+};
+
+const deleteTask = (taskId) => {
+  const updated = {
+    ...props.project,
+    tasks: props.project.tasks.filter((t) => t.id !== taskId),
+  };
+
+  emit("update-project", updated);
+  selectedTask.value = null;
 };
 </script>
