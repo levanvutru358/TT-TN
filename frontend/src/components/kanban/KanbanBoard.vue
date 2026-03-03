@@ -169,6 +169,17 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  filters: {
+    type: Object,
+    default: () => ({
+      members: [],
+      labels: [],
+      cardStatus: [],
+      dueDate: [],
+      activity: [],
+      searchQuery: ''
+    })
+  }
 });
 
 const emit = defineEmits(["update-project"]);
@@ -208,8 +219,79 @@ const computedColumns = computed(() => {
 const showAddTask = ref(false);
 const selectedColumn = ref(null);
 
-const tasksByColumn = (column) =>
-  (props.project.tasks || []).filter((t) => t.status === column.status);
+// Helper function to check if task matches filters
+const taskMatchesFilters = (task) => {
+  const { members, labels, cardStatus, dueDate, activity, searchQuery } = props.filters;
+  
+  // Filter by search query
+  if (searchQuery && !task.title?.toLowerCase().includes(searchQuery.toLowerCase())) {
+    return false;
+  }
+  
+  // Filter by members
+  if (members.length > 0 && task.assignees) {
+    const hasMatchingMember = task.assignees.some(id => members.includes(id));
+    if (!hasMatchingMember) return false;
+  }
+  
+  // Filter by labels
+  if (labels.length > 0 && task.labels) {
+    const hasMatchingLabel = task.labels.some(id => labels.includes(id));
+    if (!hasMatchingLabel) return false;
+  }
+  
+  // Filter by card status
+  if (cardStatus.length > 0) {
+    const taskStatus = task.isCompleted ? 'completed' : 'pending';
+    if (!cardStatus.includes(taskStatus)) return false;
+  }
+  
+  // Filter by due date
+  if (dueDate.length > 0 && task.dueDate) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const taskDate = new Date(task.dueDate);
+    taskDate.setHours(0, 0, 0, 0);
+    
+    let hasDueDateMatch = false;
+    
+    if (dueDate.includes('overdue') && taskDate < today) {
+      hasDueDateMatch = true;
+    }
+    if (dueDate.includes('today') && taskDate.getTime() === today.getTime()) {
+      hasDueDateMatch = true;
+    }
+    if (dueDate.includes('upcoming') && taskDate > today) {
+      hasDueDateMatch = true;
+    }
+    
+    if (!hasDueDateMatch && !dueDate.includes('no-due')) return false;
+  }
+  
+  // Filter by activity - if no due date and checking for no-due
+  if (dueDate.includes('no-due') && !task.dueDate) {
+    return true;
+  }
+  
+  return true;
+};
+
+const tasksByColumn = (column) => {
+  const allTasks = (props.project.tasks || []).filter((t) => t.status === column.status);
+  
+  // If no filters active, return all tasks
+  const hasActiveFilters = 
+    props.filters.members?.length > 0 ||
+    props.filters.labels?.length > 0 ||
+    props.filters.cardStatus?.length > 0 ||
+    props.filters.dueDate?.length > 0 ||
+    props.filters.activity?.length > 0 ||
+    (props.filters.searchQuery && props.filters.searchQuery.trim().length > 0);
+  
+  if (!hasActiveFilters) return allTasks;
+  
+  return allTasks.filter(taskMatchesFilters);
+};
 
 const addTask = (task) => {
   const updated = {
