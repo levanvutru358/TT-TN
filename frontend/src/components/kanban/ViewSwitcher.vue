@@ -14,7 +14,7 @@
       />
 
       <!-- optional: dynamic label (hidden for Trello-style icon only UI) -->
-      <!-- <span class="text-white/90">{{ currentLabel }}</span> -->
+      <span class="text-white/90">{{ currentLabel }}</span>
 
       <!-- chevron -->
       <svg
@@ -97,21 +97,21 @@
               <button
                 v-for="opt in options"
                 :key="opt.value"
-                class="w-full flex items-center justify-center px-3 py-2.5 rounded-xl hover:bg-white/5 transition"
+                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition"
                 @click="select(opt.value)"
                 :title="opt.label"
                 :aria-label="opt.label"
                 type="button"
               >
                 <span
-                  class="w-6 h-6 rounded-lg bg-black/25 border border-white/10 flex items-center justify-center"
+                  class="w-6 h-6 rounded-lg bg-black/25 border border-white/10 flex items-center justify-center flex-shrink-0"
                   v-html="opt.svg"
                 />
+                <span class="text-sm text-white/80">{{ opt.label }}</span>
 
-                <!-- icons only, labels are provided as tooltip/aria-label -->
                 <svg
                   v-if="modelValue === opt.value"
-                  class="w-4 h-4 text-white/90"
+                  class="w-4 h-4 text-white/90 ml-auto"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

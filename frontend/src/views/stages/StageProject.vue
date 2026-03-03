@@ -140,6 +140,13 @@
                 📊 Thống kê
               </button>
               <button
+                class="px-3 py-2 rounded-lg"
+                :class="filterButtonClass"
+                @click="showFilter = !showFilter"
+              >
+                🔽 Lọc
+              </button>
+              <button
                 class="px-3 py-2 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40"
               >
                 Chia sẻ
@@ -159,6 +166,7 @@
               <KanbanBoard
                 v-if="project"
                 :project="project"
+                :filters="activeFilters"
                 @update-project="project = $event"
               />
 
@@ -184,6 +192,15 @@
         </div>
       </main>
     </div>
+
+    <!-- Filter Panel -->
+    <FilterPanel
+      :is-open="showFilter"
+      :members="project?.members || []"
+      :labels="project?.labels || []"
+      @close="closeFilter"
+      @update-filters="updateFilters"
+    />
   </div>
 </template>
 
@@ -195,6 +212,7 @@ import KanbanBoardDraggable from "@/components/kanban/KanbanBoardDraggable.vue";
 import ViewSwitcher from "@/components/kanban/ViewSwitcher.vue";
 import ProjectStats from "@/components/ProjectStats.vue";
 import ProjectMembers from "@/components/ProjectMembers.vue";
+import FilterPanel from "@/components/FilterPanel.vue";
 
 const project = ref(null);
 const loading = ref(true);
@@ -206,6 +224,17 @@ const currentView = ref("board");
 // Show panels state
 const showMembers = ref(false);
 const showStats = ref(true);
+const showFilter = ref(false);
+
+// Filter state
+const activeFilters = ref({
+  members: [],
+  labels: [],
+  cardStatus: [],
+  dueDate: [],
+  activity: [],
+  searchQuery: ''
+});
 
 // ===== Board title edit =====
 const isEditingTitle = ref(false);
@@ -268,6 +297,28 @@ function updateMembers(updatedMembers) {
     };
   }
 }
+
+// ===== Filter management =====
+function updateFilters(newFilters) {
+  activeFilters.value = newFilters;
+}
+
+function closeFilter() {
+  showFilter.value = false;
+}
+
+const filterButtonClass = computed(() => {
+  const hasActiveFilters = 
+    activeFilters.value.members?.length > 0 ||
+    activeFilters.value.labels?.length > 0 ||
+    activeFilters.value.cardStatus?.length > 0 ||
+    activeFilters.value.dueDate?.length > 0 ||
+    activeFilters.value.activity?.length > 0;
+  
+  return hasActiveFilters 
+    ? 'bg-[#0c66e4] text-white' 
+    : 'bg-black/30 border border-white/15 hover:bg-black/40';
+});
 
 // ===== Fetch project =====
 onMounted(async () => {
