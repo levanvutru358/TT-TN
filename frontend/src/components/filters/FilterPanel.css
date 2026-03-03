@@ -1,0 +1,84 @@
+/* Trello-like row */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Checkbox like Trello (square border) */
+.cb {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  appearance: none;
+  outline: none;
+  display: grid;
+  place-items: center;
+}
+.cb:checked {
+  border-color: rgba(76, 154, 255, 1);
+  background: rgba(76, 154, 255, 1);
+}
+.cb:checked::after {
+  content: "";
+  width: 8px;
+  height: 4px;
+  border-left: 2px solid #1d2125;
+  border-bottom: 2px solid #1d2125;
+  transform: rotate(-45deg);
+  margin-top: -1px;
+}
+.cb:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.cb--ghost {
+  opacity: 0.6;
+}
+
+/* Small icon holder */
+.ico {
+  width: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Avatar circle */
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+}
+
+/* Label bar */
+.labelbar {
+  height: 32px;
+  width: 100%;
+  border-radius: 6px;
+}
+
+/* colored dot */
+.dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -212,7 +212,7 @@ import KanbanBoardDraggable from "@/components/kanban/KanbanBoardDraggable.vue";
 import ViewSwitcher from "@/components/kanban/ViewSwitcher.vue";
 import ProjectStats from "@/components/ProjectStats.vue";
 import ProjectMembers from "@/components/ProjectMembers.vue";
-import FilterPanel from "@/components/FilterPanel.vue";
+import FilterPanel from "@/components/filters/FilterPanel.vue";
 
 const project = ref(null);
 const loading = ref(true);
