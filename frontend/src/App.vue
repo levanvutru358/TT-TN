@@ -44,13 +44,14 @@
 <script setup>
 import { useUIStore } from "@/stores/uiStore";
 import { useRoute } from "vue-router";
-import Notification from "@/components/Notification.vue";
+import Notification from "@/components/common/Notification.vue";
 
 const uiStore = useUIStore();
 const route = useRoute();
 
 // Ẩn header/nav khi ở trang project
 const showHeaderNav = () => route.name !== "ProjectDetail";
+
 </script>
 
 <style scoped></style>

@@ -5,6 +5,7 @@ import StageDetail from "@/views/stages/StageDetail.vue";
 import StageForm from "@/views/stages/StageForm.vue";
 import NotFound from "@/views/NotFound.vue";
 import StageProject from "@/views/stages/StageProject.vue";
+import ProjectBoards from "@/components/project/ProjectBoards.vue";
 
 const routes = [
   {
@@ -33,8 +34,18 @@ const routes = [
     component: StageForm,
   },
   {
-    path: "/project",
+    path: "/projects",
+    name: "ProjectBoards",
+    component: ProjectBoards,
+  },
+  {
+    path: "/projects/:id",
     name: "ProjectDetail",
+    component: StageProject,
+  },
+  {
+    path: "/project",
+    name: "ProjectDetailLegacy",
     component: StageProject,
   },
   {

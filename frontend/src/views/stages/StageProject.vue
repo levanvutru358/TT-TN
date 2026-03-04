@@ -210,8 +210,8 @@ import { getProjectDetail } from "@/api/mockApi";
 import KanbanBoard from "@/components/kanban/KanbanBoard.vue";
 import KanbanBoardDraggable from "@/components/kanban/KanbanBoardDraggable.vue";
 import ViewSwitcher from "@/components/kanban/ViewSwitcher.vue";
-import ProjectStats from "@/components/ProjectStats.vue";
-import ProjectMembers from "@/components/ProjectMembers.vue";
+import ProjectStats from "@/components/project/ProjectStats.vue";
+import ProjectMembers from "@/components/project/ProjectMembers.vue";
 import FilterPanel from "@/components/filters/FilterPanel.vue";
 
 const project = ref(null);
