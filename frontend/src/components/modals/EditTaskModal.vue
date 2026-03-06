@@ -143,8 +143,8 @@
 
 <script setup>
 import { ref, computed, watchEffect } from "vue";
-import SubtaskList from "./SubtaskList.vue";
-import CommentsSection from "./CommentsSection.vue";
+import SubtaskList from "../kanban/SubtaskList.vue";
+import CommentsSection from "../kanban/CommentsSection.vue";
 
 const props = defineProps({
   task: {

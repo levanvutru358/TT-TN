@@ -162,7 +162,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import TaskCard from "./TaskCard.vue";
-import AddTaskModal from "./AddTaskModal.vue";
+import AddTaskModal from "../modals/AddTaskModal.vue";
 
 const props = defineProps({
   project: {

@@ -11,7 +11,7 @@
       <p class="text-gray-600 mb-4">Click Start to open the project board.</p>
 
       <router-link
-        to="/project"
+        to="/projects"
         class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
       >
         Start

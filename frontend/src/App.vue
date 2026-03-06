@@ -44,13 +44,17 @@
 <script setup>
 import { useUIStore } from "@/stores/uiStore";
 import { useRoute } from "vue-router";
-import Notification from "@/components/Notification.vue";
+import Notification from "@/components/common/Notification.vue";
 
 const uiStore = useUIStore();
 const route = useRoute();
 
-// Ẩn header/nav khi ở trang project
-const showHeaderNav = () => route.name !== "ProjectDetail";
+// Ẩn header/nav khi ở trang project boards hoặc project detail
+const showHeaderNav = () => {
+  // hide on both project list and individual project pages
+  return route.name !== "ProjectDetail" && route.name !== "ProjectBoards";
+};
+
 </script>
 
 <style scoped></style>

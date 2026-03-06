@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import StartCard from "@/components/StartCard.vue";
+import StartCard from "@/components/project/StartCard.vue";
 </script>
 
 <style scoped></style>
