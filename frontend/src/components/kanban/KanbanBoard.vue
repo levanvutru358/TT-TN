@@ -183,32 +183,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update-project"]);
-
-/**
- * Columns mặc định (giữ như bạn)
- * - Lưu ý: status là "Todo", "In Progress", "Done"
- */
 const defaultColumns = [
   { id: "today", status: "Todo", label: "Hôm nay" },
   { id: "this-week", status: "In Progress", label: "Tuần này" },
   { id: "later", status: "Done", label: "Sau này" },
 ];
-
-/**
- * Status options để tạo list mới (bạn có thể đổi)
- * - Nếu bạn muốn tạo list có status riêng, bạn có thể cho phép nhập free-text.
- */
 const statusOptions = [
   { value: "Todo", label: "Todo" },
   { value: "In Progress", label: "In Progress" },
   { value: "Done", label: "Done" },
 ];
 
-/**
- * computedColumns:
- * - Ưu tiên lấy từ project.columns nếu có
- * - Nếu chưa có thì fallback defaultColumns
- */
 const computedColumns = computed(() => {
   const cols = props.project?.columns;
   if (Array.isArray(cols) && cols.length > 0) return cols;
