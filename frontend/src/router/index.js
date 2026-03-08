@@ -5,6 +5,10 @@ import StageDetail from "@/views/stages/StageDetail.vue";
 import StageForm from "@/views/stages/StageForm.vue";
 import NotFound from "@/views/NotFound.vue";
 import StageProject from "@/views/stages/StageProject.vue";
+import WorkspaceMembers from "@/views/WorkspaceMembers.vue";
+import WorkspaceSettings from "@/views/WorkspaceSettings.vue";
+import WorkspaceBoards from "@/views/WorkspaceBoards.vue";
+import WorkspaceCards from "@/views/WorkspaceCards.vue";
 
 const routes = [
   {
@@ -36,6 +40,26 @@ const routes = [
     path: "/project",
     name: "ProjectDetail",
     component: StageProject,
+  },
+  {
+    path: "/workspace/members",
+    name: "WorkspaceMembers",
+    component: WorkspaceMembers,
+  },
+  {
+    path: "/workspace/settings",
+    name: "WorkspaceSettings",
+    component: WorkspaceSettings,
+  },
+  {
+    path: "/workspace/boards",
+    name: "WorkspaceBoards",
+    component: WorkspaceBoards,
+  },
+  {
+    path: "/workspace/cards",
+    name: "WorkspaceCards",
+    component: WorkspaceCards,
   },
   {
     path: "/:pathMatch(.*)*",

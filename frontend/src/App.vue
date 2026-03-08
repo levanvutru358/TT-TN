@@ -50,7 +50,16 @@ const uiStore = useUIStore();
 const route = useRoute();
 
 // Ẩn header/nav khi ở trang project
-const showHeaderNav = () => route.name !== "ProjectDetail";
+const hideHeaderNavRoutes = [
+  "ProjectDetail",
+  "Home",
+  "WorkspaceMembers",
+  "WorkspaceSettings",
+  "WorkspaceBoards",
+  "WorkspaceCards",
+];
+const showHeaderNav = () =>
+  !hideHeaderNavRoutes.includes(String(route.name || ""));
 </script>
 
 <style scoped></style>
