@@ -56,7 +56,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import TaskModal from "./TaskModal.vue";
+import TaskModal from "../modals/TaskModal.vue";
 
 const props = defineProps({
   task: {
