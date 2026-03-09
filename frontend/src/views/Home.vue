@@ -349,7 +349,7 @@
 
             <div class="mt-8 flex justify-center">
               <router-link
-                to="/project"
+                to="/projects/1"
                 class="inline-flex items-center justify-center px-8 h-11 rounded-lg bg-[#0c66e4] text-white text-[18px] font-semibold hover:bg-[#0055cc] border border-[#0055cc]"
               >
                 Tạo bảng đầu tiên của bạn
@@ -366,7 +366,7 @@
             </div>
 
             <router-link
-              to="/project"
+              to="/projects/1"
               class="group block w-[320px] rounded-xl overflow-hidden border border-[#c8ced8] bg-white shadow-sm hover:shadow-md transition-shadow"
             >
               <div
@@ -440,7 +440,7 @@
 
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-9">
               <router-link
-                to="/project"
+                to="/projects/1"
                 class="h-34 rounded-xl border border-[#d0d4db] bg-[#e5e7eb] text-[20px] text-[#44546f] hover:bg-[#dce0e6] flex items-center justify-center transition-colors"
               >
                 Tạo bảng mới
