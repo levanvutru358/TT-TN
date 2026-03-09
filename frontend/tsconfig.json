@@ -16,7 +16,6 @@
     "jsx": "preserve",
 
     /* Path alias */
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }

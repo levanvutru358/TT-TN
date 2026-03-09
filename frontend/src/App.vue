@@ -49,12 +49,17 @@ import Notification from "@/components/common/Notification.vue";
 const uiStore = useUIStore();
 const route = useRoute();
 
-// Ẩn header/nav khi ở trang project boards hoặc project detail
-const showHeaderNav = () => {
-  // hide on both project list and individual project pages
-  return route.name !== "ProjectDetail" && route.name !== "ProjectBoards";
-};
-
+// Ẩn header/nav khi ở trang project
+const hideHeaderNavRoutes = [
+  "ProjectDetail",
+  "Home",
+  "WorkspaceMembers",
+  "WorkspaceSettings",
+  "WorkspaceBoards",
+  "WorkspaceCards",
+];
+const showHeaderNav = () =>
+  !hideHeaderNavRoutes.includes(String(route.name || ""));
 </script>
 
 <style scoped></style>
