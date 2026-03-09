@@ -134,13 +134,6 @@
               </button>
               <button
                 class="px-3 py-2 rounded-lg"
-                :class="showStats ? 'bg-[#0c66e4] text-white' : 'bg-black/30 border border-white/15 hover:bg-black/40'"
-                @click="showStats = !showStats"
-              >
-                📊 Thống kê
-              </button>
-              <button
-                class="px-3 py-2 rounded-lg"
                 :class="filterButtonClass"
                 @click="showFilter = !showFilter"
               >
@@ -156,11 +149,6 @@
 
           <!-- Board content -->
           <div v-if="!showMembers" class="flex flex-col h-[calc(100vh-9rem)] md:h-[calc(100vh-8rem)] gap-4">
-            <!-- Stats section -->
-            <div v-if="showStats && project" class="animate-in fade-in flex-shrink-0">
-              <ProjectStats :tasks="project.tasks || []" />
-            </div>
-
             <!-- Kanban board -->
             <div class="flex-1 overflow-hidden">
               <KanbanBoard
@@ -210,7 +198,6 @@ import { getProjectDetail } from "@/api/mockApi";
 import KanbanBoard from "@/components/kanban/KanbanBoard.vue";
 import KanbanBoardDraggable from "@/components/kanban/KanbanBoardDraggable.vue";
 import ViewSwitcher from "@/components/kanban/ViewSwitcher.vue";
-import ProjectStats from "@/components/project/ProjectStats.vue";
 import ProjectMembers from "@/components/project/ProjectMembers.vue";
 import FilterPanel from "@/components/filters/FilterPanel.vue";
 
@@ -223,7 +210,6 @@ const currentView = ref("board");
 
 // Show panels state
 const showMembers = ref(false);
-const showStats = ref(true);
 const showFilter = ref(false);
 
 // Filter state
