@@ -1,0 +1,2 @@
+-- V6__create_comments.sql
+-- TODO: add migration SQL
