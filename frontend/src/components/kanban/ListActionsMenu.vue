@@ -19,9 +19,10 @@
           :style="{ left: `${pos.left}px`, top: `${pos.top}px` }"
         >
           <div
-            class="w-[22rem] max-w-[92vw] rounded-2xl bg-[#1f2328] border border-white/10 shadow-2xl overflow-hidden"
+            class="w-[22rem] max-w-[92vw] h-auto max-h-[70vh] rounded-2xl bg-[#1f2328] border border-white/10 shadow-2xl overflow-hidden flex flex-col"
           >
-            <div class="px-4 py-3 flex items-center justify-between">
+            <!-- Header -->
+            <div class="px-4 py-3 flex items-center justify-between shrink-0">
               <div class="flex items-center gap-2">
                 <button
                   v-if="page !== 'main'"
@@ -47,6 +48,7 @@
                     />
                   </svg>
                 </button>
+
                 <div class="text-sm font-semibold text-white/90">
                   {{ headerTitle }}
                 </div>
@@ -76,146 +78,156 @@
               </button>
             </div>
 
-            <!-- MAIN -->
-            <div v-if="page === 'main'" class="px-2 pb-3">
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/85"
-                type="button"
-                @click="emitAddCard"
-              >
-                Thêm thẻ
-              </button>
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/85"
-                type="button"
-                @click="emitCopyList"
-              >
-                Sao chép danh sách
-              </button>
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/85 flex items-center justify-between"
-                type="button"
-                @click="page = 'move'"
-              >
-                <span>Di chuyển danh sách</span>
-                <span class="text-white/40">›</span>
-              </button>
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/85"
-                type="button"
-                @click="emitToggleWatch"
-              >
-                Theo dõi
-              </button>
-
-              <div class="mt-2 px-3 py-2 text-[11px] text-white/45">
-                Thay đổi màu danh sách
-                <span
-                  class="ml-2 inline-flex text-[10px] px-2 py-0.5 rounded-full bg-[#6d28d9]/25 border border-[#6d28d9]/25 text-[#c4b5fd] font-semibold"
+            <!-- Scrollable body -->
+            <div class="flex-1 overflow-y-auto hide-scrollbar">
+              <!-- MAIN -->
+              <div v-if="page === 'main'" class="px-2 pb-3">
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/85"
+                  type="button"
+                  @click="emitAddCard"
                 >
-                  PREMIUM
-                </span>
-              </div>
+                  Thêm thẻ
+                </button>
 
-              <!-- Bảng màu luôn hiển thị (giống ảnh Trello) -->
-              <div class="px-3 pb-1">
-                <div class="grid grid-cols-5 gap-2">
-                  <button
-                    v-for="c in colors"
-                    :key="c"
-                    class="h-9 rounded-lg border border-white/10 hover:scale-[1.02] transition relative"
-                    type="button"
-                    :style="{ backgroundColor: c }"
-                    @click="emitSetColor(c)"
-                    :aria-label="`Chọn màu ${c}`"
-                    :title="c"
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/85"
+                  type="button"
+                  @click="emitCopyList"
+                >
+                  Sao chép danh sách
+                </button>
+
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/85 flex items-center justify-between"
+                  type="button"
+                  @click="page = 'move'"
+                >
+                  <span>Di chuyển danh sách</span>
+                  <span class="text-white/40">›</span>
+                </button>
+
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/85"
+                  type="button"
+                  @click="emitToggleWatch"
+                >
+                  Theo dõi
+                </button>
+
+                <div class="mt-2 px-3 py-2 text-[11px] text-white/45">
+                  Thay đổi màu danh sách
+                  <span
+                    class="ml-2 inline-flex text-[10px] px-2 py-0.5 rounded-full bg-[#6d28d9]/25 border border-[#6d28d9]/25 text-[#c4b5fd] font-semibold"
                   >
-                    <span
-                      v-if="String(selectedColor || '').toLowerCase() === String(c).toLowerCase()"
-                      class="absolute inset-0 flex items-center justify-center text-black"
-                      aria-hidden="true"
+                    PREMIUM
+                  </span>
+                </div>
+
+                <div class="px-3 pb-1">
+                  <div class="grid grid-cols-5 gap-2">
+                    <button
+                      v-for="c in colors"
+                      :key="c"
+                      class="h-9 rounded-lg border border-white/10 hover:scale-[1.02] transition relative"
+                      type="button"
+                      :style="{ backgroundColor: c }"
+                      @click="emitSetColor(c)"
+                      :aria-label="`Chọn màu ${c}`"
+                      :title="c"
                     >
-                      ✓
-                    </span>
+                      <span
+                        v-if="String(selectedColor || '').toLowerCase() === String(c).toLowerCase()"
+                        class="absolute inset-0 flex items-center justify-center text-black"
+                        aria-hidden="true"
+                      >
+                        ✓
+                      </span>
+                    </button>
+                  </div>
+
+                  <button
+                    class="w-full mt-2 text-left px-3 py-2.5 rounded-xl bg-black/25 border border-white/10 hover:bg-black/35 transition text-sm text-white/85 flex items-center justify-center gap-2"
+                    type="button"
+                    @click="emitClearColor"
+                  >
+                    <span>✕</span>
+                    <span>Gỡ bỏ màu</span>
                   </button>
                 </div>
 
+                <div class="mt-3 px-3 py-2 text-[11px] text-white/45">
+                  Tự động hóa
+                </div>
+
                 <button
-                  class="w-full mt-2 text-left px-3 py-2.5 rounded-xl bg-black/25 border border-white/10 hover:bg-black/35 transition text-sm text-white/85 flex items-center justify-center gap-2"
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/75"
                   type="button"
-                  @click="emitClearColor"
+                  @click="emitAutomation"
                 >
-                  <span>✕</span>
-                  <span>Gỡ bỏ màu</span>
+                  Khi thêm thẻ vào danh sách...
+                </button>
+
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/75"
+                  type="button"
+                  @click="emitAutomation"
+                >
+                  Hàng ngày, sắp xếp danh sách theo...
+                </button>
+
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/75"
+                  type="button"
+                  @click="emitAutomation"
+                >
+                  Thứ 2 hàng tuần, sắp xếp danh sách theo...
+                </button>
+
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/75"
+                  type="button"
+                  @click="emitAutomation"
+                >
+                  Tạo quy tắc
+                </button>
+
+                <div class="mt-3 border-t border-white/10" />
+
+                <button
+                  class="w-full text-left px-3 py-3 rounded-xl hover:bg-white/5 transition text-sm text-white/85"
+                  type="button"
+                  @click="emitArchive"
+                >
+                  Lưu trữ danh sách này
                 </button>
               </div>
 
-              <div class="mt-3 px-3 py-2 text-[11px] text-white/45">
-                Tự động hóa
+              <!-- MOVE -->
+              <div v-else-if="page === 'move'" class="px-2 pb-3">
+                <div class="px-3 py-2 text-[11px] text-white/45">
+                  Di chuyển nhanh
+                </div>
+
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm disabled:opacity-40 disabled:cursor-not-allowed text-white/85"
+                  type="button"
+                  :disabled="!canMoveLeft"
+                  @click="emitMove('left')"
+                >
+                  ← Sang trái
+                </button>
+
+                <button
+                  class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm disabled:opacity-40 disabled:cursor-not-allowed text-white/85"
+                  type="button"
+                  :disabled="!canMoveRight"
+                  @click="emitMove('right')"
+                >
+                  → Sang phải
+                </button>
               </div>
-
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/75"
-                type="button"
-                @click="emitAutomation"
-              >
-                Khi thêm thẻ vào danh sách...
-              </button>
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/75"
-                type="button"
-                @click="emitAutomation"
-              >
-                Hàng ngày, sắp xếp danh sách theo...
-              </button>
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/75"
-                type="button"
-                @click="emitAutomation"
-              >
-                Thứ 2 hàng tuần, sắp xếp danh sách theo...
-              </button>
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm text-white/75"
-                type="button"
-                @click="emitAutomation"
-              >
-                Tạo quy tắc
-              </button>
-
-              <div class="mt-3 border-t border-white/10" />
-              <button
-                class="w-full text-left px-3 py-3 rounded-xl hover:bg-white/5 transition text-sm text-white/85"
-                type="button"
-                @click="emitArchive"
-              >
-                Lưu trữ danh sách này
-              </button>
             </div>
-
-            <!-- MOVE -->
-            <div v-else-if="page === 'move'" class="px-2 pb-3">
-              <div class="px-3 py-2 text-[11px] text-white/45">
-                Di chuyển nhanh
-              </div>
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm disabled:opacity-40 disabled:cursor-not-allowed text-white/85"
-                type="button"
-                :disabled="!canMoveLeft"
-                @click="emitMove('left')"
-              >
-                ← Sang trái
-              </button>
-              <button
-                class="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition text-sm disabled:opacity-40 disabled:cursor-not-allowed text-white/85"
-                type="button"
-                :disabled="!canMoveRight"
-                @click="emitMove('right')"
-              >
-                → Sang phải
-              </button>
-            </div>
-
           </div>
         </div>
       </div>
@@ -245,7 +257,7 @@ const emit = defineEmits([
 ]);
 
 const open = ref(false);
-const page = ref("main"); // main | move
+const page = ref("main");
 const pos = ref({ left: 16, top: 80 });
 
 const colors = [
@@ -269,12 +281,19 @@ const headerTitle = computed(() => {
 function computePositionFromClick(e) {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const panelW = 352; // ~22rem
-  const panelH = 520;
+  const panelW = 352;
+  const panelH = Math.min(560, vh * 0.7);
   const margin = 12;
 
-  const baseLeft = Math.min(vw - panelW - margin, Math.max(margin, e.clientX - panelW + 28));
-  const baseTop = Math.min(vh - Math.min(panelH, vh - margin) - margin, Math.max(margin, e.clientY - 10));
+  const baseLeft = Math.min(
+    vw - panelW - margin,
+    Math.max(margin, e.clientX - panelW + 28)
+  );
+
+  const baseTop = Math.min(
+    vh - panelH - margin,
+    Math.max(margin, e.clientY - 10)
+  );
 
   pos.value = { left: baseLeft, top: baseTop };
 }
@@ -338,3 +357,13 @@ function emitAutomation() {
 }
 </script>
 
+<style scoped>
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>
