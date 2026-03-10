@@ -14,7 +14,7 @@
           <span class="text-sm font-semibold">Trolleo</span>
         </div>
 
-        <div class="hidden md:flex items-center ml-4">
+        <div class="hidden md:flex items-center ml-3">
           <input
             class="w-72 bg-[#1d2125] border border-[#4b5563] rounded px-3 py-1.5 text-xs placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Tìm kiếm"
@@ -23,16 +23,48 @@
       </div>
 
       <div class="flex items-center gap-3">
+        <!-- Trello-like right actions (ảnh 5) -->
         <button
-          class="hidden md:inline-flex text-xs px-3 py-1.5 rounded bg-[#0c66e4] hover:bg-[#0b5ac7]"
+          class="hidden md:inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg bg-[#a855f7] hover:bg-[#9333ea] text-white font-semibold"
+          type="button"
         >
-          Tạo mới
+          <span aria-hidden="true">✨</span>
+          <span>Còn 1 ngày</span>
         </button>
-        <div
-          class="text-[11px] px-2.5 py-1 rounded-full bg-[#f973ff] text-black font-semibold"
+
+        <button
+          class="w-9 h-9 rounded-lg bg-black/20 border border-white/10 hover:bg-black/30 flex items-center justify-center"
+          type="button"
+          aria-label="Thông báo"
+          title="Thông báo"
         >
-          MỚI
-        </div>
+          📣
+        </button>
+        <button
+          class="w-9 h-9 rounded-lg bg-black/20 border border-white/10 hover:bg-black/30 flex items-center justify-center"
+          type="button"
+          aria-label="Chuông"
+          title="Chuông"
+        >
+          🔔
+        </button>
+        <button
+          class="w-9 h-9 rounded-lg bg-black/20 border border-white/10 hover:bg-black/30 flex items-center justify-center"
+          type="button"
+          aria-label="Trợ giúp"
+          title="Trợ giúp"
+        >
+          ?
+        </button>
+
+        <button
+          class="w-9 h-9 rounded-full bg-white/10 border border-white/10 hover:bg-white/15 flex items-center justify-center text-xs font-semibold"
+          type="button"
+          aria-label="Tài khoản"
+          title="Tài khoản"
+        >
+          TV
+        </button>
       </div>
     </div>
 
@@ -91,9 +123,9 @@
       <!-- Board area -->
       <main
         ref="boardWrapper"
-        class="flex-1 bg-gradient-to-r from-[#4b3f72] via-[#7b3ea8] to-[#c1558b] p-4 md:p-6 overflow-auto"
+        class="relative flex-1 bg-gradient-to-r from-[#4b3f72] via-[#7b3ea8] to-[#c1558b] p-4 md:p-6 overflow-auto"
       >
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-6xl mx-auto pb-16">
           <!-- Board header -->
           <div class="mb-3 md:mb-4 flex items-start justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0">
@@ -144,6 +176,15 @@
               >
                 Chia sẻ
               </button>
+              <button
+                class="w-9 h-9 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40 flex items-center justify-center"
+                type="button"
+                aria-label="Menu bảng"
+                title="Menu"
+                @click="showBoardMenu = true"
+              >
+                ⋯
+              </button>
             </div>
           </div>
 
@@ -178,6 +219,57 @@
             />
           </div>
         </div>
+
+        <!-- Bottom quick nav bar (giống ảnh bạn gửi) -->
+        <div
+          class="pointer-events-none fixed left-1/2 bottom-3 md:bottom-4 -translate-x-1/2"
+        >
+          <div
+            class="pointer-events-auto flex items-center gap-0.5 px-1.5 py-1.5 rounded-3xl bg-[#020617] border border-black/70 shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
+          >
+            <!-- Tab: Hộp thư đến (active) -->
+            <button
+              class="relative inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-[#0c66e4] text-xs font-medium text-white hover:bg-[#0855c0]"
+              type="button"
+            >
+              <span class="text-[13px]">✉️</span>
+              <span>Hộp thư đến</span>
+              <span
+                class="absolute left-3 right-3 -bottom-1 h-[2px] bg-[#4c9aff] rounded-full"
+              />
+            </button>
+
+            <!-- Tab: Trình lập kế hoạch -->
+            <button
+              class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-transparent text-xs font-medium text-white/80 hover:bg-white/5"
+              type="button"
+            >
+              <span class="text-[13px]">📅</span>
+              <span>Trình lập kế hoạch</span>
+            </button>
+
+            <!-- Tab: Bảng thông tin (active) -->
+            <button
+              class="relative inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-[#0c66e4] text-xs font-medium text-white hover:bg-[#0855c0]"
+              type="button"
+            >
+              <span class="text-[13px]">▦</span>
+              <span>Bảng thông tin</span>
+              <span
+                class="absolute left-3 right-3 -bottom-1 h-[2px] bg-[#4c9aff] rounded-full"
+              />
+            </button>
+
+            <!-- Tab: Chuyển đổi các bảng -->
+            <button
+              class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-transparent text-xs font-medium text-white/80 hover:bg-white/5"
+              type="button"
+            >
+              <span class="text-[13px]">▤</span>
+              <span>Chuyển đổi các bảng</span>
+            </button>
+          </div>
+        </div>
       </main>
     </div>
 
@@ -189,6 +281,8 @@
       @close="closeFilter"
       @update-filters="updateFilters"
     />
+
+    <BoardMenu :open="showBoardMenu" @close="showBoardMenu = false" />
   </div>
 </template>
 
@@ -200,10 +294,12 @@ import KanbanBoardDraggable from "@/components/kanban/KanbanBoardDraggable.vue";
 import ViewSwitcher from "@/components/kanban/ViewSwitcher.vue";
 import ProjectMembers from "@/components/project/ProjectMembers.vue";
 import FilterPanel from "@/components/filters/FilterPanel.vue";
+import BoardMenu from "@/components/kanban/BoardMenu.vue";
 
 const project = ref(null);
 const loading = ref(true);
 const boardWrapper = ref(null);
+const showBoardMenu = ref(false);
 
 // View switcher state
 const currentView = ref("board");
