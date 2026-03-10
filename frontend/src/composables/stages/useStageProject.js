@@ -1,4 +1,3 @@
-// src/composables/stages/useStageProject.js
 import { computed, nextTick, onMounted, ref } from "vue";
 import { getProjectDetail } from "@/api/mockApi";
 
@@ -9,6 +8,9 @@ export function useStageProject() {
   const showBoardMenu = ref(false);
 
   const currentView = ref("board");
+  const bottomNavTab = ref("board");
+  const showInboxSidebar = computed(() => bottomNavTab.value === "inbox");
+
   const showMembers = ref(false);
   const showFilter = ref(false);
 
@@ -123,6 +125,8 @@ export function useStageProject() {
     boardWrapper,
     showBoardMenu,
     currentView,
+    bottomNavTab,
+    showInboxSidebar,
     showMembers,
     showFilter,
     activeFilters,

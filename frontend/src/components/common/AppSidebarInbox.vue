@@ -1,4 +1,3 @@
-<!-- src/components/common/AppSidebarInbox.vue -->
 <template>
   <aside
     class="hidden sm:flex w-80 bg-[#111827] border-r border-black/60 px-3 py-3"

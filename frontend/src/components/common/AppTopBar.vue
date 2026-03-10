@@ -1,4 +1,3 @@
-<!-- src/components/common/AppTopBar.vue -->
 <template>
   <div
     class="h-14 px-3 md:px-5 flex items-center justify-between border-b border-black bg-[#020617]"
