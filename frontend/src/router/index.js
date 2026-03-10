@@ -37,11 +37,6 @@ const routes = [
     component: StageForm,
   },
   {
-    path: "/projects",
-    name: "ProjectBoards",
-    component: ProjectBoards,
-  },
-  {
     path: "/projects/:id",
     name: "ProjectDetail",
     component: StageProject,
