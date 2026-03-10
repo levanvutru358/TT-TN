@@ -1,279 +1,47 @@
+<!-- src/views/stages/StageProject.vue -->
 <template>
   <div class="h-screen flex flex-col bg-[#020617] text-white">
-    <!-- Top App Bar -->
-    <div
-      class="h-14 px-3 md:px-5 flex items-center justify-between border-b border-black bg-[#020617]"
-    >
-      <div class="flex items-center gap-3">
-        <div class="flex items-center gap-2">
-          <div
-            class="w-8 h-8 rounded bg-[#0c66e4] flex items-center justify-center"
-          >
-            <span class="text-xs font-semibold">T</span>
-          </div>
-          <span class="text-sm font-semibold">Trolleo</span>
-        </div>
+    <AppTopBar />
 
-        <div class="hidden md:flex items-center ml-3">
-          <input
-            class="w-72 bg-[#1d2125] border border-[#4b5563] rounded px-3 py-1.5 text-xs placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Tìm kiếm"
-          />
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <!-- Trello-like right actions (ảnh 5) -->
-        <button
-          class="hidden md:inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg bg-[#a855f7] hover:bg-[#9333ea] text-white font-semibold"
-          type="button"
-        >
-          <span aria-hidden="true">✨</span>
-          <span>Còn 1 ngày</span>
-        </button>
-
-        <button
-          class="w-9 h-9 rounded-lg bg-black/20 border border-white/10 hover:bg-black/30 flex items-center justify-center"
-          type="button"
-          aria-label="Thông báo"
-          title="Thông báo"
-        >
-          📣
-        </button>
-        <button
-          class="w-9 h-9 rounded-lg bg-black/20 border border-white/10 hover:bg-black/30 flex items-center justify-center"
-          type="button"
-          aria-label="Chuông"
-          title="Chuông"
-        >
-          🔔
-        </button>
-        <button
-          class="w-9 h-9 rounded-lg bg-black/20 border border-white/10 hover:bg-black/30 flex items-center justify-center"
-          type="button"
-          aria-label="Trợ giúp"
-          title="Trợ giúp"
-        >
-          ?
-        </button>
-
-        <button
-          class="w-9 h-9 rounded-full bg-white/10 border border-white/10 hover:bg-white/15 flex items-center justify-center text-xs font-semibold"
-          type="button"
-          aria-label="Tài khoản"
-          title="Tài khoản"
-        >
-          TV
-        </button>
-      </div>
-    </div>
-
-    <!-- Main layout -->
     <div class="flex flex-1 overflow-hidden">
-      <!-- Left sidebar -->
-      <aside
-        class="hidden sm:flex w-80 bg-[#111827] border-r border-black/60 px-3 py-3"
-      >
-        <div
-          class="flex-1 rounded-3xl bg-gradient-to-b from-[#073b79] via-[#073469] to-[#082b53] px-4 pt-4 pb-3 flex flex-col shadow-lg"
-        >
-          <div class="flex items-center gap-2 mb-5">
-            <div
-              class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center"
-            >
-              <span class="text-sm">✉️</span>
-            </div>
-            <h2 class="text-sm font-semibold">Hộp thư đến</h2>
-          </div>
+      <AppSidebarInbox />
 
-          <div class="space-y-3 text-sm">
-            <button
-              class="w-full text-left px-3 py-2 rounded-xl bg-black/40 text-gray-100 hover:bg-black/55 transition-colors"
-            >
-              Thêm thẻ
-            </button>
-            <button
-              class="w-full text-left px-3 py-2 rounded-xl bg-black/40 text-gray-100 hover:bg-black/55 transition-colors"
-            >
-              Bắt đầu sử dụng Trello
-            </button>
-          </div>
-
-          <div class="mt-auto pt-4">
-            <div
-              class="rounded-full bg-black/40 px-3 py-1.5 flex items-center gap-2 text-[11px] text-white/90"
-            >
-              <div
-                class="w-5 h-5 rounded-full bg-white flex items-center justify-center overflow-hidden"
-              >
-                <span class="text-[10px] text-[#0f172a]">G</span>
-              </div>
-              <span
-                class="text-[10px] font-semibold bg-[#0c66e4] text-white px-1.5 py-0.5 rounded"
-              >
-                MỚI
-              </span>
-              <span class="truncate">Tổng hợp việc cần làm</span>
-              <span class="ml-auto text-[10px]">⌄</span>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Board area -->
       <main
         ref="boardWrapper"
         class="relative flex-1 bg-gradient-to-r from-[#4b3f72] via-[#7b3ea8] to-[#c1558b] p-4 md:p-6 overflow-auto"
       >
         <div class="max-w-6xl mx-auto pb-16">
-          <!-- Board header -->
-          <div class="mb-3 md:mb-4 flex items-start justify-between gap-3">
-            <div class="flex items-center gap-3 min-w-0">
-              <!-- Editable title -->
-              <div class="min-w-0">
-                <!-- view mode -->
-                <h1
-                  v-if="!isEditingTitle"
-                  class="text-lg md:text-xl font-semibold truncate cursor-text select-none"
-                  :title="boardTitle"
-                  @click="startEditTitle"
-                >
-                  {{ boardTitle }}
-                </h1>
+          <StageBoardHeader
+            :board-title="boardTitle"
+            :is-editing-title="isEditingTitle"
+            :title-draft="titleDraft"
+            :current-view="currentView"
+            :show-members="showMembers"
+            :filter-button-class="filterButtonClass"
+            @start-edit-title="startEditTitle"
+            @commit-title="commitTitle"
+            @cancel-edit-title="cancelEditTitle"
+            @update:titleDraft="titleDraft = $event"
+            @update:currentView="currentView = $event"
+            @toggle-members="showMembers = !showMembers"
+            @toggle-filter="showFilter = !showFilter"
+            @open-board-menu="showBoardMenu = true"
+          />
 
-                <!-- edit mode -->
-                <input
-                  v-else
-                  ref="titleInputRef"
-                  v-model="titleDraft"
-                  class="text-lg md:text-xl font-semibold w-full max-w-[28rem] bg-black/30 border border-white/20 rounded px-2 py-1
-                         focus:outline-none focus:ring-2 focus:ring-white/30"
-                  @keydown.enter.prevent="commitTitle"
-                  @keydown.esc.prevent="cancelEditTitle"
-                  @blur="commitTitle"
-                />
-              </div>
-            </div>
-            <div class="flex items-center gap-2 text-xs shrink-0">
-              <!-- NEW: view switcher -->
-              <ViewSwitcher v-model="currentView" />
-              <button
-                class="px-3 py-2 rounded-lg"
-                :class="showMembers ? 'bg-[#0c66e4] text-white' : 'bg-black/30 border border-white/15 hover:bg-black/40'"
-                @click="showMembers = !showMembers"
-              >
-                👥 Thành viên
-              </button>
-              <button
-                class="px-3 py-2 rounded-lg"
-                :class="filterButtonClass"
-                @click="showFilter = !showFilter"
-              >
-                🔽 Lọc
-              </button>
-              <button
-                class="px-3 py-2 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40"
-              >
-                Chia sẻ
-              </button>
-              <button
-                class="w-9 h-9 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40 flex items-center justify-center"
-                type="button"
-                aria-label="Menu bảng"
-                title="Menu"
-                @click="showBoardMenu = true"
-              >
-                ⋯
-              </button>
-            </div>
-          </div>
-
-          <!-- Board content -->
-          <div v-if="!showMembers" class="flex flex-col h-[calc(100vh-9rem)] md:h-[calc(100vh-8rem)] gap-4">
-            <!-- Kanban board -->
-            <div class="flex-1 overflow-hidden">
-              <KanbanBoard
-                v-if="project"
-                :project="project"
-                :filters="activeFilters"
-                @update-project="project = $event"
-              />
-
-              <div
-                v-else
-                class="h-full rounded-2xl bg-black/20 border border-white/10 flex items-center justify-center"
-              >
-                <div class="text-sm text-white/80">
-                  {{ loading ? "Đang tải dự án..." : "Không có dữ liệu dự án" }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Members panel -->
-          <div v-else class="h-[calc(100vh-9rem)] md:h-[calc(100vh-8rem)] overflow-y-auto">
-            <ProjectMembers
-              v-if="project"
-              :members="project.members || []"
-              @update-members="updateMembers"
-            />
-          </div>
+          <StageBoardContent
+            :project="project"
+            :loading="loading"
+            :show-members="showMembers"
+            :active-filters="activeFilters"
+            @update-project="project = $event"
+            @update-members="updateMembers"
+          />
         </div>
 
-        <!-- Bottom quick nav bar (giống ảnh bạn gửi) -->
-        <div
-          class="pointer-events-none fixed left-1/2 bottom-3 md:bottom-4 -translate-x-1/2"
-        >
-          <div
-            class="pointer-events-auto flex items-center gap-0.5 px-1.5 py-1.5 rounded-3xl bg-[#020617] border border-black/70 shadow-[0_4px_14px_rgba(0,0,0,0.6)]"
-          >
-            <!-- Tab: Hộp thư đến (active) -->
-            <button
-              class="relative inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-[#0c66e4] text-xs font-medium text-white hover:bg-[#0855c0]"
-              type="button"
-            >
-              <span class="text-[13px]">✉️</span>
-              <span>Hộp thư đến</span>
-              <span
-                class="absolute left-3 right-3 -bottom-1 h-[2px] bg-[#4c9aff] rounded-full"
-              />
-            </button>
-
-            <!-- Tab: Trình lập kế hoạch -->
-            <button
-              class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-transparent text-xs font-medium text-white/80 hover:bg-white/5"
-              type="button"
-            >
-              <span class="text-[13px]">📅</span>
-              <span>Trình lập kế hoạch</span>
-            </button>
-
-            <!-- Tab: Bảng thông tin (active) -->
-            <button
-              class="relative inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-[#0c66e4] text-xs font-medium text-white hover:bg-[#0855c0]"
-              type="button"
-            >
-              <span class="text-[13px]">▦</span>
-              <span>Bảng thông tin</span>
-              <span
-                class="absolute left-3 right-3 -bottom-1 h-[2px] bg-[#4c9aff] rounded-full"
-              />
-            </button>
-
-            <!-- Tab: Chuyển đổi các bảng -->
-            <button
-              class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-transparent text-xs font-medium text-white/80 hover:bg-white/5"
-              type="button"
-            >
-              <span class="text-[13px]">▤</span>
-              <span>Chuyển đổi các bảng</span>
-            </button>
-          </div>
-        </div>
+        <BottomQuickNav />
       </main>
     </div>
 
-    <!-- Filter Panel -->
     <FilterPanel
       :is-open="showFilter"
       :members="project?.members || []"
@@ -287,131 +55,33 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref } from "vue";
-import { getProjectDetail } from "@/api/mockApi";
-import KanbanBoard from "@/components/kanban/KanbanBoard.vue";
-import KanbanBoardDraggable from "@/components/kanban/KanbanBoardDraggable.vue";
-import ViewSwitcher from "@/components/kanban/ViewSwitcher.vue";
-import ProjectMembers from "@/components/project/ProjectMembers.vue";
+import AppTopBar from "@/components/common/AppTopBar.vue";
+import AppSidebarInbox from "@/components/common/AppSidebarInbox.vue";
+import BottomQuickNav from "@/components/common/BottomQuickNav.vue";
+import StageBoardHeader from "@/components/stages/StageBoardHeader.vue";
+import StageBoardContent from "@/components/stages/StageBoardContent.vue";
 import FilterPanel from "@/components/filters/FilterPanel.vue";
 import BoardMenu from "@/components/kanban/BoardMenu.vue";
+import { useStageProject } from "@/composables/stages/useStageProject";
 
-const project = ref(null);
-const loading = ref(true);
-const boardWrapper = ref(null);
-const showBoardMenu = ref(false);
-
-// View switcher state
-const currentView = ref("board");
-
-// Show panels state
-const showMembers = ref(false);
-const showFilter = ref(false);
-
-// Filter state
-const activeFilters = ref({
-  members: [],
-  labels: [],
-  cardStatus: [],
-  dueDate: [],
-  activity: [],
-  searchQuery: ''
-});
-
-// ===== Board title edit =====
-const isEditingTitle = ref(false);
-const titleDraft = ref("");
-const titleInputRef = ref(null);
-
-const boardTitle = computed(() => {
-  const p = project.value;
-  const fromProject =
-    (p?.name && String(p.name).trim()) ||
-    (p?.title && String(p.title).trim()) ||
-    (p?.project_name && String(p.project_name).trim()) ||
-    "";
-  return fromProject || "Bảng Trello của tôi";
-});
-
-function startEditTitle() {
-  if (!project.value) return;
-
-  isEditingTitle.value = true;
-  titleDraft.value = boardTitle.value;
-
-  nextTick(() => {
-    if (titleInputRef.value) {
-      titleInputRef.value.focus();
-      titleInputRef.value.select?.();
-    }
-  });
-}
-
-function cancelEditTitle() {
-  isEditingTitle.value = false;
-  titleDraft.value = "";
-}
-
-function commitTitle() {
-  if (!isEditingTitle.value) return;
-
-  const nextTitle = String(titleDraft.value || "").trim();
-  if (!nextTitle) {
-    cancelEditTitle();
-    return;
-  }
-
-  const p = project.value || {};
-  project.value = {
-    ...p,
-    name: nextTitle,
-  };
-
-  isEditingTitle.value = false;
-}
-
-// ===== Members management =====
-function updateMembers(updatedMembers) {
-  if (project.value) {
-    project.value = {
-      ...project.value,
-      members: updatedMembers,
-    };
-  }
-}
-
-// ===== Filter management =====
-function updateFilters(newFilters) {
-  activeFilters.value = newFilters;
-}
-
-function closeFilter() {
-  showFilter.value = false;
-}
-
-const filterButtonClass = computed(() => {
-  const hasActiveFilters = 
-    activeFilters.value.members?.length > 0 ||
-    activeFilters.value.labels?.length > 0 ||
-    activeFilters.value.cardStatus?.length > 0 ||
-    activeFilters.value.dueDate?.length > 0 ||
-    activeFilters.value.activity?.length > 0;
-  
-  return hasActiveFilters 
-    ? 'bg-[#0c66e4] text-white' 
-    : 'bg-black/30 border border-white/15 hover:bg-black/40';
-});
-
-// ===== Fetch project =====
-onMounted(async () => {
-  try {
-    loading.value = true;
-    const res = await getProjectDetail();
-    project.value = res.data;
-  } catch (error) {
-    console.error("Failed to fetch project:", error);
-  } finally {
-    loading.value = false;
-  }
-});
+const {
+  project,
+  loading,
+  boardWrapper,
+  showBoardMenu,
+  currentView,
+  showMembers,
+  showFilter,
+  activeFilters,
+  isEditingTitle,
+  titleDraft,
+  boardTitle,
+  filterButtonClass,
+  startEditTitle,
+  cancelEditTitle,
+  commitTitle,
+  updateMembers,
+  updateFilters,
+  closeFilter,
+} = useStageProject();
 </script>
