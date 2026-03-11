@@ -108,7 +108,7 @@
 
 <script setup>
 import { onBeforeUnmount, onMounted } from "vue";
-import BoardMenuItem from "./BoardMenuItem.vue";
+import BoardMenuItem from "@/components/kanban/menus/BoardMenuItem.vue";
 
 defineProps({
   open: { type: Boolean, default: false },
