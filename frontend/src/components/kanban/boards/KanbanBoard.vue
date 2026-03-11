@@ -11,7 +11,10 @@
               Hướng dẫn cho người mới dùng Trello
             </h3>
           </div>
-          <button class="text-white/80 hover:text-white p-1 rounded hover:bg-white/10">
+          <button
+            class="text-white/80 hover:text-white p-1 rounded hover:bg-white/10"
+            type="button"
+          >
             ⋮
           </button>
         </div>
@@ -31,6 +34,7 @@
 
             <button
               class="w-full mt-1 text-left text-white/80 hover:text-white text-sm p-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              type="button"
             >
               <span class="text-lg leading-none">+</span>
               <span>Thêm thẻ</span>
@@ -39,13 +43,11 @@
         </div>
       </div>
 
-      <!-- Draggable task columns -->
+      <!-- Task columns -->
       <div
         v-for="(column, idx) in computedColumns"
         :key="column.id"
         class="w-80 flex-shrink-0 h-full flex flex-col"
-        @dragover.prevent
-        @drop="handleDrop($event, column.id)"
       >
         <div
           class="mb-3 rounded-xl bg-black/40 border border-white/10 px-3 py-2 flex items-center justify-between shadow-sm"
@@ -61,6 +63,7 @@
               {{ tasksByColumn(column).length }}
             </span>
           </div>
+
           <ListActionsMenu
             :column-id="String(column.id)"
             :can-move-left="idx > 0"
@@ -82,13 +85,21 @@
               v-for="task in tasksByColumn(column)"
               :key="task.id"
               :task="task"
-              draggable="true"
-              @dragstart="handleDragStart($event, task)"
-              @click="selectTask(task)"
+              @open-card="handleOpenCard"
+              @edit-labels="handleEditLabels"
+              @change-members="handleChangeMembers"
+              @change-cover="handleChangeCover"
+              @edit-date="handleEditDate"
+              @move-task="handleMoveTask"
+              @copy-task="handleCopyTask"
+              @copy-link="handleCopyLink"
+              @mirror-task="handleMirrorTask"
+              @archive-task="handleArchiveTask"
             />
 
             <button
               class="w-full mt-1 text-left text-white/70 hover:text-white text-sm p-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              type="button"
               @click="openAddTask(column)"
             >
               <span class="text-lg leading-none">+</span>
@@ -106,6 +117,7 @@
           <button
             v-if="!showAddList"
             class="w-full text-left text-white/80 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+            type="button"
             @click="openAddList"
           >
             <span class="text-lg leading-none">+</span>
@@ -136,6 +148,7 @@
 
               <button
                 class="px-3 py-2 rounded-lg bg-white/10 text-white text-sm hover:bg-white/15 border border-white/10"
+                type="button"
                 @click="createList"
               >
                 Thêm
@@ -143,8 +156,9 @@
 
               <button
                 class="px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10"
-                @click="closeAddList"
+                type="button"
                 title="Hủy"
+                @click="closeAddList"
               >
                 ✕
               </button>
@@ -158,149 +172,225 @@
       </div>
     </div>
 
-    <!-- Edit task modal -->
-    <EditTaskModal
-      v-if="selectedTask"
-      :task="selectedTask"
-      :members="project?.members || []"
-      @close="selectedTask = null"
-      @save="updateTask"
-      @delete="deleteTask"
+    <AddTaskModal
+      v-if="showAddTask && selectedColumn"
+      :status="selectedColumn.status"
+      :display-status="selectedColumn.label"
+      :members="project.members"
+      @close="showAddTask = false"
+      @add="addTask"
     />
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
-import TaskCard from "./TaskCard.vue";
-import AddTaskModal from "../modals/AddTaskModal.vue";
-import EditTaskModal from "../modals/EditTaskModal.vue";
-import ListActionsMenu from "./ListActionsMenu.vue";
+import TaskCard from "@/components/kanban/cards/TaskCard.vue";
+import ListActionsMenu from "@/components/kanban/menus/ListActionsMenu.vue";
+import AddTaskModal from "@/components/modals/AddTaskModal.vue";
 
 const props = defineProps({
   project: {
     type: Object,
-    default: null,
+    required: true,
+  },
+  filters: {
+    type: Object,
+    default: () => ({
+      members: [],
+      labels: [],
+      cardStatus: [],
+      dueDate: [],
+      activity: [],
+      searchQuery: "",
+    }),
   },
 });
 
 const emit = defineEmits(["update-project"]);
 
+const defaultColumns = [
+  { id: "today", status: "Todo", label: "Hôm nay" },
+  { id: "this-week", status: "In Progress", label: "Tuần này" },
+  { id: "later", status: "Done", label: "Sau này" },
+];
+
+const statusOptions = [
+  { value: "Todo", label: "Todo" },
+  { value: "In Progress", label: "In Progress" },
+  { value: "Done", label: "Done" },
+];
+
+const computedColumns = computed(() => {
+  const cols = props.project?.columns;
+  if (Array.isArray(cols) && cols.length > 0) return cols;
+  return defaultColumns;
+});
+
+/** ============ Add task ============ */
+const showAddTask = ref(false);
+const selectedColumn = ref(null);
+
+const taskMatchesFilters = (task) => {
+  const {
+    members = [],
+    labels = [],
+    cardStatus = [],
+    dueDate = [],
+    activity = [],
+    searchQuery = "",
+  } = props.filters || {};
+
+  if (
+    searchQuery &&
+    !String(task.title || "")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  ) {
+    return false;
+  }
+
+  if (members.length > 0 && Array.isArray(task.assignees)) {
+    const hasMatchingMember = task.assignees.some((id) => members.includes(id));
+    if (!hasMatchingMember) return false;
+  }
+
+  if (labels.length > 0 && Array.isArray(task.labels)) {
+    const hasMatchingLabel = task.labels.some((id) => labels.includes(id));
+    if (!hasMatchingLabel) return false;
+  }
+
+  if (cardStatus.length > 0) {
+    const taskStatus = task.isCompleted ? "completed" : "pending";
+    if (!cardStatus.includes(taskStatus)) return false;
+  }
+
+  if (dueDate.length > 0) {
+    if (!task.dueDate) {
+      if (dueDate.includes("no-due")) return true;
+      return false;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const taskDate = new Date(task.dueDate);
+    taskDate.setHours(0, 0, 0, 0);
+
+    let hasDueDateMatch = false;
+
+    if (dueDate.includes("overdue") && taskDate < today) {
+      hasDueDateMatch = true;
+    }
+    if (dueDate.includes("today") && taskDate.getTime() === today.getTime()) {
+      hasDueDateMatch = true;
+    }
+    if (dueDate.includes("upcoming") && taskDate > today) {
+      hasDueDateMatch = true;
+    }
+
+    if (!hasDueDateMatch && !dueDate.includes("no-due")) return false;
+  }
+
+  void activity;
+  return true;
+};
+
+const tasksByColumn = (column) => {
+  const allTasks = (props.project.tasks || []).filter(
+    (t) => t.status === column.status
+  );
+
+  const hasActiveFilters =
+    props.filters?.members?.length > 0 ||
+    props.filters?.labels?.length > 0 ||
+    props.filters?.cardStatus?.length > 0 ||
+    props.filters?.dueDate?.length > 0 ||
+    props.filters?.activity?.length > 0 ||
+    (props.filters?.searchQuery &&
+      props.filters.searchQuery.trim().length > 0);
+
+  if (!hasActiveFilters) return allTasks;
+  return allTasks.filter(taskMatchesFilters);
+};
+
+const addTask = (task) => {
+  const updated = {
+    ...props.project,
+    tasks: [...(props.project.tasks || []), task],
+  };
+  emit("update-project", updated);
+  showAddTask.value = false;
+};
+
+const openAddTask = (column) => {
+  selectedColumn.value = column;
+  showAddTask.value = true;
+};
+
+/** ============ Add list ============ */
 const showAddList = ref(false);
 const newListTitle = ref("");
 const newListStatus = ref("Todo");
 
-const statusOptions = [
-  { label: "Chưa làm", value: "Todo" },
-  { label: "Đang làm", value: "In Progress" },
-  { label: "Hoàn thành", value: "Done" },
-];
-
-const draggedTask = ref(null);
-const selectedTask = ref(null);
-
-const computedColumns = computed(() => {
-  if (!props.project?.columns) {
-    return [
-      { id: "todo", label: "Chưa làm", status: "Todo" },
-      { id: "in-progress", label: "Đang làm", status: "In Progress" },
-      { id: "done", label: "Hoàn thành", status: "Done" },
-    ];
-  }
-  return props.project.columns;
-});
-
-const tasksByColumn = (column) => {
-  if (!props.project?.tasks) return [];
-  return props.project.tasks.filter((t) => t.status === column.status);
-};
-
 const openAddList = () => {
   showAddList.value = true;
-};
-
-const closeAddList = () => {
-  showAddList.value = false;
   newListTitle.value = "";
   newListStatus.value = "Todo";
 };
 
-const createList = () => {
-  if (!newListTitle.value.trim()) return;
+const closeAddList = () => {
+  showAddList.value = false;
+};
 
-  const newColumn = {
-    id: `col-${Date.now()}`,
-    label: newListTitle.value.trim(),
+const slugifyId = (s) =>
+  String(s || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9\-]/g, "")
+    .slice(0, 40);
+
+const createList = () => {
+  const title = newListTitle.value.trim();
+  if (!title) return;
+
+  const baseId = slugifyId(title) || "list";
+  const current = Array.isArray(props.project.columns)
+    ? props.project.columns
+    : computedColumns.value;
+
+  let id = baseId;
+  let i = 2;
+  while (current.some((c) => c.id === id)) {
+    id = `${baseId}-${i++}`;
+  }
+
+  const newCol = {
+    id,
+    label: title,
     status: newListStatus.value,
   };
 
   const updated = {
     ...props.project,
-    columns: [...(props.project?.columns || []), newColumn],
+    columns: [
+      ...(Array.isArray(props.project.columns)
+        ? props.project.columns
+        : computedColumns.value),
+      newCol,
+    ],
   };
 
   emit("update-project", updated);
-  closeAddList();
-};
-
-const openAddTask = (column) => {
-  // Implement in AddTaskModal
-};
-
-const handleDragStart = (event, task) => {
-  draggedTask.value = task;
-  event.dataTransfer.effectAllowed = "move";
-};
-
-const handleDrop = (event, columnId) => {
-  event.preventDefault();
-  if (!draggedTask.value) return;
-
-  const column = computedColumns.value.find((c) => c.id === columnId);
-  if (!column) return;
-
-  // Update task status
-  const updated = {
-    ...props.project,
-    tasks: props.project.tasks.map((t) =>
-      t.id === draggedTask.value.id ? { ...t, status: column.status } : t
-    ),
-  };
-
-  emit("update-project", updated);
-  draggedTask.value = null;
-};
-
-const selectTask = (task) => {
-  selectedTask.value = task;
-};
-
-const updateTask = (updatedTask) => {
-  const updated = {
-    ...props.project,
-    tasks: props.project.tasks.map((t) =>
-      t.id === updatedTask.id ? updatedTask : t
-    ),
-  };
-
-  emit("update-project", updated);
-  selectedTask.value = null;
-};
-
-const deleteTask = (taskId) => {
-  const updated = {
-    ...props.project,
-    tasks: props.project.tasks.filter((t) => t.id !== taskId),
-  };
-
-  emit("update-project", updated);
-  selectedTask.value = null;
+  showAddList.value = false;
 };
 
 function columnsForUpdate() {
-  const cols = Array.isArray(props.project?.columns) && props.project.columns.length
-    ? props.project.columns
-    : computedColumns.value;
+  const cols =
+    Array.isArray(props.project?.columns) && props.project.columns.length
+      ? props.project.columns
+      : computedColumns.value;
   return Array.isArray(cols) ? cols : [];
 }
 
@@ -312,24 +402,31 @@ function updateColumns(nextCols) {
   emit("update-project", updated);
 }
 
-function onAddCard() {
-  // Draggable board hiện chưa nối AddTaskModal theo từng cột.
-  // Giữ UI giống Trello; chức năng thêm thẻ thực thi ở KanbanBoard.vue.
+function onAddCard(columnId) {
+  const col = computedColumns.value.find(
+    (c) => String(c.id) === String(columnId)
+  );
+  if (!col) return;
+  openAddTask(col);
 }
 
 function onMoveList({ columnId, dir }) {
   const cols = [...columnsForUpdate()];
   const from = cols.findIndex((c) => String(c.id) === String(columnId));
   if (from < 0) return;
+
   const to = dir === "left" ? from - 1 : from + 1;
   if (to < 0 || to >= cols.length) return;
+
   const [picked] = cols.splice(from, 1);
   cols.splice(to, 0, picked);
   updateColumns(cols);
 }
 
 function onArchiveList(columnId) {
-  const cols = columnsForUpdate().filter((c) => String(c.id) !== String(columnId));
+  const cols = columnsForUpdate().filter(
+    (c) => String(c.id) !== String(columnId)
+  );
   updateColumns(cols);
 }
 
@@ -357,7 +454,7 @@ function onToggleWatch(columnId) {
 }
 
 function onCopyList() {
-  // Tạm thời chỉ có UI.
+  // tạm giữ UI
 }
 
 function hexToRgba(hex, alpha) {
@@ -375,5 +472,46 @@ function listHeaderStyle(column) {
   return {
     backgroundColor: hexToRgba(c, 0.35),
   };
+}
+
+/** ============ Task card actions ============ */
+function handleOpenCard(task) {
+  console.log("open-card", task);
+}
+
+function handleEditLabels(task) {
+  console.log("edit-labels", task);
+}
+
+function handleChangeMembers(task) {
+  console.log("change-members", task);
+}
+
+function handleChangeCover(task) {
+  console.log("change-cover", task);
+}
+
+function handleEditDate(task) {
+  console.log("edit-date", task);
+}
+
+function handleMoveTask(task) {
+  console.log("move-task", task);
+}
+
+function handleCopyTask(task) {
+  console.log("copy-task", task);
+}
+
+function handleCopyLink(payload) {
+  console.log("copy-link", payload);
+}
+
+function handleMirrorTask(task) {
+  console.log("mirror-task", task);
+}
+
+function handleArchiveTask(task) {
+  console.log("archive-task", task);
 }
 </script>

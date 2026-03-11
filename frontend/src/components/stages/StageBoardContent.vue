@@ -36,8 +36,8 @@
 </template>
 
 <script setup>
-import KanbanBoard from "@/components/kanban/KanbanBoard.vue";
 import ProjectMembers from "@/components/project/ProjectMembers.vue";
+import KanbanBoard from "@/components/kanban/boards/KanbanBoard.vue";
 
 defineProps({
   project: {
