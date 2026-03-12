@@ -29,9 +29,9 @@
           >
             T
           </div>
-          <span class="text-[20px] leading-none text-[#0747a6] font-semibold"
-            >Trello</span
-          >
+          <span class="text-[20px] leading-none text-[#0747a6] font-semibold">
+            Trello
+          </span>
         </div>
 
         <div class="flex-1 max-w-4xl">
@@ -61,6 +61,7 @@
         <button
           type="button"
           class="h-8 px-3.5 rounded-md bg-[#0c66e4] text-white text-xs font-semibold hover:bg-[#0055cc]"
+          @click="isCreateBoardOpen = true"
         >
           Tạo mới
         </button>
@@ -119,9 +120,9 @@
             >
               T
             </div>
-            <span class="text-[15px] font-medium text-[#172b4d]"
-              >Trello Không gian làm việc</span
-            >
+            <span class="text-[15px] font-medium text-[#172b4d]">
+              Trello Không gian làm việc
+            </span>
             <svg
               class="w-4 h-4 ml-auto text-[#172b4d] transition-transform"
               :class="{ 'rotate-180': workspaceOpen }"
@@ -348,12 +349,13 @@
             </p>
 
             <div class="mt-8 flex justify-center">
-              <router-link
-                to="/projects/1"
+              <button
+                type="button"
                 class="inline-flex items-center justify-center px-8 h-11 rounded-lg bg-[#0c66e4] text-white text-[18px] font-semibold hover:bg-[#0055cc] border border-[#0055cc]"
+                @click="isCreateBoardOpen = true"
               >
                 Tạo bảng đầu tiên của bạn
-              </router-link>
+              </button>
             </div>
           </div>
         </section>
@@ -437,17 +439,16 @@
                 </button>
               </div>
             </div>
-
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-9">
-              <router-link
-                to="/projects/1"
-                class="h-34 rounded-xl border border-[#d0d4db] bg-[#e5e7eb] text-[20px] text-[#44546f] hover:bg-[#dce0e6] flex items-center justify-center transition-colors"
-              >
-                Tạo bảng mới
-              </router-link>
-            </div>
-
             <button
+              type="button"
+              class="h-34 rounded-xl border border-[#d0d4db] bg-[#e5e7eb] text-[20px] text-[#44546f] hover:bg-[#dce0e6] flex items-center justify-center transition-colors"
+              @click="isCreateBoardOpen = true"
+            >
+              Tạo bảng mới
+            </button>
+          </div>
+          <button
               type="button"
               class="h-9 px-4 rounded-md border border-[#d0d4db] bg-[#e9ebef] text-[18px] hover:bg-[#dde1e7]"
             >
@@ -457,14 +458,18 @@
         </template>
       </main>
     </div>
+
+    <CreateBoardModal v-model="isCreateBoardOpen" />
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import CreateBoardModal from "@/components/modals/CreateBoardModal.vue";
 
 const workspaceOpen = ref(false);
 const activeWorkspaceSection = ref("home");
+const isCreateBoardOpen = ref(false);
 
 const topActions = ["📢", "🔔", "❔"];
 
