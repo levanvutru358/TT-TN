@@ -5,7 +5,7 @@
       <div class="min-w-0">
         <h1
           v-if="!isEditingTitle"
-          class="text-lg md:text-xl font-semibold truncate cursor-text select-none"
+          class="text-white md:text-xl font-semibold truncate cursor-text select-none"
           :title="boardTitle"
           @click="$emit('start-edit-title')"
         >
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="flex items-center gap-2 text-xs shrink-0">
+    <div class="text-white flex items-center gap-2 text-xs shrink-0">
       <ViewSwitcher
         :model-value="currentView"
         @update:model-value="$emit('update:currentView', $event)"

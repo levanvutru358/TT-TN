@@ -1,6 +1,9 @@
 <template>
-  <div class="h-screen flex flex-col bg-[#020617] text-white overflow-hidden">
-    <AppTopBar />
+  <div class="min-h-screen flex flex-col bg-[#f1f2f4] text-[#172b4d]">
+    <WorkspaceHeader
+      v-model="searchKeyword"
+      @create-click="showBoardMenu = true"
+    />
 
     <div class="flex flex-1 overflow-hidden">
       <AppSidebarInbox v-if="bottomNavTab === 'inbox'" />
@@ -9,7 +12,7 @@
 
       <main
         ref="boardWrapper"
-        class="relative flex-1 p-3 md:p-4 overflow-hidden rounded-[26px] bg-[#0b0f19] border border-black/60 shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
+        class="relative flex-1 p-3 md:p-4 overflow-hidden rounded-none bg-[#0b0f19] border border-black/10 shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
       >
         <div
           class="h-full w-full overflow-auto rounded-[22px] bg-gradient-to-r from-[#4b3f72] via-[#7b3ea8] to-[#c1558b] hide-scrollbar"
@@ -32,8 +35,16 @@
               @open-board-menu="showBoardMenu = true"
             />
 
+            <div
+              v-if="searchKeyword.trim()"
+              class="mx-4 md:mx-6 mt-4 mb-2 text-sm text-white/80"
+            >
+              Kết quả tìm kiếm cho:
+              <span class="font-semibold text-white">"{{ searchKeyword }}"</span>
+            </div>
+
             <StageBoardContent
-              :project="project"
+              :project="filteredProject"
               :loading="loading"
               :show-members="showMembers"
               :active-filters="activeFilters"
@@ -65,7 +76,8 @@
 </template>
 
 <script setup>
-import AppTopBar from "@/components/common/AppTopBar.vue";
+import { computed, ref } from "vue";
+import WorkspaceHeader from "@/components/common/WorkspaceHeader.vue";
 import AppSidebarInbox from "@/components/common/AppSidebarInbox.vue";
 import AppSidebarPlanner from "@/components/common/AppSidebarPlanner.vue";
 import AppSidebarBoards from "@/components/common/AppSidebarBoards.vue";
@@ -76,6 +88,8 @@ import StageBoardHeader from "@/components/stages/StageBoardHeader.vue";
 import FilterPanel from "@/components/filters/FilterPanel.vue";
 import BoardMenu from "@/components/kanban/menus/BoardMenu.vue";
 import { useStageProject } from "@/composables/stages/useStageProject.js";
+
+const searchKeyword = ref("");
 
 const {
   project,
@@ -98,6 +112,33 @@ const {
   updateFilters,
   closeFilter,
 } = useStageProject();
+
+const filteredProject = computed(() => {
+  const keyword = searchKeyword.value.trim().toLowerCase();
+
+  if (!project.value) return project.value;
+  if (!keyword) return project.value;
+
+  const clonedProject = {
+    ...project.value,
+    lists: (project.value.lists || [])
+      .map((list) => {
+        const filteredCards = (list.cards || []).filter((card) => {
+          const title = (card.title || "").toLowerCase();
+          const description = (card.description || "").toLowerCase();
+          return title.includes(keyword) || description.includes(keyword);
+        });
+
+        return {
+          ...list,
+          cards: filteredCards,
+        };
+      })
+      .filter((list) => list.cards.length > 0),
+  };
+
+  return clonedProject;
+});
 </script>
 
 <style scoped>
