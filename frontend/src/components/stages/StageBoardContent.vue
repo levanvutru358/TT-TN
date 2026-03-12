@@ -11,14 +11,10 @@
         :filters="activeFilters"
         @update-project="$emit('update-project', $event)"
       />
-
       <div
         v-else
         class="h-full rounded-2xl bg-black/20 border border-white/10 flex items-center justify-center"
       >
-        <div class="text-sm text-white/80">
-          {{ loading ? "Đang tải dự án..." : "Không có dữ liệu dự án" }}
-        </div>
       </div>
     </div>
   </div>
