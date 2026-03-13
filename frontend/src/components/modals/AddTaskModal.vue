@@ -25,61 +25,6 @@
             class="w-full bg-[#1e2429] border border-[#3f474f] rounded text-sm text-white p-2 focus:outline-none focus:border-blue-600"
           />
         </div>
-
-        <div>
-          <label class="block text-xs text-[#9fadbc] mb-1">Description</label>
-          <textarea
-            v-model="description"
-            rows="3"
-            placeholder="Add a description..."
-            class="w-full bg-[#1e2429] border border-[#3f474f] rounded text-sm text-white p-2 focus:outline-none focus:border-blue-600"
-          />
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-xs text-[#9fadbc] mb-1">Priority</label>
-            <select
-              v-model="priority"
-              class="w-full bg-[#1e2429] border border-[#3f474f] rounded text-sm text-white p-2 focus:outline-none focus:border-blue-600"
-            >
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-xs text-[#9fadbc] mb-1">Assignee</label>
-            <select
-              v-model="assignee"
-              class="w-full bg-[#1e2429] border border-[#3f474f] rounded text-sm text-white p-2 focus:outline-none focus:border-blue-600"
-            >
-              <option value="Unassigned">Unassigned</option>
-              <option
-                v-for="member in members || []"
-                :key="member.id"
-                :value="member.name"
-              >
-                {{ member.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs text-[#9fadbc] mb-1">Due date</label>
-          <input
-            v-model="dueDate"
-            type="date"
-            class="w-full bg-[#1e2429] border border-[#3f474f] rounded text-sm text-white p-2 focus:outline-none focus:border-blue-600"
-          />
-        </div>
-
-        <div class="text-xs text-[#9fadbc] mt-2">
-          <span>Adding to: </span>
-          <span class="text-white">{{ displayStatus || status }}</span>
-        </div>
       </div>
 
       <div class="flex justify-end gap-2 mt-4">

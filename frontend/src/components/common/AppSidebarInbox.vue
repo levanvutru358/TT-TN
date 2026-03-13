@@ -11,7 +11,7 @@
         >
           <span class="text-sm">✉️</span>
         </div>
-        <h2 class="text-sm font-semibold">Hộp thư đến</h2>
+        <h2 class="text-white text-sm font-semibold">Hộp thư đến</h2>
       </div>
 
       <div class="space-y-3 text-sm">
