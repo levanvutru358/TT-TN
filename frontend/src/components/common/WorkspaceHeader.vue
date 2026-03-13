@@ -3,34 +3,81 @@
     class="sticky top-0 z-20 h-12 border-b border-[#d0d4db] bg-[#f8f9fb]/95 backdrop-blur"
   >
     <div class="h-full flex items-center gap-3 px-4 lg:px-7">
-      <button
-        type="button"
-        class="w-7 h-7 rounded-md text-[#44546f] hover:bg-[#e9ebef] flex items-center justify-center"
-        aria-label="Menu"
-      >
-        <svg
-          class="w-4 h-4"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
+      <div class="relative">
+        <button
+          type="button"
+          class="flex h-8 w-8 items-center justify-center rounded-md border border-[#cfd5de] text-[#44546f] hover:bg-[#e9ebef]"
+          aria-label="Mở danh sách ứng dụng"
+          @click="isLauncherOpen = !isLauncherOpen"
         >
-          <path
-            d="M6 6H8V8H6V6ZM11 6H13V8H11V6ZM16 6H18V8H16V6ZM6 11H8V13H6V11ZM11 11H13V13H11V11ZM16 11H18V13H16V11ZM6 16H8V18H6V16ZM11 16H13V18H11V16ZM16 16H18V18H16V16Z"
-            fill="currentColor"
-          />
-        </svg>
-      </button>
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <rect
+              x="4"
+              y="4"
+              width="6"
+              height="6"
+              rx="1.2"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+            <rect
+              x="14"
+              y="4"
+              width="6"
+              height="6"
+              rx="1.2"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+            <rect
+              x="4"
+              y="14"
+              width="6"
+              height="6"
+              rx="1.2"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+            <rect
+              x="14"
+              y="14"
+              width="6"
+              height="6"
+              rx="1.2"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+          </svg>
+        </button>
+
+        <AppLauncherMenu v-if="isLauncherOpen" />
+      </div>
 
       <router-link
         to="/"
         class="flex items-center gap-2 min-w-[140px] rounded-md px-1 py-1 hover:bg-[#e9ebef] transition-colors"
       >
         <div
-          class="w-7 h-7 rounded-md bg-[#0c66e4] text-white text-xs font-semibold flex items-center justify-center"
+          class="flex h-7 w-7 items-center justify-center rounded-md bg-[#0c66e4] text-white"
         >
-          T
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="5" y="4" width="14" height="16" rx="3" fill="currentColor" />
+            <rect x="8" y="7" width="3" height="8" rx="1.2" fill="#0C66E4" />
+            <rect x="13" y="7" width="3" height="5.5" rx="1.2" fill="#0C66E4" />
+          </svg>
         </div>
+
         <span class="text-[20px] leading-none text-[#0747a6] font-semibold">
           Trello
         </span>
@@ -74,19 +121,87 @@
 
       <div class="hidden md:flex items-center gap-1 text-[#44546f] ml-auto">
         <button
-          v-for="item in topActions"
-          :key="item"
           type="button"
-          class="w-7 h-7 rounded-md hover:bg-[#e9ebef] flex items-center justify-center text-sm"
-          :aria-label="item"
+          class="flex h-7 w-7 items-center justify-center rounded-md hover:bg-[#e9ebef]"
+          aria-label="Thông báo"
         >
-          {{ item }}
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 14H8L13 18V6L8 10H5V14Z"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M16 9C17.3 10 18 11 18 12C18 13 17.3 14 16 15"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="flex h-7 w-7 items-center justify-center rounded-md hover:bg-[#e9ebef]"
+          aria-label="Chuông"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 20C13.1 20 14 19.1 14 18H10C10 19.1 10.9 20 12 20Z"
+              fill="currentColor"
+            />
+            <path
+              d="M6 16H18L16.5 14V10.5C16.5 8 14.7 6 12 6C9.3 6 7.5 8 7.5 10.5V14L6 16Z"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="flex h-7 w-7 items-center justify-center rounded-md hover:bg-[#e9ebef]"
+          aria-label="Trợ giúp"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="8"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+            <path
+              d="M9.8 9.3C10 8.3 10.9 7.6 12 7.6C13.2 7.6 14.2 8.5 14.2 9.7C14.2 10.7 13.6 11.2 12.8 11.7C12.1 12.1 11.6 12.5 11.6 13.4V13.8"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+            <circle cx="12" cy="16.8" r="1" fill="currentColor" />
+          </svg>
         </button>
 
         <div
-          class="w-7 h-7 rounded-full bg-[#de350b] text-white text-[10px] font-bold flex items-center justify-center ml-1"
+          class="ml-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#1D4ED8] text-[10px] font-bold text-white"
         >
-          LT
+          TV
         </div>
       </div>
     </div>
@@ -94,6 +209,9 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
+import AppLauncherMenu from "@/components/common/AppLauncherMenu.vue";
+
 defineProps({
   modelValue: {
     type: String,
@@ -115,5 +233,5 @@ defineProps({
 
 defineEmits(["update:modelValue", "create-click"]);
 
-const topActions = ["📢", "🔔", "❔"];
+const isLauncherOpen = ref(false);
 </script>
