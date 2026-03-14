@@ -25,6 +25,7 @@
           />
         </svg>
       </button>
+
       <aside
         class="relative shrink-0 overflow-hidden bg-[#f5f6f8] transition-[width,padding,border] duration-200"
         :class="
@@ -64,18 +65,21 @@
           >
             <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
           </router-link>
+
           <router-link
             to="/personal/activity"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
             <span class="text-[15px] font-semibold">Hoạt động</span>
           </router-link>
+
           <router-link
             to="/workspace/cards"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
             <span class="text-[15px] font-semibold">Thẻ</span>
           </router-link>
+
           <router-link
             to="/personal/settings"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
@@ -102,18 +106,21 @@
           >
             <span class="text-[15px] font-semibold">Bảng</span>
           </button>
+
           <router-link
             to="/workspace/members"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
             <span class="text-[15px] font-semibold">Thành viên</span>
           </router-link>
+
           <router-link
             to="/workspace/settings"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
             <span class="text-[15px] font-semibold">Cài đặt</span>
           </router-link>
+
           <button
             type="button"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
@@ -223,7 +230,15 @@
             <router-link
               v-for="board in displayedBoards"
               :key="board.id"
-              to="/project"
+              :to="{
+                name: 'ProjectDetail',
+                params: { id: board.id },
+                query: {
+                  title: board.name,
+                  bg: board.background,
+                  visibility: board.visibility
+                }
+              }"
               class="group relative flex h-[96px] w-[248px] overflow-hidden rounded-xl border border-[#c4c9d1] bg-[#dfe1e6] transition-transform hover:-translate-y-0.5"
             >
               <div class="absolute inset-0" :style="{ background: board.background }"></div>
@@ -484,9 +499,15 @@
 </template>
 
 <script setup>
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const STORAGE_KEY = "workspace_boards";
 
 const isSidebarCollapsed = ref(false);
+
 const sortOptions = [
   { id: "recent-desc", label: "Hoạt động gần đây nhất" },
   { id: "recent-asc", label: "Ít hoạt động nhất gần đây" },
@@ -497,6 +518,7 @@ const sortOptions = [
 const showSortDropdown = ref(false);
 const selectedSort = ref("recent-desc");
 const searchQuery = ref("");
+
 const workspaceBoards = ref([]);
 
 const showCreateBoardModal = ref(false);
@@ -558,7 +580,9 @@ const selectedVisibilityOption = computed(
 );
 
 const selectedSortLabel = computed(
-  () => sortOptions.find((option) => option.id === selectedSort.value)?.label || sortOptions[0].label
+  () =>
+    sortOptions.find((option) => option.id === selectedSort.value)?.label ||
+    sortOptions[0].label
 );
 
 const displayedBoards = computed(() => {
@@ -585,6 +609,38 @@ const displayedBoards = computed(() => {
   }
 
   return boards;
+});
+
+const saveBoardsToStorage = () => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(workspaceBoards.value));
+};
+
+const loadBoardsFromStorage = () => {
+  const raw = localStorage.getItem(STORAGE_KEY);
+
+  if (!raw) {
+    workspaceBoards.value = [];
+    return;
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    workspaceBoards.value = Array.isArray(parsed) ? parsed : [];
+  } catch {
+    workspaceBoards.value = [];
+  }
+};
+
+watch(
+  workspaceBoards,
+  () => {
+    saveBoardsToStorage();
+  },
+  { deep: true }
+);
+
+onMounted(() => {
+  loadBoardsFromStorage();
 });
 
 const selectSortOption = (id) => {
@@ -619,6 +675,7 @@ const positionCreateBoardModal = (anchorRect) => {
     screenPadding,
     Math.max(screenPadding, window.innerWidth - measuredModalWidth - screenPadding)
   );
+
   const boundedTop = clampValue(
     top,
     screenPadding,
@@ -661,15 +718,27 @@ const closeCreateBoardModal = () => {
 const submitCreateBoard = () => {
   if (!canCreateBoard.value) return;
 
-  workspaceBoards.value.unshift({
+  const newBoard = {
     id: Date.now(),
     name: newBoardTitle.value.trim(),
     background: selectedBoardBackground.value,
     updatedAt: Date.now(),
     visibility: selectedVisibility.value,
-  });
+  };
+
+  workspaceBoards.value.unshift(newBoard);
 
   closeCreateBoardModal();
   newBoardTitle.value = "";
+
+  router.push({
+    name: "ProjectDetail",
+    params: { id: newBoard.id },
+    query: {
+      title: newBoard.name,
+      bg: newBoard.background,
+      visibility: newBoard.visibility,
+    },
+  });
 };
 </script>

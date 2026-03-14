@@ -25,6 +25,7 @@
           />
         </svg>
       </button>
+
       <aside
         class="relative shrink-0 overflow-hidden bg-[#f5f6f8] transition-[width,padding,border] duration-200"
         :class="
@@ -400,21 +401,53 @@
               <div>
                 <p class="max-w-[720px] text-[16px] leading-[1.45]">
                   <span class="font-semibold">Lê văn vũ trụ</span>
+
                   <template v-if="item.type === 'create-board'">
                     <span> đã tạo bảng </span>
-                    <a href="#" class="text-[#0c66e4] underline">{{ item.target }}</a>
+                    <router-link
+                      :to="{
+                        path: '/projects/1',
+                        query: {
+                          title: item.target
+                        }
+                      }"
+                      class="text-[#0c66e4] underline"
+                    >
+                      {{ item.target }}
+                    </router-link>
                   </template>
+
                   <template v-else>
                     <span> đã thêm danh sách công việc {{ item.listName }} vào thẻ </span>
-                    <a href="#" class="text-[#0c66e4] underline">{{ item.target }}</a>
+                    <router-link
+                      :to="{
+                        path: '/projects/1',
+                        query: {
+                          title: item.board
+                        }
+                      }"
+                      class="text-[#0c66e4] underline"
+                    >
+                      {{ item.target }}
+                    </router-link>
                   </template>
                 </p>
 
                 <div class="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-[#44546f]">
-                  <a href="#" class="text-[#0c66e4] underline">{{ item.date }}</a>
+                  <span class="text-[#0c66e4] underline">{{ item.date }}</span>
                   <span>•</span>
                   <span>trên bảng</span>
-                  <a href="#" class="text-[#0c66e4] underline">{{ item.board }}</a>
+                  <router-link
+                    :to="{
+                      path: '/projects/1',
+                      query: {
+                        title: item.board
+                      }
+                    }"
+                    class="text-[#0c66e4] underline"
+                  >
+                    {{ item.board }}
+                  </router-link>
                   <svg
                     class="h-4 w-4 text-[#c9372c]"
                     viewBox="0 0 24 24"
@@ -457,6 +490,7 @@
 
 <script setup>
 import { ref } from "vue";
+
 
 const isSidebarCollapsed = ref(false);
 
