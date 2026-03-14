@@ -5,7 +5,7 @@
         type="button"
         class="absolute top-16 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] transition-[left] duration-200"
         :class="isSidebarCollapsed ? 'left-3' : 'left-[274px]'"
-        :aria-label="isSidebarCollapsed ? 'Mở cài đặt không gian làm việc' : 'Thu gọn cài đặt không gian làm việc'"
+        :aria-label="isSidebarCollapsed ? 'Mở cài đặt cá nhân' : 'Thu gọn cài đặt cá nhân'"
         @click="isSidebarCollapsed = !isSidebarCollapsed"
       >
         <svg
@@ -81,27 +81,34 @@
             <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
           </router-link>
 
-          <router-link
-            to="/personal/activity"
-            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
+          <button
+            type="button"
+            class="flex w-full items-center gap-3 rounded-lg border border-[#0c66e4] bg-[#e9f2ff] px-3 py-2 text-[#0c66e4]"
           >
             <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
+              class="h-[18px] w-[18px]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
               <path
-                d="M6 8H18M6 12H14M6 16H18"
+                d="M5 12C5 8.13401 8.13401 5 12 5C14.4987 5 16.6916 6.3081 17.9282 8.27641M17.9282 8.27641V5.7M17.9282 8.27641H15.2"
                 stroke="currentColor"
                 stroke-width="1.8"
                 stroke-linecap="round"
+                stroke-linejoin="round"
               />
-              <circle cx="16.5" cy="12" r="1.5" fill="currentColor" />
+              <path
+                d="M19 12C19 15.866 15.866 19 12 19C9.50127 19 7.30839 17.6919 6.0718 15.7236M6.0718 15.7236V18.3M6.0718 15.7236H8.8"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
             <span class="text-[15px] font-semibold">Hoạt động</span>
-          </router-link>
+          </button>
 
           <router-link
             to="/workspace/cards"
@@ -151,7 +158,7 @@
           </router-link>
         </div>
 
-        <div class="mt-8 border-t border-[#d0d4db] pt-7">
+        <div class="mt-7 border-t border-[#d0d4db] pt-6">
           <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
           <div class="mb-2 flex items-center gap-3 px-2 py-2">
@@ -188,12 +195,12 @@
             <span class="text-[15px] font-semibold">Bảng</span>
           </router-link>
 
-          <button
-            type="button"
-            class="flex w-full items-center gap-3 rounded-lg border border-[#0c66e4] bg-[#dce4f0] px-3 py-2 text-[#0c66e4]"
+          <router-link
+            to="/workspace/members"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
             <svg
-              class="h-[18px] w-[18px]"
+              class="h-[18px] w-[18px] text-[#2c2f36]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +221,7 @@
               />
             </svg>
             <span class="text-[15px] font-semibold">Thành viên</span>
-          </button>
+          </router-link>
 
           <router-link
             to="/workspace/settings"
@@ -270,14 +277,14 @@
         </div>
       </aside>
 
-      <main class="relative flex-1 px-6 py-6 lg:px-8 lg:py-8">
+      <main class="relative flex-1 overflow-hidden px-6 py-6 lg:px-8 lg:py-8">
         <router-link
           to="/workspace/boards"
           class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] hover:bg-[#d0d4db]"
           aria-label="Đóng"
         >
           <svg
-            class="h-[18px] w-[18px]"
+            class="h-5 w-5"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -292,113 +299,156 @@
           </svg>
         </router-link>
 
-        <div class="max-w-[1180px]">
-          <div class="mb-5 flex items-center gap-3">
-            <h1 class="text-[28px] font-semibold">Người cộng tác</h1>
-            <span class="rounded-full bg-[#dfe1e6] px-2 py-0.5 text-[13px]">1 / 10</span>
-          </div>
+        <div class="max-w-[980px] pt-3">
+          <div class="pl-6">
+            <h1 class="text-[28px] font-semibold leading-none">Hoạt động</h1>
 
-          <div
-            class="relative mb-6 overflow-hidden rounded-lg border border-[#d0d4db] bg-[#f7f8fa] px-5 py-4"
-          >
-            <h2 class="text-[20px] font-semibold">Nâng cấp để kiểm soát nhiều quyền hơn</h2>
-            <p class="mt-2 text-[15px] text-[#44546f]">
-              Quyết định ai có thể gửi lời mời, chỉnh sửa cài đặt Không gian làm việc và hơn
-              thế nữa với Premium.
-            </p>
-            <a href="#" class="mt-2 inline-block text-[15px] underline">
-              Dùng thử Premium miễn phí trong 14 ngày
-            </a>
-            <div
-              class="absolute bottom-3 right-4 flex h-9 w-9 items-center justify-center rounded-lg bg-[#8f5fd3] text-sm font-semibold text-white"
-            >
-              T
-            </div>
-          </div>
-
-          <div class="flex items-center gap-5 overflow-x-auto border-b border-[#d0d4db]">
-            <button
-              v-for="tab in memberTabs"
-              :key="tab.id"
-              type="button"
-              class="whitespace-nowrap border-b-2 pb-3 text-[15px]"
-              :class="
-                selectedMemberTab === tab.id
-                  ? 'border-[#0c66e4] font-semibold text-[#0c66e4]'
-                  : 'border-transparent text-[#2c2f36]'
-              "
-              @click="selectedMemberTab = tab.id"
-            >
-              {{ tab.label }}
-            </button>
-          </div>
-
-          <template v-if="selectedMemberTab === 'members'">
-            <div class="flex items-start justify-between gap-6 border-b border-[#d0d4db] py-5">
-              <p class="max-w-[900px] text-[15px] leading-[1.45]">
-                Các thành viên trong Không gian làm việc có thể xem và tham gia tất cả các bảng
-                Không gian làm việc hiển thị và tạo ra các bảng mới trong Không gian làm việc.
-              </p>
-
-              <button
-                type="button"
-                class="h-9 shrink-0 rounded-md bg-[#0c66e4] px-4 text-[13px] font-semibold text-white hover:bg-[#0055cc]"
+            <div class="mt-6 flex items-center gap-3">
+              <svg
+                class="h-6 w-6 text-[#2c2f36]"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
               >
-                Mời các thành viên Không gian làm việc
-              </button>
+                <circle cx="8" cy="8.5" r="2.7" stroke="currentColor" stroke-width="1.8" />
+                <circle cx="16.5" cy="9.5" r="2.2" stroke="currentColor" stroke-width="1.8" />
+                <path
+                  d="M3.8 18C3.8 15.5 5.8 13.5 8.3 13.5H10.1C12.6 13.5 14.6 15.5 14.6 18"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M13.8 17.8C14 16.1 15.3 14.9 17 14.9H17.8C19.5 14.9 20.8 16.1 21 17.8"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <h2 class="text-[18px] font-semibold">Các Không gian làm việc</h2>
             </div>
 
-            <div class="border-b border-[#d0d4db] py-5">
-              <input
-                type="text"
-                placeholder="Lọc theo tên"
-                class="h-9 w-[320px] rounded-md border border-[#9fadbc] bg-white px-3.5 text-[13px] placeholder:text-[#7a869a] outline-none"
-              />
+            <div class="mt-5 border-b border-[#d0d4db] pb-3 pl-10">
+              <div class="flex items-center gap-2 text-[16px]">
+                <span>Trello Không gian làm việc</span>
+                <svg
+                  class="h-4 w-4 text-[#c9372c]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <rect
+                    x="6"
+                    y="10"
+                    width="12"
+                    height="9"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                  <path
+                    d="M8.5 10V8C8.5 6.067 10.067 4.5 12 4.5C13.933 4.5 15.5 6.067 15.5 8V10"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
             </div>
 
-            <div class="flex items-center gap-5 border-b border-[#d0d4db] py-4">
+            <div class="mt-6 flex items-center gap-3">
+              <svg
+                class="h-6 w-6 text-[#2c2f36]"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M5 12C5 8.13401 8.13401 5 12 5C14.4987 5 16.6916 6.3081 17.9282 8.27641M17.9282 8.27641V5.7M17.9282 8.27641H15.2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M19 12C19 15.866 15.866 19 12 19C9.50127 19 7.30839 17.6919 6.0718 15.7236M6.0718 15.7236V18.3M6.0718 15.7236H8.8"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <h2 class="text-[18px] font-semibold">Hoạt động</h2>
+            </div>
+          </div>
+
+          <div class="mt-8 max-w-[780px] pl-6">
+            <article
+              v-for="item in activityItems"
+              :key="item.id"
+              class="mb-6 flex items-start gap-3"
+            >
               <div
-                class="flex h-9 w-9 items-center justify-center rounded-full bg-[#de350b] text-[16px] font-bold text-white"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e3490b] text-[17px] font-semibold text-white"
               >
                 LT
               </div>
 
-              <div class="text-[14px] font-semibold">
-                39. Lê văn vũ trụ
-                <span class="font-normal text-[#44546f]">@39levanvutr</span>
+              <div>
+                <p class="max-w-[720px] text-[16px] leading-[1.45]">
+                  <span class="font-semibold">Lê văn vũ trụ</span>
+                  <template v-if="item.type === 'create-board'">
+                    <span> đã tạo bảng </span>
+                    <a href="#" class="text-[#0c66e4] underline">{{ item.target }}</a>
+                  </template>
+                  <template v-else>
+                    <span> đã thêm danh sách công việc {{ item.listName }} vào thẻ </span>
+                    <a href="#" class="text-[#0c66e4] underline">{{ item.target }}</a>
+                  </template>
+                </p>
+
+                <div class="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-[#44546f]">
+                  <a href="#" class="text-[#0c66e4] underline">{{ item.date }}</a>
+                  <span>•</span>
+                  <span>trên bảng</span>
+                  <a href="#" class="text-[#0c66e4] underline">{{ item.board }}</a>
+                  <svg
+                    class="h-4 w-4 text-[#c9372c]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="6"
+                      y="10"
+                      width="12"
+                      height="9"
+                      rx="2"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                    <path
+                      d="M8.5 10V8C8.5 6.067 10.067 4.5 12 4.5C13.933 4.5 15.5 6.067 15.5 8V10"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
               </div>
+            </article>
 
-              <div class="ml-auto text-[13px] text-[#2c2f36]">Lần hoạt động gần nhất Feb 2026</div>
-
-              <button
-                type="button"
-                class="h-9 rounded-md bg-[#e6e7ea] px-3.5 text-[13px] font-semibold hover:bg-[#d9dbe0]"
-              >
-                Quản trị viên
-              </button>
-
-              <button
-                type="button"
-                class="h-9 rounded-md bg-[#e6e7ea] px-5 text-[13px] font-semibold hover:bg-[#d9dbe0]"
-              >
-                Rời đi
-              </button>
-            </div>
-          </template>
-
-          <template v-else>
-            <div class="border-b border-[#d0d4db] py-5">
-              <p class="text-[15px] leading-[1.45] text-[#172b4d]">
-                {{ currentMemberTab.description }}
-              </p>
-            </div>
-
-            <div class="border-b border-[#d0d4db] py-5 text-center">
-              <p class="text-[17px] italic text-[#44546f]">
-                {{ currentMemberTab.emptyMessage }}
-              </p>
-            </div>
-          </template>
+            <button
+              type="button"
+              class="inline-flex items-center rounded-md bg-[#dfe1e6] px-4 py-2.5 text-[15px] font-medium hover:bg-[#d0d4db]"
+            >
+              Tải thêm hoạt động
+            </button>
+          </div>
         </div>
       </main>
     </div>
@@ -406,42 +456,49 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 const isSidebarCollapsed = ref(false);
-const memberTabs = [
+
+const activityItems = [
   {
-    id: "members",
-    label: "Thành viên (1)",
-    description: "",
-    emptyMessage: "",
+    id: 1,
+    type: "create-board",
+    target: "Bảng Trello của tôi",
+    board: "Bảng Trello của tôi",
+    date: "19:07 23 thg 2, 2026",
   },
   {
-    id: "single-board-guests",
-    label: "Khách một bảng thông tin (0)",
-    description:
-      "Khách một bảng thông tin là thành viên của một bảng thông tin duy nhất trong Không gian làm việc. Khách chỉ có thể xem và chỉnh sửa bảng mà họ được thêm vào.",
-    emptyMessage: "Không có khách nào trong Không gian làm việc này.",
+    id: 2,
+    type: "add-list",
+    listName: "Trình lập kế hoạch",
+    target: "Tìm hiểu thông tin cơ bản về Trello",
+    board: "Bảng Trello của tôi",
+    date: "19:07 23 thg 2, 2026",
   },
   {
-    id: "multi-board-guests",
-    label: "Khách đa bảng thông tin (0)",
-    description:
-      "Khách đa bảng thông tin là thành viên của nhiều bảng thông tin của Không gian làm việc. Khách chỉ có thể xem và chỉnh sửa bảng mà họ được thêm vào.",
-    emptyMessage: "Không có khách nào trong Không gian làm việc này.",
+    id: 3,
+    type: "add-list",
+    listName: "Thanh điều hướng",
+    target: "Tìm hiểu thông tin cơ bản về Trello",
+    board: "Bảng Trello của tôi",
+    date: "19:07 23 thg 2, 2026",
   },
   {
-    id: "join-requests",
-    label: "Yêu cầu tham gia (0)",
-    description:
-      "Những người này đã yêu cầu tham gia Không gian làm việc này. Việc thêm thành viên Không gian làm việc mới sẽ tự động cập nhật thanh toán của bạn. Khách của Không gian làm việc đã được tính vào giới hạn người cộng tác trong Không gian làm việc miễn phí.",
-    emptyMessage: "Không có yêu cầu tham gia nào.",
+    id: 4,
+    type: "add-list",
+    listName: "Jira",
+    target: "Quản lý các dự án của đội ngũ",
+    board: "Bảng Trello của tôi",
+    date: "19:07 23 thg 2, 2026",
+  },
+  {
+    id: 5,
+    type: "add-list",
+    listName: "Dùng thử các tính năng mạnh mẽ của Trello",
+    target: "Làm việc thông minh hơn",
+    board: "Bảng Trello của tôi",
+    date: "19:07 23 thg 2, 2026",
   },
 ];
-
-const selectedMemberTab = ref("members");
-
-const currentMemberTab = computed(
-  () => memberTabs.find((tab) => tab.id === selectedMemberTab.value) ?? memberTabs[0]
-);
 </script>
