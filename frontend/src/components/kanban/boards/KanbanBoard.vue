@@ -1,10 +1,10 @@
 <template>
-  <div class="h-full overflow-x-auto">
-    <div class="flex gap-4 h-full">
+  <div class="trello-scrollbar h-full overflow-x-auto">
+    <div class="flex h-full gap-4">
       <!-- Tutorial column -->
-      <div class="w-80 flex-shrink-0 h-full flex flex-col">
+      <div class="flex h-full w-80 flex-shrink-0 flex-col">
         <div
-          class="mb-3 rounded-xl bg-[#4b2d7f] px-3 py-2 flex items-center justify-between shadow"
+          class="mb-3 flex items-center justify-between rounded-xl bg-[#4b2d7f] px-3 py-2 shadow"
         >
           <div class="flex items-center gap-2">
             <h3 class="text-sm font-semibold text-white">
@@ -12,20 +12,20 @@
             </h3>
           </div>
           <button
-            class="text-white/80 hover:text-white p-1 rounded hover:bg-white/10"
+            class="rounded p-1 text-white/80 hover:bg-white/10 hover:text-white"
             type="button"
           >
             ⋮
           </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto">
+        <div class="trello-scrollbar flex-1 overflow-y-auto">
           <div class="space-y-3 pr-1">
             <div
-              class="bg-[#4b2d7f] rounded-xl p-2 shadow cursor-pointer hover:bg-[#553390] transition-colors"
+              class="cursor-pointer rounded-xl bg-[#4b2d7f] p-2 shadow transition-colors hover:bg-[#553390]"
             >
               <div
-                class="rounded-lg bg-black/30 mb-2 h-32 flex items-center justify-center text-xs text-white/80"
+                class="mb-2 flex h-32 items-center justify-center rounded-lg bg-black/30 text-xs text-white/80"
               >
                 Video hướng dẫn
               </div>
@@ -33,7 +33,7 @@
             </div>
 
             <button
-              class="w-full mt-1 text-left text-white/80 hover:text-white text-sm p-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              class="mt-1 flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm text-white/80 transition-colors hover:bg-white/10 hover:text-white"
               type="button"
             >
               <span class="text-lg leading-none">+</span>
@@ -47,10 +47,10 @@
       <div
         v-for="(column, idx) in computedColumns"
         :key="column.id"
-        class="w-80 flex-shrink-0 h-full flex flex-col"
+        class="flex h-full w-80 flex-shrink-0 flex-col"
       >
         <div
-          class="mb-3 rounded-xl bg-black/40 border border-white/10 px-3 py-2 flex items-center justify-between shadow-sm"
+          class="mb-3 flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-3 py-2 shadow-sm"
           :style="listHeaderStyle(column)"
         >
           <div class="flex items-center gap-2">
@@ -58,7 +58,7 @@
               {{ column.label }}
             </h3>
             <span
-              class="text-xs bg-white/10 text-white px-2 py-0.5 rounded-full"
+              class="rounded-full bg-white/10 px-2 py-0.5 text-xs text-white"
             >
               {{ tasksByColumn(column).length }}
             </span>
@@ -79,12 +79,26 @@
           />
         </div>
 
-        <div class="flex-1 overflow-y-auto">
+        <div
+          class="trello-scrollbar flex-1 overflow-y-auto rounded-xl transition-colors"
+          :class="dragOverColumnId === String(column.id) ? 'bg-white/5' : ''"
+          @dragover.prevent="onDragOver(column)"
+          @dragenter.prevent="onDragEnter(column)"
+          @dragleave="onDragLeave(column, $event)"
+          @drop="onDrop(column, $event)"
+        >
           <div class="space-y-2 pr-1">
+            <div
+              v-if="dragOverColumnId === String(column.id)"
+              class="rounded-xl border border-dashed border-[#579dff] bg-[#1d2125]/70 px-3 py-3 text-sm text-[#9fadbc]"
+            >
+              Thả thẻ vào đây
+            </div>
+
             <TaskCard
               v-for="task in tasksByColumn(column)"
               :key="task.id"
-              :task="task"
+              :task="{ ...task, listId: column.id }"
               @open-card="handleOpenCard"
               @edit-labels="handleEditLabels"
               @change-members="handleChangeMembers"
@@ -95,10 +109,12 @@
               @copy-link="handleCopyLink"
               @mirror-task="handleMirrorTask"
               @archive-task="handleArchiveTask"
+              @drag-start="handleTaskDragStart"
+              @drag-end="handleTaskDragEnd"
             />
 
             <button
-              class="w-full mt-1 text-left text-white/70 hover:text-white text-sm p-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              class="mt-1 flex w-full items-center gap-2 rounded-lg p-2 text-left text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
               type="button"
               @click="openAddTask(column)"
             >
@@ -110,13 +126,13 @@
       </div>
 
       <!-- Add another list -->
-      <div class="w-80 flex-shrink-0 h-full">
+      <div class="h-full w-80 flex-shrink-0">
         <div
-          class="mb-3 rounded-xl bg-black/40 border border-white/10 px-3 py-2 flex items-center justify-between shadow-sm"
+          class="mb-3 flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-3 py-2 shadow-sm"
         >
           <button
             v-if="!showAddList"
-            class="w-full text-left text-white/80 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+            class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-white/80 transition-colors hover:bg-white/10 hover:text-white"
             type="button"
             @click="openAddList"
           >
@@ -124,10 +140,10 @@
             <span>Thêm danh sách khác</span>
           </button>
 
-          <div v-else class="space-y-2 w-full">
+          <div v-else class="w-full space-y-2">
             <input
               v-model.trim="newListTitle"
-              class="w-full rounded-lg bg-black/30 border border-white/10 px-3 py-2 text-sm text-white placeholder:text-white/50 outline-none focus:border-white/20"
+              class="w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none placeholder:text-white/50 focus:border-white/20"
               placeholder="Nhập tên danh sách..."
               @keyup.enter="createList"
             />
@@ -135,7 +151,7 @@
             <div class="flex items-center gap-2">
               <select
                 v-model="newListStatus"
-                class="flex-1 rounded-lg bg-black/30 border border-white/10 px-3 py-2 text-sm text-white outline-none focus:border-white/20"
+                class="flex-1 rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-white outline-none focus:border-white/20"
               >
                 <option
                   v-for="opt in statusOptions"
@@ -147,7 +163,7 @@
               </select>
 
               <button
-                class="px-3 py-2 rounded-lg bg-white/10 text-white text-sm hover:bg-white/15 border border-white/10"
+                class="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-sm text-white hover:bg-white/15"
                 type="button"
                 @click="createList"
               >
@@ -155,7 +171,7 @@
               </button>
 
               <button
-                class="px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10"
+                class="rounded-lg px-3 py-2 text-white/70 hover:bg-white/10 hover:text-white"
                 type="button"
                 title="Hủy"
                 @click="closeAddList"
@@ -164,7 +180,7 @@
               </button>
             </div>
 
-            <p class="text-xs text-white/50 px-1">
+            <p class="px-1 text-xs text-white/50">
               * Danh sách mới sẽ được lưu vào project (project.columns).
             </p>
           </div>
@@ -226,6 +242,87 @@ const computedColumns = computed(() => {
   if (Array.isArray(cols) && cols.length > 0) return cols;
   return defaultColumns;
 });
+
+/** ============ Drag drop task ============ */
+const draggingTaskPayload = ref(null);
+const dragOverColumnId = ref(null);
+
+function handleTaskDragStart(payload) {
+  draggingTaskPayload.value = payload;
+}
+
+function handleTaskDragEnd() {
+  draggingTaskPayload.value = null;
+  dragOverColumnId.value = null;
+}
+
+function onDragOver(column) {
+  dragOverColumnId.value = String(column.id);
+}
+
+function onDragEnter(column) {
+  dragOverColumnId.value = String(column.id);
+}
+
+function onDragLeave(column, event) {
+  const currentTarget = event.currentTarget;
+  const related = event.relatedTarget;
+
+  if (currentTarget && related && currentTarget.contains(related)) return;
+
+  if (dragOverColumnId.value === String(column.id)) {
+    dragOverColumnId.value = null;
+  }
+}
+
+function onDrop(column, event) {
+  event.preventDefault();
+
+  let payload = draggingTaskPayload.value;
+
+  if (!payload) {
+    try {
+      const raw = event.dataTransfer?.getData("application/json");
+      if (raw) payload = JSON.parse(raw);
+    } catch {
+      payload = null;
+    }
+  }
+
+  dragOverColumnId.value = null;
+  draggingTaskPayload.value = null;
+
+  if (!payload?.taskId) return;
+
+  const targetStatus = column.status;
+  const targetListId = column.id;
+
+  const tasks = Array.isArray(props.project.tasks) ? [...props.project.tasks] : [];
+  const taskIndex = tasks.findIndex((t) => String(t.id) === String(payload.taskId));
+  if (taskIndex === -1) return;
+
+  const currentTask = tasks[taskIndex];
+
+  if (
+    String(currentTask.status) === String(targetStatus) &&
+    String(payload.sourceListId ?? "") === String(targetListId)
+  ) {
+    return;
+  }
+
+  const updatedTask = {
+    ...currentTask,
+    status: targetStatus,
+    listId: targetListId,
+  };
+
+  tasks.splice(taskIndex, 1, updatedTask);
+
+  emit("update-project", {
+    ...props.project,
+    tasks,
+  });
+}
 
 /** ============ Add task ============ */
 const showAddTask = ref(false);
@@ -315,9 +412,14 @@ const tasksByColumn = (column) => {
 };
 
 const addTask = (task) => {
+  const taskWithList = {
+    ...task,
+    listId: selectedColumn.value?.id ?? null,
+  };
+
   const updated = {
     ...props.project,
-    tasks: [...(props.project.tasks || []), task],
+    tasks: [...(props.project.tasks || []), taskWithList],
   };
   emit("update-project", updated);
   showAddTask.value = false;
@@ -515,3 +617,32 @@ function handleArchiveTask(task) {
   console.log("archive-task", task);
 }
 </script>
+
+<style scoped>
+.trello-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #596773 transparent;
+}
+
+.trello-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.trello-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.trello-scrollbar::-webkit-scrollbar-thumb {
+  background: #596773;
+  border-radius: 999px;
+}
+
+.trello-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7785;
+}
+
+.trello-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+</style>
