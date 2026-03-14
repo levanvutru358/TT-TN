@@ -1,2 +1,0 @@
--- V7__create_labels.sql
--- TODO: add migration SQL

@@ -1,2 +1,0 @@
--- V3__create_boards.sql
--- TODO: add migration SQL

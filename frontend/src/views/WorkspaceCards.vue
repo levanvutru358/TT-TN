@@ -1,40 +1,52 @@
 <template>
   <div class="min-h-screen bg-[#f1f2f4] text-[#172b4d]">
-    <div class="flex min-h-screen">
-      <aside
-        class="relative w-[340px] shrink-0 border-r border-[#d0d4db] bg-[#f5f6f8] px-10 py-12"
+    <div class="relative flex min-h-screen">
+      <button
+        type="button"
+        class="absolute top-16 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] transition-[left] duration-200"
+        :class="isSidebarCollapsed ? 'left-3' : 'left-[274px]'"
+        :aria-label="
+          isSidebarCollapsed
+            ? 'Mở cài đặt không gian làm việc'
+            : 'Thu gọn cài đặt không gian làm việc'
+        "
+        @click="isSidebarCollapsed = !isSidebarCollapsed"
       >
-        <button
-          type="button"
-          class="absolute right-[-15px] top-20 w-8 h-8 rounded-full bg-[#dfe1e6] text-[#2c2f36] flex items-center justify-center"
-          aria-label="Thu gọn"
+        <svg
+          class="h-4 w-4 transition-transform duration-200"
+          :class="{ 'rotate-180': isSidebarCollapsed }"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
-          <svg
-            class="w-4 h-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M14 6L8 12L14 18"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+          <path
+            d="M14 6L8 12L14 18"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
 
-        <h2 class="text-[38px] font-semibold mb-6">Cài đặt cá nhân</h2>
+      <aside
+        class="relative shrink-0 overflow-hidden bg-[#f5f6f8] transition-[width,padding,border] duration-200"
+        :class="
+          isSidebarCollapsed
+            ? 'w-0 border-r-0 px-0 py-0 pointer-events-none'
+            : 'w-[288px] border-r border-[#d0d4db] px-6 py-8'
+        "
+      >
+        <h2 class="mb-5 text-[20px] font-semibold">Cài đặt cá nhân</h2>
 
         <div class="space-y-1">
-          <button
-            type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#e9ebef]"
+          <router-link
+            to="/personal/profile"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
             <svg
-              class="w-5 h-5 text-[#2c2f36]"
+              class="h-[18px] w-[18px] text-[#2c2f36]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -49,15 +61,15 @@
                 stroke-linecap="round"
               />
             </svg>
-            <span class="text-[17px] font-semibold">Hồ sơ và hiển thị</span>
-          </button>
+            <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
+          </router-link>
 
-          <button
-            type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#e9ebef]"
+          <router-link
+            to="/personal/activity"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
             <svg
-              class="w-5 h-5 text-[#2c2f36]"
+              class="h-[18px] w-[18px] text-[#2c2f36]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -71,15 +83,15 @@
               />
               <circle cx="16.5" cy="12" r="1.5" fill="currentColor" />
             </svg>
-            <span class="text-[17px] font-semibold">Hoạt động</span>
-          </button>
+            <span class="text-[15px] font-semibold">Hoạt động</span>
+          </router-link>
 
           <button
             type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg border border-[#0c66e4] bg-[#dce4f0] text-[#0c66e4]"
+            class="flex w-full items-center gap-3 rounded-lg border border-[#0c66e4] bg-[#dce4f0] px-3 py-2 text-[#0c66e4]"
           >
             <svg
-              class="w-5 h-5"
+              class="h-[18px] w-[18px]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -96,15 +108,15 @@
               />
               <path d="M9 7V17" stroke="currentColor" stroke-width="1.8" />
             </svg>
-            <span class="text-[17px] font-semibold">Thẻ</span>
+            <span class="text-[15px] font-semibold">Thẻ</span>
           </button>
 
-          <button
-            type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#e9ebef]"
+          <router-link
+            to="/personal/settings"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
             <svg
-              class="w-5 h-5 text-[#2c2f36]"
+              class="h-[18px] w-[18px] text-[#2c2f36]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -118,28 +130,28 @@
               />
               <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
             </svg>
-            <span class="text-[17px] font-semibold">Cài đặt</span>
-          </button>
+            <span class="text-[15px] font-semibold">Cài đặt</span>
+          </router-link>
         </div>
 
-        <div class="border-t border-[#d0d4db] mt-8 pt-7">
-          <h3 class="text-[38px] font-semibold mb-3">Không gian làm việc</h3>
+        <div class="mt-8 border-t border-[#d0d4db] pt-7">
+          <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
-          <div class="flex items-center gap-3 px-2 py-2 mb-2">
+          <div class="mb-2 flex items-center gap-3 px-2 py-2">
             <div
-              class="w-8 h-8 rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-white text-base font-semibold flex items-center justify-center"
+              class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
             >
               T
             </div>
-            <span class="text-[17px]">Trello Không gian làm việc</span>
+            <span class="text-[15px]">Trello Không gian làm việc</span>
           </div>
 
           <router-link
             to="/workspace/boards"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#e9ebef]"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
             <svg
-              class="w-5 h-5 text-[#2c2f36]"
+              class="h-[18px] w-[18px] text-[#2c2f36]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -156,15 +168,15 @@
               />
               <path d="M10 4.5V19.5" stroke="currentColor" stroke-width="1.8" />
             </svg>
-            <span class="text-[17px] font-semibold">Bảng</span>
+            <span class="text-[15px] font-semibold">Bảng</span>
           </router-link>
 
           <router-link
             to="/workspace/members"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#e9ebef]"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
             <svg
-              class="w-5 h-5 text-[#2c2f36]"
+              class="h-[18px] w-[18px] text-[#2c2f36]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -177,17 +189,22 @@
                 stroke-width="1.8"
                 stroke-linecap="round"
               />
-              <path d="M16 9V15M13 12H19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              <path
+                d="M16 9V15M13 12H19"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
             </svg>
-            <span class="text-[17px] font-semibold">Thành viên</span>
+            <span class="text-[15px] font-semibold">Thành viên</span>
           </router-link>
 
           <router-link
             to="/workspace/settings"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#e9ebef]"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
             <svg
-              class="w-5 h-5 text-[#2c2f36]"
+              class="h-[18px] w-[18px] text-[#2c2f36]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -201,15 +218,15 @@
               />
               <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
             </svg>
-            <span class="text-[17px] font-semibold">Cài đặt</span>
+            <span class="text-[15px] font-semibold">Cài đặt</span>
           </router-link>
 
           <button
             type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#e9ebef]"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
             <svg
-              class="w-5 h-5 text-[#2c2f36]"
+              class="h-[18px] w-[18px] text-[#2c2f36]"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -224,21 +241,26 @@
                 stroke="currentColor"
                 stroke-width="1.8"
               />
-              <path d="M8 9H16M8 13H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              <path
+                d="M8 9H16M8 13H16"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
             </svg>
-            <span class="text-[17px] font-semibold">Nâng cấp Không gian làm việc</span>
+            <span class="text-[15px] font-semibold">Nâng cấp Không gian làm việc</span>
           </button>
         </div>
       </aside>
 
-      <main class="relative flex-1 px-14 py-12">
+      <main class="relative flex-1 px-6 py-6 lg:px-8 lg:py-8">
         <router-link
           to="/workspace/boards"
-          class="absolute top-5 right-5 w-14 h-14 rounded-full bg-[#dfe1e6] text-[#2c2f36] flex items-center justify-center hover:bg-[#d0d4db]"
+          class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] hover:bg-[#d0d4db]"
           aria-label="Đóng"
         >
           <svg
-            class="w-7 h-7"
+            class="h-[18px] w-[18px]"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -253,64 +275,287 @@
           </svg>
         </router-link>
 
-        <div class="max-w-[1380px] pt-8">
-          <h1 class="text-[52px] font-semibold mb-10">Thẻ</h1>
+        <div class="max-w-[1180px] pt-4">
+          <h1 class="mb-5 text-[28px] font-semibold">Thẻ</h1>
 
-          <div class="flex flex-wrap items-center justify-end gap-3 mb-6">
-            <button
-              type="button"
-              class="h-11 px-5 rounded-md border border-[#d0d4db] bg-white text-[16px] hover:bg-[#f7f8fa] flex items-center gap-2"
-            >
-              <span>Sắp xếp theo ngày đến hạn</span>
-              <svg
-                class="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+          <div class="relative mb-6 flex flex-wrap items-start justify-end gap-3">
+            <div ref="sortMenuRef" class="relative">
+              <button
+                type="button"
+                class="flex min-h-10 min-w-[290px] items-center justify-between rounded-md border bg-white px-4 py-2 text-[13px] font-medium transition-colors"
+                :class="
+                  showSortMenu
+                    ? 'border-[#0c66e4] text-[#0c66e4] shadow-[inset_0_0_0_1px_#0c66e4]'
+                    : 'border-[#d0d4db] text-[#172b4d] hover:bg-[#f7f8fa]'
+                "
+                @click="toggleSortMenu"
               >
-                <path
-                  d="M7 10L12 15L17 10"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
+                <span>{{ selectedSortOption.label }}</span>
+                <svg
+                  class="h-4 w-4 transition-transform"
+                  :class="{ 'rotate-180': showSortMenu }"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M7 10L12 15L17 10"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
 
-            <button
-              type="button"
-              class="h-11 px-5 rounded-md border border-[#d0d4db] bg-[#dfe1e6] text-[16px] hover:bg-[#d0d4db] flex items-center gap-2"
-            >
-              <svg
-                class="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+              <div
+                v-if="showSortMenu"
+                class="absolute left-0 top-[calc(100%+10px)] z-30 w-[290px] overflow-hidden rounded-md border border-[#d0d4db] bg-white shadow-[0_8px_16px_rgba(9,30,66,0.15)]"
               >
-                <path
-                  d="M4 7H20M7 12H17M10 17H14"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                />
-              </svg>
-              <span>Lọc thẻ</span>
-            </button>
+                <button
+                  v-for="option in sortOptions"
+                  :key="option.id"
+                  type="button"
+                  class="flex w-full items-center border-l-[3px] px-4 py-3 text-left text-[13px] transition-colors"
+                  :class="
+                    selectedSort === option.id
+                      ? 'border-[#0c66e4] bg-[#deebff] text-[#0c66e4]'
+                      : 'border-transparent text-[#172b4d] hover:bg-[#f7f8fa]'
+                  "
+                  @click="selectSort(option.id)"
+                >
+                  {{ option.label }}
+                </button>
+              </div>
+            </div>
+
+            <div ref="filterPanelRef" class="relative">
+              <button
+                type="button"
+                class="flex h-10 items-center gap-2 rounded-md border px-3.5 text-[13px] font-medium transition-colors"
+                :class="
+                  showFilterPanel
+                    ? 'border-[#0c66e4] bg-white text-[#0c66e4] shadow-[inset_0_0_0_1px_#0c66e4]'
+                    : 'border-[#d0d4db] bg-[#dfe1e6] text-[#172b4d] hover:bg-[#d0d4db]'
+                "
+                @click="toggleFilterPanel"
+              >
+                <svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 7H20M7 12H17M10 17H14"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span>Lọc thẻ</span>
+              </button>
+
+              <div
+                v-if="showFilterPanel"
+                class="absolute right-0 top-[calc(100%+12px)] z-30 w-[360px] max-w-[calc(100vw-3rem)] rounded-xl border border-[#d0d4db] bg-white px-5 py-5 shadow-[0_12px_24px_rgba(9,30,66,0.22)]"
+              >
+                <div class="mb-5 flex items-center justify-between">
+                  <h2 class="text-[18px] font-semibold">Lọc thẻ</h2>
+                  <button
+                    type="button"
+                    class="flex h-8 w-8 items-center justify-center rounded-full text-[#44546f] hover:bg-[#f1f2f4]"
+                    aria-label="Đóng bộ lọc"
+                    @click="closeFilterPanel"
+                  >
+                    <svg
+                      class="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M6 6L18 18M18 6L6 18"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="max-h-[70vh] space-y-6 overflow-y-auto pr-1">
+                  <section>
+                    <h3 class="mb-3 text-[14px] font-semibold text-[#44546f]">Thẻ</h3>
+                    <input
+                      v-model="filterState.keyword"
+                      type="text"
+                      placeholder="Nhập từ khóa..."
+                      class="h-11 w-full rounded-md border border-[#0c66e4] px-3.5 text-[14px] outline-none ring-1 ring-[#0c66e4]/20 placeholder:text-[#7a869a]"
+                    />
+                    <p class="mt-2 text-[12px] text-[#6b778c]">Lọc theo từ khóa tên thẻ.</p>
+                  </section>
+
+                  <section>
+                    <h3 class="mb-3 text-[14px] font-semibold text-[#44546f]">Trạng thái thẻ</h3>
+                    <label
+                      v-for="option in statusOptions"
+                      :key="option.id"
+                      class="mb-3 flex cursor-pointer items-center gap-3 text-[14px] text-[#172b4d] last:mb-0"
+                    >
+                      <input
+                        v-model="filterState.statuses[option.id]"
+                        type="checkbox"
+                        class="h-5 w-5 rounded border-[#8590a2] text-[#0c66e4] focus:ring-[#0c66e4]"
+                      />
+                      <span>{{ option.label }}</span>
+                    </label>
+                  </section>
+
+                  <section>
+                    <h3 class="mb-3 text-[14px] font-semibold text-[#44546f]">Ngày đến hạn</h3>
+                    <label
+                      v-for="option in dueDateOptions"
+                      :key="option.id"
+                      class="mb-3 flex cursor-pointer items-center gap-3 text-[14px] text-[#172b4d] last:mb-0"
+                    >
+                      <input
+                        v-model="filterState.dueDates[option.id]"
+                        type="checkbox"
+                        class="h-5 w-5 rounded border-[#8590a2] text-[#0c66e4] focus:ring-[#0c66e4]"
+                      />
+                      <span
+                        class="flex h-8 w-8 items-center justify-center rounded-full"
+                        :class="option.iconClass"
+                      >
+                        <svg
+                          v-if="option.icon === 'calendar'"
+                          class="h-4 w-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M8 4.5V7M16 4.5V7M5.5 9.5H18.5M7 6.5H17C18.1 6.5 19 7.4 19 8.5V17C19 18.1 18.1 19 17 19H7C5.9 19 5 18.1 5 17V8.5C5 7.4 5.9 6.5 7 6.5Z"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <svg
+                          v-else
+                          class="h-4 w-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8" />
+                          <path
+                            d="M12 8V12L14.8 14.4"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <span class="leading-[1.35]">{{ option.label }}</span>
+                    </label>
+                  </section>
+
+                  <section>
+                    <h3 class="mb-3 text-[14px] font-semibold text-[#44546f]">Bảng thông tin</h3>
+                    <div class="relative">
+                      <button
+                        type="button"
+                        class="flex h-10 w-full items-center justify-between rounded-md border border-transparent px-3 text-[14px] text-[#44546f] hover:bg-[#f7f8fa]"
+                        @click="showBoardMenu = !showBoardMenu"
+                      >
+                        <span>{{ selectedBoardLabel }}</span>
+                        <svg
+                          class="h-4 w-4 transition-transform"
+                          :class="{ 'rotate-180': showBoardMenu }"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M7 10L12 15L17 10"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </button>
+
+                      <div
+                        v-if="showBoardMenu"
+                        class="mt-2 overflow-hidden rounded-md border border-[#d0d4db] bg-white shadow-[0_8px_16px_rgba(9,30,66,0.15)]"
+                      >
+                        <button
+                          type="button"
+                          class="flex w-full items-center px-3 py-2 text-left text-[13px] text-[#172b4d] hover:bg-[#f7f8fa]"
+                          @click="selectBoard('')"
+                        >
+                          Lọc theo bảng thông tin...
+                        </button>
+                        <button
+                          v-for="option in boardOptions"
+                          :key="option.id"
+                          type="button"
+                          class="flex w-full items-center px-3 py-2 text-left text-[13px] text-[#172b4d] hover:bg-[#f7f8fa]"
+                          @click="selectBoard(option.id)"
+                        >
+                          {{ option.label }}
+                        </button>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section>
+                    <h3 class="mb-3 text-[14px] font-semibold text-[#44546f]">Hoạt động</h3>
+                    <label
+                      v-for="option in activityOptions"
+                      :key="option.id"
+                      class="mb-3 flex cursor-pointer items-center gap-3 text-[14px] text-[#172b4d] last:mb-0"
+                    >
+                      <input
+                        v-model="filterState.activity[option.id]"
+                        type="checkbox"
+                        class="h-5 w-5 rounded border-[#8590a2] text-[#0c66e4] focus:ring-[#0c66e4]"
+                      />
+                      <span>{{ option.label }}</span>
+                    </label>
+                  </section>
+                </div>
+              </div>
+            </div>
 
             <button
               type="button"
-              class="h-11 px-5 rounded-md border border-[#d0d4db] bg-[#eef0f3] text-[16px] text-[#6b778c]"
-              disabled
+              class="h-10 rounded-md border px-3.5 text-[13px] font-medium transition-colors"
+              :class="
+                hasActiveFilters
+                  ? 'border-[#d0d4db] bg-white text-[#172b4d] hover:bg-[#f7f8fa]'
+                  : 'border-[#d0d4db] bg-[#eef0f3] text-[#6b778c]'
+              "
+              :disabled="!hasActiveFilters"
+              @click="clearFilters"
             >
               Xóa bộ lọc
             </button>
           </div>
 
           <div
-            class="h-[220px] rounded-lg bg-[#dfe1e6] text-[#44546f] text-[44px] flex items-center justify-center text-center px-8"
+            class="flex h-[144px] items-center justify-center rounded-lg bg-[#dfe1e6] px-5 text-center text-[18px] text-[#44546f]"
           >
             Không nhìn thấy thẻ nào. Bạn phải được thêm vào thẻ để thẻ xuất hiện ở đây.
           </div>
@@ -319,3 +564,180 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
+
+const isSidebarCollapsed = ref(false);
+const sortMenuRef = ref(null);
+const filterPanelRef = ref(null);
+const showSortMenu = ref(false);
+const showFilterPanel = ref(false);
+const showBoardMenu = ref(false);
+
+const sortOptions = [
+  { id: "board", label: "Sắp xếp theo bảng thông tin" },
+  { id: "due-date", label: "Sắp xếp theo ngày đến hạn" },
+];
+
+const statusOptions = [
+  { id: "completed", label: "Đã đánh dấu là hoàn tất" },
+  { id: "notCompleted", label: "Chưa đánh dấu là đã hoàn tất" },
+];
+
+const dueDateOptions = [
+  {
+    id: "noDate",
+    label: "Không có ngày",
+    icon: "calendar",
+    iconClass: "bg-[#f1f2f4] text-[#5e6c84]",
+  },
+  {
+    id: "overdue",
+    label: "Quá hạn",
+    icon: "clock",
+    iconClass: "bg-[#c9372c] text-white",
+  },
+  {
+    id: "tomorrow",
+    label: "Đến hạn vào ngày mai",
+    icon: "clock",
+    iconClass: "bg-[#f5cd47] text-[#172b4d]",
+  },
+  {
+    id: "nextSevenDays",
+    label: "Đến hạn trong bảy ngày tới",
+    icon: "clock",
+    iconClass: "bg-[#f1f2f4] text-[#5e6c84]",
+  },
+  {
+    id: "nextMonth",
+    label: "Đến hạn vào tháng sau",
+    icon: "clock",
+    iconClass: "bg-[#f1f2f4] text-[#5e6c84]",
+  },
+];
+
+const boardOptions = [{ id: "trello-workspace", label: "Trello Không gian làm việc" }];
+
+const activityOptions = [
+  { id: "lastDay", label: "Hoạt động trong ngày vừa qua" },
+  { id: "lastWeek", label: "Hoạt động trong tuần vừa qua" },
+  { id: "lastMonth", label: "Hoạt động trong tháng vừa qua" },
+  { id: "lastYear", label: "Hoạt động trong năm vừa qua" },
+];
+
+const selectedSort = ref("board");
+const filterState = reactive({
+  keyword: "",
+  statuses: {
+    completed: false,
+    notCompleted: false,
+  },
+  dueDates: {
+    noDate: false,
+    overdue: false,
+    tomorrow: false,
+    nextSevenDays: false,
+    nextMonth: false,
+  },
+  board: "",
+  activity: {
+    lastDay: false,
+    lastWeek: false,
+    lastMonth: false,
+    lastYear: false,
+  },
+});
+
+const selectedSortOption = computed(
+  () => sortOptions.find((option) => option.id === selectedSort.value) ?? sortOptions[0]
+);
+
+const selectedBoardLabel = computed(() => {
+  const selectedBoard = boardOptions.find((option) => option.id === filterState.board);
+  return selectedBoard?.label ?? "Lọc theo bảng thông tin...";
+});
+
+const hasActiveFilters = computed(() => {
+  const hasKeyword = filterState.keyword.trim().length > 0;
+  const hasStatuses = Object.values(filterState.statuses).some(Boolean);
+  const hasDueDates = Object.values(filterState.dueDates).some(Boolean);
+  const hasBoard = filterState.board !== "";
+  const hasActivity = Object.values(filterState.activity).some(Boolean);
+
+  return hasKeyword || hasStatuses || hasDueDates || hasBoard || hasActivity;
+});
+
+const toggleSortMenu = () => {
+  showSortMenu.value = !showSortMenu.value;
+
+  if (showSortMenu.value) {
+    showFilterPanel.value = false;
+    showBoardMenu.value = false;
+  }
+};
+
+const selectSort = (sortId) => {
+  selectedSort.value = sortId;
+  showSortMenu.value = false;
+};
+
+const toggleFilterPanel = () => {
+  showFilterPanel.value = !showFilterPanel.value;
+
+  if (showFilterPanel.value) {
+    showSortMenu.value = false;
+  } else {
+    showBoardMenu.value = false;
+  }
+};
+
+const closeFilterPanel = () => {
+  showFilterPanel.value = false;
+  showBoardMenu.value = false;
+};
+
+const selectBoard = (boardId) => {
+  filterState.board = boardId;
+  showBoardMenu.value = false;
+};
+
+const clearFilters = () => {
+  filterState.keyword = "";
+  filterState.board = "";
+  showBoardMenu.value = false;
+
+  Object.keys(filterState.statuses).forEach((key) => {
+    filterState.statuses[key] = false;
+  });
+
+  Object.keys(filterState.dueDates).forEach((key) => {
+    filterState.dueDates[key] = false;
+  });
+
+  Object.keys(filterState.activity).forEach((key) => {
+    filterState.activity[key] = false;
+  });
+};
+
+const handleDocumentClick = (event) => {
+  const target = event.target;
+
+  if (showSortMenu.value && sortMenuRef.value && !sortMenuRef.value.contains(target)) {
+    showSortMenu.value = false;
+  }
+
+  if (showFilterPanel.value && filterPanelRef.value && !filterPanelRef.value.contains(target)) {
+    closeFilterPanel();
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleDocumentClick);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleDocumentClick);
+});
+</script>

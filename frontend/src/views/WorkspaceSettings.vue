@@ -1,118 +1,266 @@
 <template>
   <div class="min-h-screen bg-[#f1f2f4] text-[#172b4d]">
-    <div class="flex min-h-screen">
-      <aside
-        class="relative w-[340px] shrink-0 border-r border-[#d0d4db] bg-[#f5f6f8] px-10 py-12"
+    <div class="relative flex min-h-screen">
+      <button
+        type="button"
+        class="absolute top-16 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] transition-[left] duration-200"
+        :class="isSidebarCollapsed ? 'left-3' : 'left-[274px]'"
+        :aria-label="
+          isSidebarCollapsed
+            ? 'Mở cài đặt không gian làm việc'
+            : 'Thu gọn cài đặt không gian làm việc'
+        "
+        @click="isSidebarCollapsed = !isSidebarCollapsed"
       >
-        <button
-          type="button"
-          class="absolute right-[-15px] top-20 w-8 h-8 rounded-full bg-[#dfe1e6] text-[#2c2f36] flex items-center justify-center"
-          aria-label="Thu gọn"
+        <svg
+          class="h-4 w-4 transition-transform duration-200"
+          :class="{ 'rotate-180': isSidebarCollapsed }"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
-          <svg
-            class="w-4 h-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M14 6L8 12L14 18"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+          <path
+            d="M14 6L8 12L14 18"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
 
-        <h2 class="text-[30px] font-semibold mb-6">Cài đặt cá nhân</h2>
+      <aside
+        class="relative shrink-0 overflow-hidden bg-[#f5f6f8] transition-[width,padding,border] duration-200"
+        :class="
+          isSidebarCollapsed
+            ? 'w-0 border-r-0 px-0 py-0 pointer-events-none'
+            : 'w-[288px] border-r border-[#d0d4db] px-6 py-8'
+        "
+      >
+        <h2 class="mb-5 text-[20px] font-semibold">Cài đặt cá nhân</h2>
 
         <div class="space-y-1">
-          <button
-            type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#e9ebef]"
+          <router-link
+            to="/personal/profile"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <span class="text-base">◎</span>
-            <span class="text-[17px] font-semibold">Hồ sơ và hiển thị</span>
-          </button>
-          <button
-            type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#e9ebef]"
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8" />
+              <path
+                d="M7.5 18C8.2 16.1 10 14.8 12 14.8C14 14.8 15.8 16.1 16.5 18"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
+          </router-link>
+
+          <router-link
+            to="/personal/activity"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <span class="text-base">☰</span>
-            <span class="text-[17px] font-semibold">Hoạt động</span>
-          </button>
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M6 8H18M6 12H14M6 16H18"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+              <circle cx="16.5" cy="12" r="1.5" fill="currentColor" />
+            </svg>
+            <span class="text-[15px] font-semibold">Hoạt động</span>
+          </router-link>
+
           <router-link
             to="/workspace/cards"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#e9ebef]"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <span class="text-base">▭</span>
-            <span class="text-[17px] font-semibold">Thẻ</span>
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <rect
+                x="4.5"
+                y="7"
+                width="15"
+                height="10"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path d="M9 7V17" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+            <span class="text-[15px] font-semibold">Thẻ</span>
           </router-link>
-          <button
-            type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-[#e9ebef]"
+
+          <router-link
+            to="/personal/settings"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <span class="text-base">⚙</span>
-            <span class="text-[17px] font-semibold">Cài đặt</span>
-          </button>
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 8.5V6M12 18V15.5M8.5 12H6M18 12H15.5M9.2 9.2L7.4 7.4M16.6 16.6L14.8 14.8M14.8 9.2L16.6 7.4M7.4 16.6L9.2 14.8"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+            <span class="text-[15px] font-semibold">Cài đặt</span>
+          </router-link>
         </div>
 
-        <div class="border-t border-[#d0d4db] mt-8 pt-7">
-          <h3 class="text-[30px] font-semibold mb-3">Không gian làm việc</h3>
+        <div class="mt-8 border-t border-[#d0d4db] pt-7">
+          <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
-          <div class="flex items-center gap-3 px-2 py-2 mb-2">
+          <div class="mb-2 flex items-center gap-3 px-2 py-2">
             <div
-              class="w-8 h-8 rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-white text-base font-semibold flex items-center justify-center"
+              class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
             >
               T
             </div>
-            <span class="text-[17px]">Trello Không gian làm việc</span>
+            <span class="text-[15px]">Trello Không gian làm việc</span>
           </div>
 
           <router-link
             to="/workspace/boards"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#e9ebef]"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
-            <span class="text-base">▣</span>
-            <span class="text-[17px] font-semibold">Bảng</span>
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <rect
+                x="4.5"
+                y="4.5"
+                width="15"
+                height="15"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path d="M10 4.5V19.5" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+            <span class="text-[15px] font-semibold">Bảng</span>
           </router-link>
 
           <router-link
             to="/workspace/members"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#e9ebef]"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
-            <span class="text-base">◔</span>
-            <span class="text-[17px] font-semibold">Thành viên</span>
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <circle cx="9" cy="8.5" r="3" stroke="currentColor" stroke-width="1.8" />
+              <path
+                d="M4.5 18C4.5 15.7 6.4 13.8 8.7 13.8H9.3C11.6 13.8 13.5 15.7 13.5 18"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+              <path
+                d="M16 9V15M13 12H19"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="text-[15px] font-semibold">Thành viên</span>
           </router-link>
 
           <button
             type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg border border-[#0c66e4] bg-[#dce4f0] text-[#0c66e4]"
+            class="flex w-full items-center gap-3 rounded-lg border border-[#0c66e4] bg-[#dce4f0] px-3 py-2 text-[#0c66e4]"
           >
-            <span class="text-base">⚙</span>
-            <span class="text-[17px] font-semibold">Cài đặt</span>
+            <svg
+              class="h-[18px] w-[18px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 8.5V6M12 18V15.5M8.5 12H6M18 12H15.5M9.2 9.2L7.4 7.4M16.6 16.6L14.8 14.8M14.8 9.2L16.6 7.4M7.4 16.6L9.2 14.8"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+            <span class="text-[15px] font-semibold">Cài đặt</span>
           </button>
 
           <button
             type="button"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#e9ebef]"
+            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
-            <span class="text-base">◫</span>
-            <span class="text-[17px] font-semibold">Nâng cấp Không gian làm việc</span>
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <rect
+                x="4.5"
+                y="5"
+                width="15"
+                height="14"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path
+                d="M8 9H16M8 13H16"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+            <span class="text-[15px] font-semibold">Nâng cấp Không gian làm việc</span>
           </button>
         </div>
       </aside>
 
-      <main class="relative flex-1 px-14 py-12">
+      <main class="relative flex-1 px-6 py-6 lg:px-8 lg:py-8">
         <router-link
           to="/workspace/boards"
-          class="absolute top-5 right-5 w-14 h-14 rounded-full bg-[#dfe1e6] text-[#2c2f36] flex items-center justify-center hover:bg-[#d0d4db]"
+          class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] hover:bg-[#d0d4db]"
           aria-label="Đóng"
         >
           <svg
-            class="w-7 h-7"
+            class="h-[18px] w-[18px]"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -127,28 +275,26 @@
           </svg>
         </router-link>
 
-        <div class="max-w-[1380px]">
-          <h1 class="text-[42px] font-semibold mb-6">Các cài đặt Không gian làm việc</h1>
+        <div class="max-w-[1180px]">
+          <h1 class="mb-5 text-[28px] font-semibold">Các cài đặt Không gian làm việc</h1>
 
-          <div class="flex items-start gap-4 mb-8">
+          <div class="mb-8 flex items-start gap-4">
             <div
-              class="w-16 h-16 rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-white text-5xl font-semibold flex items-center justify-center"
+              class="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-lg font-semibold text-white"
             >
               T
             </div>
 
             <div>
               <div class="flex items-center gap-2">
-                <h2 class="text-[42px] font-semibold leading-none">
-                  Trello Không gian làm việc
-                </h2>
+                <h2 class="text-[21px] font-semibold leading-none">Trello Không gian làm việc</h2>
                 <button
                   type="button"
-                  class="p-1 rounded hover:bg-[#e9ebef]"
+                  class="rounded p-1 hover:bg-[#e9ebef]"
                   aria-label="Sửa tên"
                 >
                   <svg
-                    class="w-4 h-4"
+                    class="h-4 w-4"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -170,78 +316,257 @@
                 </button>
               </div>
 
-              <div class="mt-1 flex items-center gap-1.5 text-[16px] text-[#44546f]">
-                <svg
-                  class="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <rect
-                    x="6"
-                    y="10"
-                    width="12"
-                    height="9"
-                    rx="2"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                  />
-                  <path
-                    d="M8.5 10V8C8.5 6.067 10.067 4.5 12 4.5C13.933 4.5 15.5 6.067 15.5 8V10"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                  />
-                </svg>
-                <span>Riêng tư</span>
+              <div class="mt-1 flex items-center gap-1.5 text-[14px] text-[#44546f]">
+                <component :is="currentVisibility.badgeIcon" class="h-4 w-4" />
+                <span>{{ currentVisibility.label }}</span>
               </div>
             </div>
           </div>
 
-          <section class="border-b border-[#d0d4db] pb-6 mb-8">
-            <h3 class="text-[36px] font-semibold mb-4">Khả năng hiển thị trong Không gian làm việc</h3>
+          <section ref="visibilityPanelRef" class="relative mb-8 border-b border-[#d0d4db] pb-6">
+            <h3 class="mb-4 text-[20px] font-semibold">Khả năng hiển thị trong Không gian làm việc</h3>
+
             <div class="flex items-start justify-between gap-6">
-              <p class="text-[16px] leading-[1.4]">
-                <span class="text-[#c9372c]">🔒</span>
-                <span class="ml-1 font-medium">Riêng tư</span>
-                -
-                Đây là Không gian làm việc riêng tư. Chỉ những người trong Không gian làm việc có
-                thể truy cập hoặc nhìn thấy Không gian làm việc.
+              <p class="max-w-[840px] text-[15px] leading-[1.5]">
+                <component :is="currentVisibility.inlineIcon" class="mr-1 inline h-4 w-4" />
+                <span class="font-medium">{{ currentVisibility.label }}</span>
+                <span> - {{ currentVisibility.summary }}</span>
               </p>
 
               <button
                 type="button"
-                class="h-10 shrink-0 px-4 rounded-md bg-[#dfe1e6] text-[16px] font-semibold hover:bg-[#d0d4db]"
+                class="h-9 shrink-0 rounded-md bg-[#dfe1e6] px-3.5 text-[13px] font-semibold hover:bg-[#d0d4db]"
+                @click="toggleVisibilityPanel"
               >
                 Thay đổi
               </button>
             </div>
+
+            <div
+              v-if="showVisibilityPanel"
+              class="absolute right-0 top-14 z-30 w-[368px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[16px] border border-[#d0d4db] bg-white shadow-[0_12px_24px_rgba(9,30,66,0.22)]"
+            >
+              <div class="flex items-start justify-between gap-4 border-b border-[#ebecf0] px-6 py-5">
+                <h4 class="max-w-[250px] text-[18px] font-semibold leading-[1.3]">
+                  Chọn khả năng hiển thị trong Không gian làm việc
+                </h4>
+
+                <button
+                  type="button"
+                  class="flex h-10 w-10 items-center justify-center rounded-[14px] border border-[#0c66e4] text-[#44546f] hover:bg-[#f7f8fa]"
+                  aria-label="Đóng"
+                  @click="showVisibilityPanel = false"
+                >
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6 6L18 18M18 6L6 18"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="px-6 py-2">
+                <button
+                  v-for="option in visibilityOptions"
+                  :key="option.id"
+                  type="button"
+                  class="flex w-full items-start gap-4 py-5 text-left"
+                  @click="selectVisibility(option.id)"
+                >
+                  <component :is="option.panelIcon" class="mt-1 h-5 w-5 shrink-0" />
+
+                  <div class="min-w-0 flex-1">
+                    <div class="mb-2 text-[16px] font-medium text-[#172b4d]">{{ option.label }}</div>
+                    <p class="text-[15px] leading-[1.45] text-[#5e6c84]">
+                      {{ option.description }}
+                    </p>
+                  </div>
+
+                  <svg
+                    v-if="selectedVisibility === option.id"
+                    class="mt-1 h-5 w-5 shrink-0 text-[#172b4d]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M5 12.5L9.5 17L19 7.5"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </section>
 
           <section>
-            <h3 class="text-[36px] font-semibold mb-4">Đang liên kết các Không gian làm việc Slack</h3>
-            <div class="flex items-start justify-between gap-6 pt-4 border-t border-[#d0d4db]">
+            <h3 class="mb-4 text-[20px] font-semibold">Đang liên kết các Không gian làm việc Slack</h3>
+
+            <div class="flex items-start justify-between gap-6 border-t border-[#d0d4db] pt-4">
               <div>
-                <p class="text-[16px] leading-[1.4]">
+                <p class="text-[15px] leading-[1.5]">
                   Liên kết các Không gian làm việc Slack và Trello với nhau để cộng tác trong các dự án
                   Trello từ Slack.
                 </p>
-                <a href="#" class="inline-block mt-2 text-[16px] text-[#0c66e4] underline">
+                <a href="#" class="mt-2 inline-block text-[13px] text-[#0c66e4] underline">
                   Tìm hiểu thêm.
                 </a>
               </div>
 
               <button
                 type="button"
-                class="h-10 shrink-0 px-5 rounded-md bg-[#dfe1e6] text-[16px] font-semibold hover:bg-[#d0d4db]"
+                class="h-9 shrink-0 rounded-md bg-[#dfe1e6] px-4 text-[13px] font-semibold hover:bg-[#d0d4db]"
               >
                 Thêm vào Slack
               </button>
             </div>
           </section>
+
+          <div class="pt-10">
+            <button
+              type="button"
+              class="text-[14px] font-medium text-[#c9372c] underline decoration-[#c9372c] decoration-[1.5px] underline-offset-2 hover:text-[#ae2a19]"
+            >
+              Xóa Không gian làm việc này?
+            </button>
+          </div>
         </div>
       </main>
     </div>
   </div>
 </template>
+
+<script setup>
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+
+const LockIcon = {
+  template: `
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="6" y="10" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.8" />
+      <path
+        d="M8.5 10V8C8.5 6.067 10.067 4.5 12 4.5C13.933 4.5 15.5 6.067 15.5 8V10"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+      />
+    </svg>
+  `,
+};
+
+const GlobeIcon = {
+  template: `
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8" />
+      <path d="M4.5 12H19.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <path
+        d="M12 4C13.9 6 15 8.8 15 12C15 15.2 13.9 18 12 20"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+      />
+      <path
+        d="M12 4C10.1 6 9 8.8 9 12C9 15.2 10.1 18 12 20"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+      />
+    </svg>
+  `,
+};
+
+const PrivateInlineIcon = {
+  components: { LockIcon },
+  template: '<LockIcon class="text-[#c9372c]" />',
+};
+
+const PublicInlineIcon = {
+  components: { GlobeIcon },
+  template: '<GlobeIcon class="text-[#22a06b]" />',
+};
+
+const PrivatePanelIcon = {
+  components: { LockIcon },
+  template: '<LockIcon class="text-[#e34935]" />',
+};
+
+const PublicPanelIcon = {
+  components: { GlobeIcon },
+  template: '<GlobeIcon class="text-[#22a06b]" />',
+};
+
+const visibilityOptions = [
+  {
+    id: "private",
+    label: "Riêng tư",
+    summary:
+      "Đây là Không gian làm việc riêng tư. Chỉ những người trong Không gian làm việc có thể truy cập hoặc nhìn thấy Không gian làm việc.",
+    description:
+      "Đây là Không gian làm việc riêng tư. Chỉ những người trong Không gian làm việc có thể truy cập hoặc nhìn thấy Không gian làm việc.",
+    badgeIcon: PrivateInlineIcon,
+    inlineIcon: PrivateInlineIcon,
+    panelIcon: PrivatePanelIcon,
+  },
+  {
+    id: "public",
+    label: "Công khai",
+    summary:
+      "Đây là Không gian làm việc công khai. Bất kỳ ai có đường dẫn tới Không gian làm việc đều có thể nhìn thấy Không gian làm việc và Không gian làm việc có thể được tìm thấy trên các công cụ tìm kiếm như Google. Chỉ những người được mời vào Không gian làm việc mới có thể thêm và chỉnh sửa các bảng của Không gian làm việc.",
+    description:
+      "Đây là Không gian làm việc công khai. Bất kỳ ai có đường dẫn tới Không gian làm việc đều có thể nhìn thấy Không gian làm việc và Không gian làm việc có thể được tìm thấy trên các công cụ tìm kiếm như Google. Chỉ những người được mời vào Không gian làm việc mới có thể thêm và chỉnh sửa các bảng của Không gian làm việc.",
+    badgeIcon: PublicInlineIcon,
+    inlineIcon: PublicInlineIcon,
+    panelIcon: PublicPanelIcon,
+  },
+];
+
+const isSidebarCollapsed = ref(false);
+const showVisibilityPanel = ref(false);
+const selectedVisibility = ref("private");
+const visibilityPanelRef = ref(null);
+
+const currentVisibility = computed(
+  () => visibilityOptions.find((option) => option.id === selectedVisibility.value) ?? visibilityOptions[0]
+);
+
+const toggleVisibilityPanel = () => {
+  showVisibilityPanel.value = !showVisibilityPanel.value;
+};
+
+const selectVisibility = (visibilityId) => {
+  selectedVisibility.value = visibilityId;
+  showVisibilityPanel.value = false;
+};
+
+const handleDocumentClick = (event) => {
+  const target = event.target;
+
+  if (
+    showVisibilityPanel.value &&
+    visibilityPanelRef.value &&
+    !visibilityPanelRef.value.contains(target)
+  ) {
+    showVisibilityPanel.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleDocumentClick);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleDocumentClick);
+});
+</script>

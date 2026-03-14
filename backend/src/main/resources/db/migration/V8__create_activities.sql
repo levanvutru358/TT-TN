@@ -1,2 +1,0 @@
--- V8__create_activities.sql
--- TODO: add migration SQL

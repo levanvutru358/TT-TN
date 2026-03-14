@@ -9,6 +9,9 @@ import WorkspaceMembers from "@/views/WorkspaceMembers.vue";
 import WorkspaceSettings from "@/views/WorkspaceSettings.vue";
 import WorkspaceBoards from "@/views/WorkspaceBoards.vue";
 import WorkspaceCards from "@/views/WorkspaceCards.vue";
+import PersonalSettings from "@/views/PersonalSettings.vue";
+import PersonalActivity from "@/views/PersonalActivity.vue";
+import PersonalProfile from "@/views/PersonalProfile.vue";
 
 const routes = [
   {
@@ -60,6 +63,21 @@ const routes = [
     path: "/workspace/cards",
     name: "WorkspaceCards",
     component: WorkspaceCards,
+  },
+  {
+    path: "/personal/settings",
+    name: "PersonalSettings",
+    component: PersonalSettings,
+  },
+  {
+    path: "/personal/activity",
+    name: "PersonalActivity",
+    component: PersonalActivity,
+  },
+  {
+    path: "/personal/profile",
+    name: "PersonalProfile",
+    component: PersonalProfile,
   },
   {
     path: "/:pathMatch(.*)*",

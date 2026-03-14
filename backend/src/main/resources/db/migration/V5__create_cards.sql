@@ -1,2 +1,0 @@
--- V5__create_cards.sql
--- TODO: add migration SQL

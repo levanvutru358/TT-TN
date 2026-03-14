@@ -57,6 +57,9 @@ const hideHeaderNavRoutes = [
   "WorkspaceSettings",
   "WorkspaceBoards",
   "WorkspaceCards",
+  "PersonalSettings",
+  "PersonalActivity",
+  "PersonalProfile",
 ];
 const showHeaderNav = () =>
   !hideHeaderNavRoutes.includes(String(route.name || ""));

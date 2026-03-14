@@ -1,2 +1,0 @@
--- V1__init_users.sql
--- TODO: add migration SQL

@@ -1,2 +1,0 @@
--- V2__create_workspaces.sql
--- TODO: add migration SQL
