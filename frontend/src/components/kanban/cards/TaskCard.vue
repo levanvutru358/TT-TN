@@ -1,28 +1,37 @@
 <template>
-  <div ref="rootRef" class="relative">
+  <div
+    ref="rootRef"
+    class="relative"
+    :data-task-id="task.id"
+    :data-task-list-id="task.listId || ''"
+  >
     <!-- Card -->
     <div
-      class="group bg-[#22272b] rounded-xl p-3 shadow-sm hover:bg-[#2c333a] cursor-pointer border border-[#3f474f] transition-colors"
+      class="group cursor-grab rounded-xl border border-[#3f474f] bg-[#22272b] p-3 shadow-sm transition-colors hover:bg-[#2c333a] active:cursor-grabbing"
+      :class="isDragging ? 'opacity-60 ring-1 ring-[#579dff]' : ''"
+      draggable="true"
       @click="openCardFromBody"
+      @dragstart="onCardDragStart"
+      @dragend="onCardDragEnd"
     >
       <!-- Top -->
-      <div class="flex items-start justify-between gap-2 mb-3">
+      <div class="mb-3 flex items-start justify-between gap-2">
         <div class="min-w-0 flex-1">
           <!-- Priority -->
-          <div class="flex items-center gap-2 mb-2">
-            <div class="w-2 h-2 rounded-full" :class="priorityConfig.bg" />
+          <div class="mb-2 flex items-center gap-2">
+            <div class="h-2 w-2 rounded-full" :class="priorityConfig.bg" />
             <span class="text-xs text-[#9fadbc]">{{ task.priority }}</span>
           </div>
 
           <!-- Title -->
-          <h4 class="text-sm text-white font-medium break-words leading-5">
+          <h4 class="break-words text-sm font-medium leading-5 text-white">
             {{ task.title }}
           </h4>
         </div>
 
         <!-- Edit / Actions button -->
         <button
-          class="shrink-0 w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
+          class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-white transition hover:bg-white/20"
           type="button"
           aria-label="Thao tác thẻ"
           title="Thao tác thẻ"
@@ -30,7 +39,7 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
+            class="h-4 w-4"
             viewBox="0 0 24 24"
             fill="currentColor"
           >
@@ -44,16 +53,16 @@
       <!-- Description -->
       <p
         v-if="task.description"
-        class="text-xs text-[#9fadbc] mb-3 line-clamp-2"
+        class="mb-3 line-clamp-2 text-xs text-[#9fadbc]"
       >
         {{ task.description }}
       </p>
 
       <!-- Footer -->
-      <div class="flex items-center justify-between mt-2">
+      <div class="mt-2 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <div
-            class="w-6 h-6 rounded-full bg-[#34424c] flex items-center justify-center text-xs text-white font-medium"
+            class="flex h-6 w-6 items-center justify-center rounded-full bg-[#34424c] text-xs font-medium text-white"
           >
             {{ assigneeInitial }}
           </div>
@@ -123,12 +132,15 @@ const emit = defineEmits([
   "copy-link",
   "mirror-task",
   "archive-task",
+  "drag-start",
+  "drag-end",
 ]);
 
 const open = ref(false);
 const menuOpen = ref(false);
 const rootRef = ref(null);
 const initialPopover = ref(null);
+const isDragging = ref(false);
 
 const priorityConfig = computed(() => {
   const map = {
@@ -149,14 +161,36 @@ const shortDate = computed(() => {
 });
 
 const assigneeInitial = computed(() => {
-  const value = String(
-    props.task?.assignee ||
-      props.task?.assignees?.[0] ||
-      "?"
-  ).trim();
-
+  const value = String(props.task?.assignee || props.task?.assignees?.[0] || "?").trim();
   return value ? value.charAt(0).toUpperCase() : "?";
 });
+
+function buildDragPayload() {
+  return {
+    taskId: props.task?.id ?? null,
+    sourceListId: props.task?.listId ?? null,
+    task: props.task,
+  };
+}
+
+function onCardDragStart(event) {
+  const payload = buildDragPayload();
+
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.dropEffect = "move";
+    event.dataTransfer.setData("application/json", JSON.stringify(payload));
+    event.dataTransfer.setData("text/plain", String(payload.taskId ?? ""));
+  }
+
+  emit("drag-start", payload);
+  isDragging.value = true;
+}
+
+function onCardDragEnd() {
+  isDragging.value = false;
+  emit("drag-end", buildDragPayload());
+}
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value;
