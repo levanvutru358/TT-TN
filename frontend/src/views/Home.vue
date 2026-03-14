@@ -1,262 +1,9 @@
 ﻿<template>
   <div class="min-h-screen bg-[#f1f2f4] text-[#172b4d]">
-    <header
-      class="sticky top-0 z-20 h-12 border-b border-[#d0d4db] bg-[#f8f9fb]/95 backdrop-blur"
-    >
-      <div class="h-full flex items-center gap-3 px-4 lg:px-6">
-        <button
-          type="button"
-          class="w-7 h-7 rounded-md text-[#44546f] hover:bg-[#e9ebef] flex items-center justify-center"
-          aria-label="Menu"
-        >
-          <svg
-            class="w-4 h-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M6 6H8V8H6V6ZM11 6H13V8H11V6ZM16 6H18V8H16V6ZM6 11H8V13H6V11ZM11 11H13V13H11V11ZM16 11H18V13H16V11ZM6 16H8V18H6V16ZM11 16H13V18H11V16ZM16 16H18V18H16V16Z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-
-        <div class="flex items-center gap-2 min-w-[140px]">
-          <div
-            class="w-7 h-7 rounded-md bg-[#0c66e4] text-white text-xs font-semibold flex items-center justify-center"
-          >
-            T
-          </div>
-          <span class="text-[18px] leading-none text-[#0747a6] font-semibold">Trello</span>
-        </div>
-
-        <div class="flex-1 max-w-4xl">
-          <label
-            class="h-9 px-3 rounded-md border border-[#cfd5de] bg-white flex items-center gap-2 text-[#5e6c84]"
-          >
-            <svg
-              class="w-3.5 h-3.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M11 4C14.866 4 18 7.13401 18 11C18 12.7407 17.3641 14.333 16.3124 15.5564L20.3787 19.6228L18.9645 21.037L14.8982 16.9706C13.6748 18.0224 12.0825 18.6583 10.3418 18.6583C6.4758 18.6583 3.3418 15.5243 3.3418 11.6583C3.3418 7.79231 6.4758 4.65831 10.3418 4.65831C10.5617 4.65831 10.7815 4.66965 11 4.69218V4Z"
-                fill="currentColor"
-              />
-            </svg>
-            <input
-              type="text"
-              placeholder="Tìm kiếm"
-              class="w-full bg-transparent text-xs text-[#172b4d] placeholder:text-[#5e6c84] outline-none"
-            />
-          </label>
-        </div>
-
-        <button
-          ref="createButtonRef"
-          type="button"
-          class="h-8 px-3.5 rounded-md bg-[#0c66e4] text-white text-xs font-semibold hover:bg-[#0055cc]"
-          @click="openCreateBoardModal('header')"
-        >
-          Tạo mới
-        </button>
-
-        <div class="hidden md:flex items-center gap-1 text-[#44546f] ml-auto relative">
-          <button
-            v-for="item in topActions"
-            :key="item"
-            type="button"
-            class="w-7 h-7 rounded-md hover:bg-[#e9ebef] flex items-center justify-center text-sm"
-            :aria-label="item"
-          >
-            {{ item }}
-          </button>
-          <button
-            type="button"
-            class="w-8 h-8 rounded-full bg-[#de350b] text-white text-[10px] font-bold flex items-center justify-center ml-1 ring-2 ring-transparent hover:ring-[#0c66e4]"
-            @click="toggleAccountMenu"
-          >
-            LT
-          </button>
-
-          <button
-            v-if="showAccountMenu"
-            type="button"
-            class="fixed inset-0 z-30 cursor-default"
-            aria-label="Đóng menu tài khoản"
-            @click="closeAccountMenu"
-          />
-
-          <div
-            v-if="showAccountMenu"
-            class="absolute right-0 top-10 z-40 w-[360px] rounded-xl border border-[#d0d4db] bg-[#f1f2f4] p-3.5 shadow-[0_8px_24px_rgba(9,30,66,0.25)]"
-          >
-            <p class="text-[13px] font-semibold text-[#626f86]">TÀI KHOẢN</p>
-
-            <div class="mt-3 flex items-center gap-3">
-              <div
-                class="h-11 w-11 rounded-full bg-[#de350b] text-white text-[24px] font-semibold flex items-center justify-center"
-              >
-                LT
-              </div>
-              <div>
-                <p class="text-[14px] leading-none text-[#172b4d]">Lê văn vũ trụ</p>
-                <p class="mt-1 text-[13px] leading-none text-[#44546f]">letru7@gmail.com</p>
-              </div>
-            </div>
-
-            <button type="button" class="mt-4 block text-[14px] text-[#172b4d] hover:underline">
-              Chuyển đổi Tài khoản
-            </button>
-
-            <button
-              type="button"
-              class="mt-3.5 w-full flex items-center justify-between text-[14px] text-[#172b4d] hover:underline"
-            >
-              <span>Quản lý tài khoản</span>
-              <svg
-                class="h-4 w-4 text-[#44546f]"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  d="M14 5H19V10M19 5L11 13"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M10 7H7C5.89543 7 5 7.89543 5 9V17C5 18.1046 5.89543 19 7 19H15C16.1046 19 17 18.1046 17 17V14"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                />
-              </svg>
-            </button>
-
-            <div class="my-4 border-t border-[#d0d4db]" />
-
-            <p class="text-[13px] font-semibold text-[#626f86]">TRELLO</p>
-
-            <div class="mt-3 space-y-2.5 text-[14px] text-[#172b4d]">
-              <router-link
-                v-for="item in accountLinks"
-                :key="item.label"
-                :to="item.to"
-                class="block hover:underline"
-                @click="closeAccountMenu"
-              >
-                {{ item.label }}
-              </router-link>
-              <button
-                type="button"
-                class="w-full flex items-center justify-between hover:underline"
-                @click="showThemeMenu = !showThemeMenu"
-              >
-                <span>Chủ đề</span>
-                <svg
-                  class="h-4 w-4 transition-transform"
-                  :class="{ 'rotate-90': showThemeMenu }"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M10 6L16 12L10 18"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
-
-              <div
-                v-if="showThemeMenu"
-                class="rounded-xl border border-[#d0d4db] bg-white overflow-hidden"
-              >
-                <button
-                  v-for="theme in themeOptions"
-                  :key="theme.id"
-                  type="button"
-                  class="w-full flex items-center gap-3 px-3 py-3 border-l-2"
-                  :class="
-                    selectedTheme === theme.id
-                      ? 'border-l-[#0c66e4] bg-[#e7f0ff]'
-                      : 'border-l-transparent hover:bg-[#f4f5f7]'
-                  "
-                  @click="selectTheme(theme.id)"
-                >
-                  <span
-                    class="w-5 h-5 rounded-full border border-[#a5adba] flex items-center justify-center"
-                    :class="selectedTheme === theme.id ? 'border-[#0c66e4]' : ''"
-                  >
-                    <span
-                      v-if="selectedTheme === theme.id"
-                      class="w-3 h-3 rounded-full bg-[#0c66e4]"
-                    />
-                  </span>
-
-                  <span
-                    v-if="theme.id === 'light'"
-                    class="h-12 w-[72px] rounded-lg border border-[#d0d4db] bg-[#f5f6f8] p-2 flex items-center gap-1"
-                  >
-                    <span class="h-7 w-3 rounded bg-[#cfd6df]"></span>
-                    <span class="h-7 w-3 rounded bg-[#cfd6df]"></span>
-                    <span class="h-7 w-3 rounded bg-[#cfd6df]"></span>
-                  </span>
-
-                  <span
-                    v-else-if="theme.id === 'dark'"
-                    class="h-12 w-[72px] rounded-lg border border-[#1d2125] bg-[#1d2125] p-2 flex items-center gap-1"
-                  >
-                    <span class="h-7 w-3 rounded bg-[#4f5a6a]"></span>
-                    <span class="h-7 w-3 rounded bg-[#4f5a6a]"></span>
-                    <span class="h-7 w-3 rounded bg-[#4f5a6a]"></span>
-                  </span>
-
-                  <span
-                    v-else
-                    class="h-12 w-[72px] rounded-lg border border-[#d0d4db] bg-[linear-gradient(135deg,#f5f6f8_0%,#f5f6f8_52%,#1d2125_52%,#1d2125_100%)] p-2 flex items-center gap-1"
-                  >
-                    <span class="h-7 w-3 rounded bg-[#cfd6df]"></span>
-                    <span class="h-7 w-3 rounded bg-[#cfd6df]"></span>
-                    <span class="h-7 w-3 rounded bg-[#4f5a6a]"></span>
-                  </span>
-
-                  <span
-                    class="text-[14px] leading-none"
-                    :class="selectedTheme === theme.id ? 'text-[#0c66e4]' : 'text-[#172b4d]'"
-                  >
-                    {{ theme.label }}
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <div class="my-4 border-t border-[#d0d4db]" />
-
-            <button type="button" class="w-full text-left text-[14px] text-[#172b4d] hover:underline">
-              Tạo Không gian làm việc
-            </button>
-
-            <div class="my-4 border-t border-[#d0d4db]" />
-
-            <button type="button" class="w-full text-left text-[14px] text-[#172b4d] hover:underline">
-              Đăng xuất
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
+    <WorkspaceHeader
+      v-model="searchKeyword"
+      @create-click="openCreateBoardModal('header')"
+    />
 
     <div class="max-w-[1760px] mx-auto flex">
       <aside class="hidden lg:block w-[288px] px-6 py-8">
@@ -294,9 +41,9 @@
             >
               T
             </div>
-            <span class="text-[14px] font-medium text-[#172b4d]"
-              >Trello Không gian làm việc</span
-            >
+            <span class="text-[14px] font-medium text-[#172b4d]">
+              Trello Không gian làm việc
+            </span>
             <svg
               class="w-4 h-4 ml-auto text-[#172b4d] transition-transform"
               :class="{ 'rotate-180': workspaceOpen }"
@@ -437,7 +184,6 @@
                       stroke-width="5"
                       stroke-linecap="round"
                     />
-
                     <g transform="translate(310 52) rotate(12 30 40)">
                       <rect x="0" y="0" width="72" height="84" rx="8" fill="#a4d69e" />
                       <rect x="12" y="14" width="48" height="8" rx="4" fill="#88c783" />
@@ -453,14 +199,20 @@
                 </div>
 
                 <div class="px-5 py-4 text-center">
-                  <h1 class="text-[24px] font-semibold leading-tight text-[#172b4d]">Tổ chức mọi thứ</h1>
+                  <h1 class="text-[24px] font-semibold leading-tight text-[#172b4d]">
+                    Tổ chức mọi thứ
+                  </h1>
                   <p class="mx-auto mt-3 max-w-[430px] text-[13px] leading-[1.5] text-[#172b4d]">
                     Đặt tất cả mọi thứ ở một nơi và bắt đầu di chuyển mọi thứ về phía trước với bảng
                     Trello đầu tiên của bạn!
                   </p>
 
                   <div class="mt-4">
-                    <button type="button" class="inline-flex h-8 items-center justify-center rounded-md bg-[#0c66e4] px-3.5 text-[13px] font-semibold text-white hover:bg-[#0055cc]" @click="openCreateBoardModal('header')">
+                    <button
+                      type="button"
+                      class="inline-flex h-8 items-center justify-center rounded-md bg-[#0c66e4] px-3.5 text-[13px] font-semibold text-white hover:bg-[#0055cc]"
+                      @click="openCreateBoardModal('header')"
+                    >
                       Tạo một bảng Không gian làm việc
                     </button>
                   </div>
@@ -487,16 +239,13 @@
                     <rect x="0" y="0" width="115" height="190" fill="#ece2c8" />
                     <rect x="315" y="0" width="115" height="190" fill="#ece2c8" />
                     <circle cx="214" cy="122" r="92" fill="#f2d7b3" />
-
                     <rect x="198" y="8" width="60" height="28" rx="4" fill="#eceef0" />
                     <rect x="205" y="14" width="40" height="5" rx="2.5" fill="#c3c7cf" />
                     <rect x="205" y="23" width="30" height="5" rx="2.5" fill="#d2d7df" />
-
                     <rect x="120" y="28" width="32" height="32" rx="5" fill="#f47dd3" />
                     <circle cx="131" cy="42" r="2" fill="#8e366c" />
                     <circle cx="141" cy="42" r="2" fill="#8e366c" />
                     <path d="M130 50H142" stroke="#8e366c" stroke-width="2.5" stroke-linecap="round" />
-
                     <rect x="334" y="28" width="36" height="36" rx="5" fill="#67c54a" />
                     <path
                       d="M344 45L350 51L360 39"
@@ -505,12 +254,9 @@
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     />
-
                     <circle cx="378" cy="95" r="18" fill="#bf7be1" />
                     <path d="M378 86V95H371" stroke="#8543b0" stroke-width="3" stroke-linecap="round" />
-
                     <path d="M66 106L132 88L88 128L95 112L66 106Z" fill="#0c7db9" />
-
                     <path d="M170 78L196 46L208 86Z" fill="#6f8897" />
                     <path d="M260 78L234 46L222 86Z" fill="#6f8897" />
                     <ellipse cx="215" cy="102" rx="52" ry="47" fill="#78909c" />
@@ -526,7 +272,9 @@
                 </div>
 
                 <div class="px-5 py-4 text-center">
-                  <h1 class="text-[24px] font-semibold leading-tight text-[#172b4d]">Theo dõi và cập nhật</h1>
+                  <h1 class="text-[24px] font-semibold leading-tight text-[#172b4d]">
+                    Theo dõi và cập nhật
+                  </h1>
                   <p class="mx-auto mt-3 max-w-[430px] text-[13px] leading-[1.5] text-[#172b4d]">
                     Mời mọi người vào bảng và thẻ, để lại nhận xét, thêm ngày hết hạn và chúng tôi sẽ
                     hiển thị hoạt động quan trọng nhất ở đây.
@@ -561,7 +309,13 @@
                   <router-link
                     v-for="item in homeRecentBoards"
                     :key="item.name"
-                    to="/project"
+                    :to="{
+                      path: '/projects/1',
+                      query: {
+                        title: item.name,
+                        bg: item.background
+                      }
+                    }"
                     class="flex items-center gap-3 rounded-md px-1.5 py-1.5 hover:bg-[#ebedf0]"
                   >
                     <div class="h-9 w-11 rounded-md" :style="{ background: item.background }"></div>
@@ -722,7 +476,11 @@
               </p>
 
               <div class="mt-6 flex justify-center">
-                <button type="button" class="inline-flex h-10 items-center justify-center rounded-lg border border-[#0055cc] bg-[#0c66e4] px-6 text-[15px] font-semibold text-white hover:bg-[#0055cc]" @click="openCreateBoardModal('header')">
+                <button
+                  type="button"
+                  class="inline-flex h-10 items-center justify-center rounded-lg border border-[#0055cc] bg-[#0c66e4] px-6 text-[15px] font-semibold text-white hover:bg-[#0055cc]"
+                  @click="openCreateBoardModal('header')"
+                >
                   Tạo bảng đầu tiên của bạn
                 </button>
               </div>
@@ -737,7 +495,13 @@
               </div>
 
               <router-link
-                to="/project"
+                :to="{
+                  path: '/projects/1',
+                  query: {
+                    title: 'Premortem',
+                    bg: 'linear-gradient(135deg,#d8f0f7_0%,#d4eef6_50%,#c8e9f2_100%)'
+                  }
+                }"
                 class="group block w-[288px] overflow-hidden rounded-xl border border-[#c8ced8] bg-white shadow-sm transition-shadow hover:shadow-md"
               >
                 <div
@@ -968,7 +732,9 @@
         </div>
 
         <label class="mt-2.5 block">
-          <span class="text-[14px] font-semibold text-[#44546f]">Tiêu đề bảng <span class="text-[#e2483d]">*</span></span>
+          <span class="text-[14px] font-semibold text-[#44546f]">
+            Tiêu đề bảng <span class="text-[#e2483d]">*</span>
+          </span>
           <input
             v-model="newBoardTitle"
             type="text"
@@ -1133,14 +899,13 @@
         </p>
       </section>
     </div>
-
-    <CreateBoardModal v-model="isCreateBoardOpen" />
   </div>
 </template>
 
 <script setup>
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
+import WorkspaceHeader from "@/components/common/WorkspaceHeader.vue";
 
 const router = useRouter();
 
@@ -1150,11 +915,7 @@ const activeWorkspaceSection = ref("home");
 const activeMenu = ref("boards");
 const showHomeActivityCard = ref(false);
 const showCreateBoardModal = ref(false);
-const showAccountMenu = ref(false);
-const showThemeMenu = ref(false);
-const selectedTheme = ref("system");
 const newBoardTitle = ref("");
-const createButtonRef = ref(null);
 const createBoardTileRef = ref(null);
 const createBoardModalRef = ref(null);
 const showVisibilityDropdown = ref(false);
@@ -1162,53 +923,40 @@ const selectedVisibility = ref("workspace");
 const createBoardModalStyle = ref({
   top: "56px",
   left: "8px",
-  width: "320px"
+  width: "320px",
 });
-
-const topActions = ["🔔"];
-const accountLinks = [
-  { label: "Hồ sơ và Hiển thị", to: { name: "PersonalProfile" } },
-  { label: "Hoạt động", to: { name: "PersonalActivity" } },
-  { label: "Thẻ", to: { name: "WorkspaceCards" } },
-  { label: "Cài đặt", to: { name: "PersonalSettings" } }
-];
-const themeOptions = [
-  { id: "light", label: "Màu sáng" },
-  { id: "dark", label: "Tối" },
-  { id: "system", label: "Hệ thống so khớp" }
-];
 
 const mainMenus = [
   { id: "boards", label: "Bảng", icon: "▣" },
   { id: "templates", label: "Mẫu", icon: "◫" },
-  { id: "home", label: "Trang chủ", icon: "⌁" }
+  { id: "home", label: "Trang chủ", icon: "⌁" },
 ];
 
 const workspaceActions = [
   { label: "Bảng", icon: "▣", upgrade: false, to: { name: "WorkspaceBoards" } },
   { label: "Thành viên", icon: "◔", upgrade: false, to: { name: "WorkspaceMembers" } },
   { label: "Cài đặt", icon: "⚙", upgrade: false, to: { name: "WorkspaceSettings" } },
-  { label: "Nâng cấp", icon: "▤", upgrade: true }
+  { label: "Nâng cấp", icon: "▤", upgrade: true },
 ];
 
 const homeRecentBoards = ref([
   {
     name: "Project Management",
     background: "linear-gradient(135deg,#2042d9,#8f3cf0)",
-    template: true
+    template: true,
   },
   {
     name: "Premortem",
     background: "linear-gradient(135deg,#b7f4ff 0%,#d3faff 50%,#bff0ff 100%)",
-    template: true
-  }
+    template: true,
+  },
 ]);
 
 const createBoardImageBackgrounds = [
   "linear-gradient(145deg,#6f4a2a 0%,#9b7042 40%,#4f3b2a 100%)",
   "linear-gradient(145deg,#f7a347 0%,#f28b2f 45%,#5f3f1f 100%)",
   "linear-gradient(145deg,#d5b18b 0%,#efd6b6 45%,#a36f44 100%)",
-  "linear-gradient(145deg,#8aa95b 0%,#5c7e3c 45%,#2f4d27 100%)"
+  "linear-gradient(145deg,#8aa95b 0%,#5c7e3c 45%,#2f4d27 100%)",
 ];
 
 const createBoardColorBackgrounds = [
@@ -1216,32 +964,34 @@ const createBoardColorBackgrounds = [
   "linear-gradient(135deg,#35b2d6,#2a63d3)",
   "linear-gradient(135deg,#0f5ec8,#1545a4)",
   "linear-gradient(135deg,#2d3c88,#b14484)",
-  "linear-gradient(135deg,#8161d0,#de67a9)"
+  "linear-gradient(135deg,#8161d0,#de67a9)",
 ];
 
 const selectedBoardBackground = ref(createBoardImageBackgrounds[0]);
 
 const canCreateBoard = computed(() => newBoardTitle.value.trim().length > 0);
+
 const visibilityOptions = [
   {
     id: "private",
     label: "Riêng tư",
     description:
-      "Chỉ thành viên bảng thông tin mới có quyền xem bảng thông tin này. Quản trị viên Không gian làm việc có thể đóng bảng thông tin và xoá thành viên."
+      "Chỉ thành viên bảng thông tin mới có quyền xem bảng thông tin này. Quản trị viên Không gian làm việc có thể đóng bảng thông tin và xoá thành viên.",
   },
   {
     id: "workspace",
     label: "Không gian làm việc",
     description:
-      "Tất cả thành viên của Không gian làm việc Trello có thể xem và sửa bảng thông tin này."
+      "Tất cả thành viên của Không gian làm việc Trello có thể xem và sửa bảng thông tin này.",
   },
   {
     id: "public",
     label: "Công khai",
     description:
-      "Bất kỳ ai trên mạng internet đều có thể xem bảng thông tin này. Chỉ thành viên bảng thông tin mới có quyền sửa."
-  }
+      "Bất kỳ ai trên mạng internet đều có thể xem bảng thông tin này. Chỉ thành viên bảng thông tin mới có quyền sửa.",
+  },
 ];
+
 const selectedVisibilityOption = computed(
   () => visibilityOptions.find((item) => item.id === selectedVisibility.value) || visibilityOptions[1]
 );
@@ -1249,22 +999,6 @@ const selectedVisibilityOption = computed(
 const selectVisibilityMode = (mode) => {
   selectedVisibility.value = mode;
   showVisibilityDropdown.value = false;
-};
-
-const toggleAccountMenu = () => {
-  showAccountMenu.value = !showAccountMenu.value;
-  if (!showAccountMenu.value) {
-    showThemeMenu.value = false;
-  }
-};
-
-const closeAccountMenu = () => {
-  showAccountMenu.value = false;
-  showThemeMenu.value = false;
-};
-
-const selectTheme = (themeId) => {
-  selectedTheme.value = themeId;
 };
 
 const selectMainMenu = (menuId) => {
@@ -1299,7 +1033,6 @@ const positionCreateBoardModal = (source, anchorRect) => {
   let left = anchorRect.left;
 
   if (source === "tile") {
-    // Keep tile modal a bit higher so it does not get visually covered.
     top = anchorRect.top - 20;
     left = anchorRect.right + 12;
     if (left + measuredModalWidth > window.innerWidth - screenPadding) {
@@ -1312,6 +1045,7 @@ const positionCreateBoardModal = (source, anchorRect) => {
     screenPadding,
     Math.max(screenPadding, window.innerWidth - measuredModalWidth - screenPadding)
   );
+
   const boundedTop = clampValue(
     top,
     screenPadding,
@@ -1321,17 +1055,18 @@ const positionCreateBoardModal = (source, anchorRect) => {
   createBoardModalStyle.value = {
     top: `${boundedTop}px`,
     left: `${boundedLeft}px`,
-    width: `${modalWidth}px`
+    width: `${modalWidth}px`,
   };
 };
 
 const openCreateBoardModal = async (source = "header") => {
-  closeAccountMenu();
   newBoardTitle.value = "";
   selectedBoardBackground.value = createBoardImageBackgrounds[0];
   selectedVisibility.value = "workspace";
   showVisibilityDropdown.value = false;
-  const buttonEl = source === "tile" ? createBoardTileRef.value : createButtonRef.value;
+
+  const buttonEl = source === "tile" ? createBoardTileRef.value : null;
+
   if (buttonEl && typeof window !== "undefined") {
     const rect = buttonEl.getBoundingClientRect();
     positionCreateBoardModal(source, rect);
@@ -1340,6 +1075,13 @@ const openCreateBoardModal = async (source = "header") => {
     positionCreateBoardModal(source, rect);
     return;
   }
+
+  createBoardModalStyle.value = {
+    top: "56px",
+    left: "8px",
+    width: "320px",
+  };
+
   showCreateBoardModal.value = true;
 };
 
@@ -1350,17 +1092,31 @@ const closeCreateBoardModal = () => {
 
 const submitCreateBoard = () => {
   if (!canCreateBoard.value) return;
+
+  const boardTitle = newBoardTitle.value.trim();
+  const boardBackground = selectedBoardBackground.value;
+  const boardVisibility = selectedVisibility.value;
+
   homeRecentBoards.value.unshift({
-    name: newBoardTitle.value.trim(),
-    background: selectedBoardBackground.value,
-    template: false
+    name: boardTitle,
+    background: boardBackground,
+    template: false,
   });
+
   if (homeRecentBoards.value.length > 6) {
     homeRecentBoards.value = homeRecentBoards.value.slice(0, 6);
   }
+
   showCreateBoardModal.value = false;
   newBoardTitle.value = "";
+
+  router.push({
+    path: "/projects/1",
+    query: {
+      title: boardTitle,
+      bg: boardBackground,
+      visibility: boardVisibility,
+    },
+  });
 };
 </script>
-
-
