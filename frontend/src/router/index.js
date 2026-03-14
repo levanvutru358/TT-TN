@@ -40,7 +40,7 @@ const routes = [
     component: StageForm,
   },
   {
-    path: "/project",
+    path: "/projects/:id",
     name: "ProjectDetail",
     component: StageProject,
   },

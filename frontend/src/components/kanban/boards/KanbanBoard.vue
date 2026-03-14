@@ -13,6 +13,7 @@
           </div>
           <button
             class="text-white/80 hover:text-white p-1 rounded hover:bg-white/10"
+            type="button"
           >
             ⋮
           </button>
@@ -33,6 +34,7 @@
 
             <button
               class="w-full mt-1 text-left text-white/80 hover:text-white text-sm p-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              type="button"
             >
               <span class="text-lg leading-none">+</span>
               <span>Thêm thẻ</span>
@@ -43,12 +45,13 @@
 
       <!-- Task columns -->
       <div
-        v-for="column in computedColumns"
+        v-for="(column, idx) in computedColumns"
         :key="column.id"
         class="w-80 flex-shrink-0 h-full flex flex-col"
       >
         <div
           class="mb-3 rounded-xl bg-black/40 border border-white/10 px-3 py-2 flex items-center justify-between shadow-sm"
+          :style="listHeaderStyle(column)"
         >
           <div class="flex items-center gap-2">
             <h3 class="text-sm font-semibold text-white">
@@ -60,11 +63,20 @@
               {{ tasksByColumn(column).length }}
             </span>
           </div>
-          <button
-            class="text-white/60 hover:text-white p-1 rounded hover:bg-white/10"
-          >
-            ⋮
-          </button>
+
+          <ListActionsMenu
+            :column-id="String(column.id)"
+            :can-move-left="idx > 0"
+            :can-move-right="idx < computedColumns.length - 1"
+            :selected-color="String(column.color || '')"
+            @add-card="onAddCard"
+            @move="onMoveList"
+            @archive="onArchiveList"
+            @set-color="onSetListColor"
+            @clear-color="onClearListColor"
+            @toggle-watch="onToggleWatch"
+            @copy-list="onCopyList"
+          />
         </div>
 
         <div class="flex-1 overflow-y-auto">
@@ -73,10 +85,21 @@
               v-for="task in tasksByColumn(column)"
               :key="task.id"
               :task="task"
+              @open-card="handleOpenCard"
+              @edit-labels="handleEditLabels"
+              @change-members="handleChangeMembers"
+              @change-cover="handleChangeCover"
+              @edit-date="handleEditDate"
+              @move-task="handleMoveTask"
+              @copy-task="handleCopyTask"
+              @copy-link="handleCopyLink"
+              @mirror-task="handleMirrorTask"
+              @archive-task="handleArchiveTask"
             />
 
             <button
               class="w-full mt-1 text-left text-white/70 hover:text-white text-sm p-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              type="button"
               @click="openAddTask(column)"
             >
               <span class="text-lg leading-none">+</span>
@@ -86,23 +109,22 @@
         </div>
       </div>
 
-      <!-- Add another list (Trello style) -->
+      <!-- Add another list -->
       <div class="w-80 flex-shrink-0 h-full">
         <div
           class="mb-3 rounded-xl bg-black/40 border border-white/10 px-3 py-2 flex items-center justify-between shadow-sm"
         >
-          <!-- Collapsed button -->
           <button
             v-if="!showAddList"
             class="w-full text-left text-white/80 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+            type="button"
             @click="openAddList"
           >
             <span class="text-lg leading-none">+</span>
             <span>Thêm danh sách khác</span>
           </button>
 
-          <!-- Expanded form -->
-          <div v-else class="space-y-2">
+          <div v-else class="space-y-2 w-full">
             <input
               v-model.trim="newListTitle"
               class="w-full rounded-lg bg-black/30 border border-white/10 px-3 py-2 text-sm text-white placeholder:text-white/50 outline-none focus:border-white/20"
@@ -126,6 +148,7 @@
 
               <button
                 class="px-3 py-2 rounded-lg bg-white/10 text-white text-sm hover:bg-white/15 border border-white/10"
+                type="button"
                 @click="createList"
               >
                 Thêm
@@ -133,8 +156,9 @@
 
               <button
                 class="px-3 py-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10"
-                @click="closeAddList"
+                type="button"
                 title="Hủy"
+                @click="closeAddList"
               >
                 ✕
               </button>
@@ -161,43 +185,42 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import TaskCard from "./TaskCard.vue";
-import AddTaskModal from "./AddTaskModal.vue";
+import TaskCard from "@/components/kanban/cards/TaskCard.vue";
+import ListActionsMenu from "@/components/kanban/menus/ListActionsMenu.vue";
+import AddTaskModal from "@/components/modals/AddTaskModal.vue";
 
 const props = defineProps({
   project: {
     type: Object,
     required: true,
   },
+  filters: {
+    type: Object,
+    default: () => ({
+      members: [],
+      labels: [],
+      cardStatus: [],
+      dueDate: [],
+      activity: [],
+      searchQuery: "",
+    }),
+  },
 });
 
 const emit = defineEmits(["update-project"]);
 
-/**
- * Columns mặc định (giữ như bạn)
- * - Lưu ý: status là "Todo", "In Progress", "Done"
- */
 const defaultColumns = [
   { id: "today", status: "Todo", label: "Hôm nay" },
   { id: "this-week", status: "In Progress", label: "Tuần này" },
   { id: "later", status: "Done", label: "Sau này" },
 ];
 
-/**
- * Status options để tạo list mới (bạn có thể đổi)
- * - Nếu bạn muốn tạo list có status riêng, bạn có thể cho phép nhập free-text.
- */
 const statusOptions = [
   { value: "Todo", label: "Todo" },
   { value: "In Progress", label: "In Progress" },
   { value: "Done", label: "Done" },
 ];
 
-/**
- * computedColumns:
- * - Ưu tiên lấy từ project.columns nếu có
- * - Nếu chưa có thì fallback defaultColumns
- */
 const computedColumns = computed(() => {
   const cols = props.project?.columns;
   if (Array.isArray(cols) && cols.length > 0) return cols;
@@ -208,8 +231,88 @@ const computedColumns = computed(() => {
 const showAddTask = ref(false);
 const selectedColumn = ref(null);
 
-const tasksByColumn = (column) =>
-  (props.project.tasks || []).filter((t) => t.status === column.status);
+const taskMatchesFilters = (task) => {
+  const {
+    members = [],
+    labels = [],
+    cardStatus = [],
+    dueDate = [],
+    activity = [],
+    searchQuery = "",
+  } = props.filters || {};
+
+  if (
+    searchQuery &&
+    !String(task.title || "")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  ) {
+    return false;
+  }
+
+  if (members.length > 0 && Array.isArray(task.assignees)) {
+    const hasMatchingMember = task.assignees.some((id) => members.includes(id));
+    if (!hasMatchingMember) return false;
+  }
+
+  if (labels.length > 0 && Array.isArray(task.labels)) {
+    const hasMatchingLabel = task.labels.some((id) => labels.includes(id));
+    if (!hasMatchingLabel) return false;
+  }
+
+  if (cardStatus.length > 0) {
+    const taskStatus = task.isCompleted ? "completed" : "pending";
+    if (!cardStatus.includes(taskStatus)) return false;
+  }
+
+  if (dueDate.length > 0) {
+    if (!task.dueDate) {
+      if (dueDate.includes("no-due")) return true;
+      return false;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const taskDate = new Date(task.dueDate);
+    taskDate.setHours(0, 0, 0, 0);
+
+    let hasDueDateMatch = false;
+
+    if (dueDate.includes("overdue") && taskDate < today) {
+      hasDueDateMatch = true;
+    }
+    if (dueDate.includes("today") && taskDate.getTime() === today.getTime()) {
+      hasDueDateMatch = true;
+    }
+    if (dueDate.includes("upcoming") && taskDate > today) {
+      hasDueDateMatch = true;
+    }
+
+    if (!hasDueDateMatch && !dueDate.includes("no-due")) return false;
+  }
+
+  void activity;
+  return true;
+};
+
+const tasksByColumn = (column) => {
+  const allTasks = (props.project.tasks || []).filter(
+    (t) => t.status === column.status
+  );
+
+  const hasActiveFilters =
+    props.filters?.members?.length > 0 ||
+    props.filters?.labels?.length > 0 ||
+    props.filters?.cardStatus?.length > 0 ||
+    props.filters?.dueDate?.length > 0 ||
+    props.filters?.activity?.length > 0 ||
+    (props.filters?.searchQuery &&
+      props.filters.searchQuery.trim().length > 0);
+
+  if (!hasActiveFilters) return allTasks;
+  return allTasks.filter(taskMatchesFilters);
+};
 
 const addTask = (task) => {
   const updated = {
@@ -225,7 +328,7 @@ const openAddTask = (column) => {
   showAddTask.value = true;
 };
 
-/** ============ Add list (new column) ============ */
+/** ============ Add list ============ */
 const showAddList = ref(false);
 const newListTitle = ref("");
 const newListStatus = ref("Todo");
@@ -257,7 +360,6 @@ const createList = () => {
     ? props.project.columns
     : computedColumns.value;
 
-  // tạo id không trùng
   let id = baseId;
   let i = 2;
   while (current.some((c) => c.id === id)) {
@@ -270,13 +372,146 @@ const createList = () => {
     status: newListStatus.value,
   };
 
-  // LƯU VÀO project.columns
   const updated = {
     ...props.project,
-    columns: [...(Array.isArray(props.project.columns) ? props.project.columns : computedColumns.value), newCol],
+    columns: [
+      ...(Array.isArray(props.project.columns)
+        ? props.project.columns
+        : computedColumns.value),
+      newCol,
+    ],
   };
 
   emit("update-project", updated);
   showAddList.value = false;
 };
+
+function columnsForUpdate() {
+  const cols =
+    Array.isArray(props.project?.columns) && props.project.columns.length
+      ? props.project.columns
+      : computedColumns.value;
+  return Array.isArray(cols) ? cols : [];
+}
+
+function updateColumns(nextCols) {
+  const updated = {
+    ...props.project,
+    columns: nextCols,
+  };
+  emit("update-project", updated);
+}
+
+function onAddCard(columnId) {
+  const col = computedColumns.value.find(
+    (c) => String(c.id) === String(columnId)
+  );
+  if (!col) return;
+  openAddTask(col);
+}
+
+function onMoveList({ columnId, dir }) {
+  const cols = [...columnsForUpdate()];
+  const from = cols.findIndex((c) => String(c.id) === String(columnId));
+  if (from < 0) return;
+
+  const to = dir === "left" ? from - 1 : from + 1;
+  if (to < 0 || to >= cols.length) return;
+
+  const [picked] = cols.splice(from, 1);
+  cols.splice(to, 0, picked);
+  updateColumns(cols);
+}
+
+function onArchiveList(columnId) {
+  const cols = columnsForUpdate().filter(
+    (c) => String(c.id) !== String(columnId)
+  );
+  updateColumns(cols);
+}
+
+function onSetListColor({ columnId, color }) {
+  const cols = columnsForUpdate().map((c) =>
+    String(c.id) === String(columnId) ? { ...c, color } : c
+  );
+  updateColumns(cols);
+}
+
+function onClearListColor(columnId) {
+  const cols = columnsForUpdate().map((c) =>
+    String(c.id) === String(columnId) ? { ...c, color: "" } : c
+  );
+  updateColumns(cols);
+}
+
+function onToggleWatch(columnId) {
+  const cols = columnsForUpdate().map((c) =>
+    String(c.id) === String(columnId)
+      ? { ...c, watching: !Boolean(c.watching) }
+      : c
+  );
+  updateColumns(cols);
+}
+
+function onCopyList() {
+  // tạm giữ UI
+}
+
+function hexToRgba(hex, alpha) {
+  const h = String(hex || "").replace("#", "").trim();
+  if (!/^[0-9a-fA-F]{6}$/.test(h)) return "";
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function listHeaderStyle(column) {
+  const c = String(column?.color || "").trim();
+  if (!c) return undefined;
+  return {
+    backgroundColor: hexToRgba(c, 0.35),
+  };
+}
+
+/** ============ Task card actions ============ */
+function handleOpenCard(task) {
+  console.log("open-card", task);
+}
+
+function handleEditLabels(task) {
+  console.log("edit-labels", task);
+}
+
+function handleChangeMembers(task) {
+  console.log("change-members", task);
+}
+
+function handleChangeCover(task) {
+  console.log("change-cover", task);
+}
+
+function handleEditDate(task) {
+  console.log("edit-date", task);
+}
+
+function handleMoveTask(task) {
+  console.log("move-task", task);
+}
+
+function handleCopyTask(task) {
+  console.log("copy-task", task);
+}
+
+function handleCopyLink(payload) {
+  console.log("copy-link", payload);
+}
+
+function handleMirrorTask(task) {
+  console.log("mirror-task", task);
+}
+
+function handleArchiveTask(task) {
+  console.log("archive-task", task);
+}
 </script>

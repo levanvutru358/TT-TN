@@ -41,7 +41,7 @@
 
       <!-- Draggable task columns -->
       <div
-        v-for="column in computedColumns"
+        v-for="(column, idx) in computedColumns"
         :key="column.id"
         class="w-80 flex-shrink-0 h-full flex flex-col"
         @dragover.prevent
@@ -49,6 +49,7 @@
       >
         <div
           class="mb-3 rounded-xl bg-black/40 border border-white/10 px-3 py-2 flex items-center justify-between shadow-sm"
+          :style="listHeaderStyle(column)"
         >
           <div class="flex items-center gap-2">
             <h3 class="text-sm font-semibold text-white">
@@ -60,11 +61,19 @@
               {{ tasksByColumn(column).length }}
             </span>
           </div>
-          <button
-            class="text-white/60 hover:text-white p-1 rounded hover:bg-white/10"
-          >
-            ⋮
-          </button>
+          <ListActionsMenu
+            :column-id="String(column.id)"
+            :can-move-left="idx > 0"
+            :can-move-right="idx < computedColumns.length - 1"
+            :selected-color="String(column.color || '')"
+            @add-card="onAddCard"
+            @move="onMoveList"
+            @archive="onArchiveList"
+            @set-color="onSetListColor"
+            @clear-color="onClearListColor"
+            @toggle-watch="onToggleWatch"
+            @copy-list="onCopyList"
+          />
         </div>
 
         <div class="flex-1 overflow-y-auto">
@@ -163,9 +172,11 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import TaskCard from "./TaskCard.vue";
-import AddTaskModal from "./AddTaskModal.vue";
-import EditTaskModal from "./EditTaskModal.vue";
+import TaskCard from "@/components/kanban/cards/TaskCard.vue";
+import ListActionsMenu from "@/components/kanban/menus/ListActionsMenu.vue";
+import AddTaskModal from "../modals/AddTaskModal.vue";
+import EditTaskModal from "../modals/EditTaskModal.vue";
+
 
 const props = defineProps({
   project: {
@@ -286,4 +297,84 @@ const deleteTask = (taskId) => {
   emit("update-project", updated);
   selectedTask.value = null;
 };
+
+function columnsForUpdate() {
+  const cols = Array.isArray(props.project?.columns) && props.project.columns.length
+    ? props.project.columns
+    : computedColumns.value;
+  return Array.isArray(cols) ? cols : [];
+}
+
+function updateColumns(nextCols) {
+  const updated = {
+    ...props.project,
+    columns: nextCols,
+  };
+  emit("update-project", updated);
+}
+
+function onAddCard() {
+  // Draggable board hiện chưa nối AddTaskModal theo từng cột.
+  // Giữ UI giống Trello; chức năng thêm thẻ thực thi ở KanbanBoard.vue.
+}
+
+function onMoveList({ columnId, dir }) {
+  const cols = [...columnsForUpdate()];
+  const from = cols.findIndex((c) => String(c.id) === String(columnId));
+  if (from < 0) return;
+  const to = dir === "left" ? from - 1 : from + 1;
+  if (to < 0 || to >= cols.length) return;
+  const [picked] = cols.splice(from, 1);
+  cols.splice(to, 0, picked);
+  updateColumns(cols);
+}
+
+function onArchiveList(columnId) {
+  const cols = columnsForUpdate().filter((c) => String(c.id) !== String(columnId));
+  updateColumns(cols);
+}
+
+function onSetListColor({ columnId, color }) {
+  const cols = columnsForUpdate().map((c) =>
+    String(c.id) === String(columnId) ? { ...c, color } : c
+  );
+  updateColumns(cols);
+}
+
+function onClearListColor(columnId) {
+  const cols = columnsForUpdate().map((c) =>
+    String(c.id) === String(columnId) ? { ...c, color: "" } : c
+  );
+  updateColumns(cols);
+}
+
+function onToggleWatch(columnId) {
+  const cols = columnsForUpdate().map((c) =>
+    String(c.id) === String(columnId)
+      ? { ...c, watching: !Boolean(c.watching) }
+      : c
+  );
+  updateColumns(cols);
+}
+
+function onCopyList() {
+  // Tạm thời chỉ có UI.
+}
+
+function hexToRgba(hex, alpha) {
+  const h = String(hex || "").replace("#", "").trim();
+  if (!/^[0-9a-fA-F]{6}$/.test(h)) return "";
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function listHeaderStyle(column) {
+  const c = String(column?.color || "").trim();
+  if (!c) return undefined;
+  return {
+    backgroundColor: hexToRgba(c, 0.35),
+  };
+}
 </script>

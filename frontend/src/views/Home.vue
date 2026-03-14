@@ -1133,6 +1133,8 @@
         </p>
       </section>
     </div>
+
+    <CreateBoardModal v-model="isCreateBoardOpen" />
   </div>
 </template>
 
@@ -1142,6 +1144,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+const searchKeyword = ref("");
 const workspaceOpen = ref(false);
 const activeWorkspaceSection = ref("home");
 const activeMenu = ref("boards");

@@ -85,7 +85,7 @@
 
 <script setup>
 import { ref } from "vue";
-import MemberManageModal from "./MemberManageModal.vue";
+import MemberManageModal from "../modals/MemberManageModal.vue";
 
 const props = defineProps({
   members: {
