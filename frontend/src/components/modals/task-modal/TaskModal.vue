@@ -24,6 +24,51 @@
 
           <div class="grid h-[calc(92vh-70px)] grid-cols-1 lg:grid-cols-[1.3fr_0.95fr]">
             <div class="custom-scrollbar min-h-0 overflow-y-auto border-r border-white/10 px-5 py-6 md:px-8">
+              <!-- Title row: giữ ở trên cùng như ảnh -->
+              <div class="mb-8 flex items-start gap-3">
+                <button
+                  type="button"
+                  class="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition"
+                  :class="
+                    localTask.completed
+                      ? 'border-green-500 bg-green-500 text-white'
+                      : 'border-[#738496] bg-transparent text-transparent hover:border-green-500'
+                  "
+                  :aria-label="
+                    localTask.completed
+                      ? 'Đánh dấu chưa hoàn thành'
+                      : 'Đánh dấu hoàn thành'
+                  "
+                  :title="
+                    localTask.completed
+                      ? 'Đánh dấu chưa hoàn thành'
+                      : 'Đánh dấu hoàn thành'
+                  "
+                  @click="toggleCompleted"
+                >
+                  <svg
+                    v-if="localTask.completed"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-3.5 w-3.5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.704 5.29a1 1 0 010 1.42l-7.2 7.2a1 1 0 01-1.414 0l-3.2-3.2a1 1 0 111.414-1.42l2.493 2.494 6.493-6.494a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+
+                <input
+                  v-model="localTask.title"
+                  type="text"
+                  class="w-full bg-transparent text-[26px] font-semibold leading-tight text-white outline-none placeholder:text-white/35"
+                  placeholder="Nhập tiêu đề thẻ"
+                />
+              </div>
+
               <TaskModalActions
                 :active-popover="activePopover"
                 @toggle="togglePopover"
@@ -266,6 +311,7 @@ const localTask = ref({
   labels: [],
   members: [],
   cover: "",
+  completed: false,
 });
 
 watch(
@@ -282,6 +328,7 @@ watch(
       labels: Array.isArray(val?.labels) ? [...val.labels] : [],
       members: Array.isArray(val?.members) ? [...val.members] : [],
       cover: val?.cover ?? "",
+      completed: Boolean(val?.completed),
     };
 
     selectedLabels.value = Array.isArray(val?.labels) ? [...val.labels] : [];
@@ -325,6 +372,10 @@ function togglePopover(name) {
 
 function goToPopover(name) {
   activePopover.value = name;
+}
+
+function toggleCompleted() {
+  localTask.value.completed = !localTask.value.completed;
 }
 
 function toggleMember(name) {
