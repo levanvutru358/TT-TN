@@ -1,105 +1,130 @@
 <template>
   <teleport to="body">
     <div v-if="open" class="fixed inset-0 z-[80]">
-      <div class="absolute inset-0 bg-black/50" @click="$emit('close')" />
+      <div class="absolute inset-0 bg-black/50" @click="handleClose" />
 
       <div class="absolute right-4 top-20 md:right-6 md:top-16">
         <div
-          class="w-[23rem] max-w-[92vw] rounded-2xl bg-[#1f2328] border border-white/10 shadow-2xl overflow-hidden"
+          class="w-[23rem] max-w-[92vw] rounded-2xl border border-white/10 bg-[#1f2328] shadow-2xl overflow-hidden"
         >
-          <div class="px-4 py-3 flex items-center justify-between">
-            <div class="text-sm font-semibold text-white/90">Menu</div>
-            <button
-              class="w-9 h-9 rounded-xl bg-black/25 border border-white/10 hover:bg-black/35 flex items-center justify-center"
-              type="button"
-              aria-label="Đóng"
-              title="Đóng"
-              @click="$emit('close')"
-            >
-              <svg
-                class="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+          <template v-if="currentView === 'main'">
+            <div class="px-4 py-3 flex items-center justify-between">
+              <div class="text-sm font-semibold text-white/90">Menu</div>
+              <button
+                class="w-9 h-9 rounded-xl bg-black/25 border border-white/10 hover:bg-black/35 flex items-center justify-center"
+                type="button"
+                aria-label="Đóng"
+                title="Đóng"
+                @click="handleClose"
               >
-                <path
-                  d="M6 6L18 18M18 6L6 18"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
+                <svg
+                  class="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M6 6L18 18M18 6L6 18"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div class="max-h-[72vh] overflow-auto px-2 pb-3">
+              <div class="rounded-xl bg-black/20 border border-white/10 p-3 mx-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-lg bg-[#0c66e4] flex items-center justify-center text-white text-sm font-semibold">
+                    Jira
+                  </span>
+                  <div class="min-w-0">
+                    <div class="text-sm font-semibold text-white/90">
+                      Xuất bảng thông tin sang Jira
+                    </div>
+                    <div class="text-xs text-white/60">
+                      Biến bảng này dự án nhanh chóng và dễ dàng hơn.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-xl bg-black/20 border border-white/10 p-3 mx-2 mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-lg bg-[#0c66e4] flex items-center justify-center text-white text-sm font-semibold">
+                    Jira
+                  </span>
+                  <div class="min-w-0">
+                    <div class="text-sm font-semibold text-white/90">
+                      Mời thành viên Không gian làm việc tham gia Jira
+                    </div>
+                    <div class="text-xs text-white/60">
+                      Duy trì dự án hoạt động và cộng tác với đội ngũ.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-1 mx-2">
+                <BoardMenuItem label="Chia sẻ" :svg="ICONS.share" />
+                <BoardMenuItem
+                  label="Về bảng này"
+                  sub="Thêm mô tả vào bảng của bạn"
+                  :svg="ICONS.info"
                 />
-              </svg>
-            </button>
-          </div>
+                <BoardMenuItem
+                  label="Khả năng hiển thị: Không gian làm việc"
+                  :svg="ICONS.eye"
+                />
+                <BoardMenuItem label="In, xuất và chia sẻ" :svg="ICONS.print" />
+                <BoardMenuItem label="Gắn sao" :svg="ICONS.star" />
+              </div>
 
-          <div class="max-h-[72vh] overflow-auto px-2 pb-3">
-            <!-- Jira block -->
-            <div class="rounded-xl bg-black/20 border border-white/10 p-3 mx-2 mb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-8 h-8 rounded-lg bg-[#0c66e4] flex items-center justify-center text-white text-sm font-semibold">
-                  Jira
-                </span>
-                <div class="min-w-0">
-                  <div class="text-sm font-semibold text-white/90">
-                    Xuất bảng thông tin sang Jira
-                  </div>
-                  <div class="text-xs text-white/60">
-                    Biến bảng này dự án nhanh chóng và dễ dàng hơn.
-                  </div>
-                </div>
+              <div class="my-3 border-t border-white/10 mx-2" />
+
+              <div class="mx-2 space-y-1">
+                <div class="px-2 py-2 text-[11px] text-white/45">Cài đặt</div>
+
+                <BoardMenuItem
+                  label="Thay đổi hình nền"
+                  :svg="ICONS.bg"
+                  @click="openBackgroundPanel"
+                />
+
+                <BoardMenuItem label="Trường tùy chỉnh" :svg="ICONS.fields" />
+                <BoardMenuItem label="Tự động hóa" :svg="ICONS.bolt" active />
+                <BoardMenuItem label="Tiện ích bổ sung" :svg="ICONS.power" />
+                <BoardMenuItem label="Nhãn" :svg="ICONS.tag" />
+                <BoardMenuItem label="Các nhãn dán" :svg="ICONS.sticker" />
+                <BoardMenuItem label="Tạo mẫu" :svg="ICONS.template" />
+                <BoardMenuItem label="Hoạt động" :svg="ICONS.activity" />
+                <BoardMenuItem label="Mục đã lưu trữ" :svg="ICONS.archive" />
+              </div>
+
+              <div class="my-3 border-t border-white/10 mx-2" />
+
+              <div class="mx-2 space-y-1">
+                <BoardMenuItem label="Theo dõi" :svg="ICONS.follow" />
+                <BoardMenuItem label="Thu gọn tất cả danh sách" :svg="ICONS.collapse" />
+                <BoardMenuItem label="Sao chép bảng thông tin" :svg="ICONS.copy" />
+                <BoardMenuItem label="Cài đặt Email-tới-bảng" :svg="ICONS.mail" />
+                <BoardMenuItem label="Đóng bảng thông tin" :svg="ICONS.close" />
               </div>
             </div>
+          </template>
 
-            <div class="rounded-xl bg-black/20 border border-white/10 p-3 mx-2 mb-3">
-              <div class="flex items-center gap-2">
-                <span class="w-8 h-8 rounded-lg bg-[#0c66e4] flex items-center justify-center text-white text-sm font-semibold">
-                  Jira
-                </span>
-                <div class="min-w-0">
-                  <div class="text-sm font-semibold text-white/90">
-                    Mời thành viên Không gian làm việc tham gia Jira
-                  </div>
-                  <div class="text-xs text-white/60">
-                    Duy trì dự án hoạt động và cộng tác với đội ngũ.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="space-y-1 mx-2">
-              <BoardMenuItem label="Chia sẻ" :svg="ICONS.share" />
-              <BoardMenuItem label="Về bảng này" sub="Thêm mô tả vào bảng của bạn" :svg="ICONS.info" />
-              <BoardMenuItem label="Khả năng hiển thị: Không gian làm việc" :svg="ICONS.eye" />
-              <BoardMenuItem label="In, xuất và chia sẻ" :svg="ICONS.print" />
-              <BoardMenuItem label="Gắn sao" :svg="ICONS.star" />
-            </div>
-
-            <div class="my-3 border-t border-white/10 mx-2" />
-
-            <div class="mx-2 space-y-1">
-              <div class="px-2 py-2 text-[11px] text-white/45">Cài đặt</div>
-              <BoardMenuItem label="Thay đổi hình nền" :svg="ICONS.bg" />
-              <BoardMenuItem label="Trường tùy chỉnh" :svg="ICONS.fields" />
-              <BoardMenuItem label="Tự động hóa" :svg="ICONS.bolt" active />
-              <BoardMenuItem label="Tiện ích bổ sung" :svg="ICONS.power" />
-              <BoardMenuItem label="Nhãn" :svg="ICONS.tag" />
-              <BoardMenuItem label="Các nhãn dán" :svg="ICONS.sticker" />
-              <BoardMenuItem label="Tạo mẫu" :svg="ICONS.template" />
-              <BoardMenuItem label="Hoạt động" :svg="ICONS.activity" />
-              <BoardMenuItem label="Mục đã lưu trữ" :svg="ICONS.archive" />
-            </div>
-
-            <div class="my-3 border-t border-white/10 mx-2" />
-
-            <div class="mx-2 space-y-1">
-              <BoardMenuItem label="Theo dõi" :svg="ICONS.follow" />
-              <BoardMenuItem label="Thu gọn tất cả danh sách" :svg="ICONS.collapse" />
-              <BoardMenuItem label="Sao chép bảng thông tin" :svg="ICONS.copy" />
-              <BoardMenuItem label="Cài đặt Email-tới-bảng" :svg="ICONS.mail" />
-              <BoardMenuItem label="Đóng bảng thông tin" :svg="ICONS.close" />
-            </div>
-          </div>
+          <template v-else>
+            <BoardBackgroundPanel
+              v-model="draftBackground"
+              :image-options="imageOptions"
+              :color-options="colorOptions"
+              @back="currentView = 'main'"
+              @save="handleSaveBackground"
+              @reset="handleResetBackground"
+            />
+          </template>
         </div>
       </div>
     </div>
@@ -107,13 +132,110 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import BoardMenuItem from "@/components/kanban/menus/BoardMenuItem.vue";
+import BoardBackgroundPanel from "@/components/kanban/menus/BoardBackgroundPanel.vue";
 
-defineProps({
+const DEFAULT_BACKGROUND = "linear-gradient(135deg,#4b3f72,#7b3ea8,#c1558b)";
+
+const props = defineProps({
   open: { type: Boolean, default: false },
+  background: {
+    type: String,
+    default: DEFAULT_BACKGROUND,
+  },
+  imageOptions: {
+    type: Array,
+    default: () => [
+      {
+        id: "bg-1",
+        value:
+          "linear-gradient(rgba(0,0,0,.20), rgba(0,0,0,.35)), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover",
+      },
+      {
+        id: "bg-2",
+        value:
+          "linear-gradient(rgba(0,0,0,.20), rgba(0,0,0,.35)), url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80') center/cover",
+      },
+      {
+        id: "bg-3",
+        value:
+          "linear-gradient(rgba(0,0,0,.20), rgba(0,0,0,.35)), url('https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1200&q=80') center/cover",
+      },
+      {
+        id: "bg-4",
+        value:
+          "linear-gradient(rgba(0,0,0,.20), rgba(0,0,0,.35)), url('https://images.unsplash.com/photo-1511300636408-a63a89df3482?auto=format&fit=crop&w=1200&q=80') center/cover",
+      },
+    ],
+  },
+  colorOptions: {
+    type: Array,
+    default: () => [
+      { id: "color-1", value: "linear-gradient(135deg,#0f766e,#115e59)" },
+      { id: "color-2", value: "linear-gradient(135deg,#1d4ed8,#1e3a8a)" },
+      { id: "color-3", value: "linear-gradient(135deg,#7c3aed,#4c1d95)" },
+      { id: "color-4", value: "linear-gradient(135deg,#be185d,#831843)" },
+      { id: "color-5", value: "linear-gradient(135deg,#ea580c,#9a3412)" },
+      { id: "color-6", value: "linear-gradient(135deg,#65a30d,#3f6212)" },
+      { id: "color-7", value: "linear-gradient(135deg,#334155,#0f172a)" },
+      { id: "color-8", value: "linear-gradient(135deg,#0f766e,#164e63,#1d4ed8)" },
+    ],
+  },
 });
-const emit = defineEmits(["close"]);
+
+const emit = defineEmits(["close", "save-background"]);
+
+const currentView = ref("main");
+const draftBackground = ref(props.background || DEFAULT_BACKGROUND);
+
+watch(
+  () => props.open,
+  (isOpen) => {
+    if (isOpen) {
+      currentView.value = "main";
+      draftBackground.value = props.background || DEFAULT_BACKGROUND;
+    }
+  }
+);
+
+watch(
+  () => props.background,
+  (newValue) => {
+    if (props.open) {
+      draftBackground.value = newValue || DEFAULT_BACKGROUND;
+    }
+  }
+);
+
+function openBackgroundPanel() {
+  draftBackground.value = props.background || DEFAULT_BACKGROUND;
+  currentView.value = "background";
+}
+
+function handleSaveBackground() {
+  emit("save-background", draftBackground.value);
+  emit("close");
+}
+
+function handleResetBackground() {
+  draftBackground.value = DEFAULT_BACKGROUND;
+}
+
+function handleClose() {
+  currentView.value = "main";
+  draftBackground.value = props.background || DEFAULT_BACKGROUND;
+  emit("close");
+}
+
+function onKeydown(e) {
+  if (e.key === "Escape" && props.open) {
+    handleClose();
+  }
+}
+
+onMounted(() => window.addEventListener("keydown", onKeydown));
+onBeforeUnmount(() => window.removeEventListener("keydown", onKeydown));
 
 const ICONS = {
   share: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 8C18.2091 8 20 6.20914 20 4C20 1.79086 18.2091 0 16 0C13.7909 0 12 1.79086 12 4C12 4.12596 12.0062 4.25047 12.0182 4.37312L6.9236 7.21925C6.20773 6.45718 5.19166 6 4 6C1.79086 6 0 7.79086 0 10C0 12.2091 1.79086 14 4 14C5.19166 14 6.20773 13.5428 6.9236 12.7808L12.0182 15.6269C12.0062 15.7495 12 15.874 12 16C12 18.2091 13.7909 20 16 20C18.2091 20 20 18.2091 20 16C20 13.7909 18.2091 12 16 12C14.8083 12 13.7923 12.4572 13.0764 13.2192L7.9818 10.3731C7.99376 10.2505 8 10.126 8 10C8 9.87404 7.99376 9.74953 7.9818 9.62688L13.0764 6.78075C13.7923 7.54282 14.8083 8 16 8Z" fill="currentColor"/></svg>`,
@@ -136,13 +258,4 @@ const ICONS = {
   mail: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6H20V18H4V6Z" stroke="currentColor" stroke-width="1.6"/><path d="M4 7L12 13L20 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   close: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
 };
-
-function onKeydown(e) {
-  if (e.key === "Escape") {
-    emit("close");
-  }
-}
-
-onMounted(() => window.addEventListener("keydown", onKeydown));
-onBeforeUnmount(() => window.removeEventListener("keydown", onKeydown));
 </script>

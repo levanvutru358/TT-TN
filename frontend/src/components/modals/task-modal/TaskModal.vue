@@ -6,9 +6,9 @@
         @click="emit('close')"
       />
 
-      <div class="absolute inset-0 p-4 md:p-6 flex items-center justify-center">
+      <div class="absolute inset-0 flex items-center justify-center p-4 md:p-6">
         <div
-          class="relative w-full max-w-7xl h-[92vh] rounded-2xl overflow-hidden bg-[#1f232b] border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.55)]"
+          class="relative h-[92vh] w-full max-w-7xl overflow-hidden rounded-2xl border border-white/10 bg-[#1f232b] shadow-[0_30px_80px_rgba(0,0,0,0.55)]"
           @click.stop
         >
           <TaskModalHeader
@@ -22,14 +22,14 @@
             @close="emit('close')"
           />
 
-          <div class="grid grid-cols-1 lg:grid-cols-[1.3fr_0.95fr] h-[calc(92vh-70px)]">
-            <div class="px-5 md:px-8 py-6 overflow-y-auto custom-scrollbar border-r border-white/10">
+          <div class="grid h-[calc(92vh-70px)] grid-cols-1 lg:grid-cols-[1.3fr_0.95fr]">
+            <div class="custom-scrollbar min-h-0 overflow-y-auto border-r border-white/10 px-5 py-6 md:px-8">
               <TaskModalActions
                 :active-popover="activePopover"
                 @toggle="togglePopover"
               />
 
-              <div class="relative min-h-[0] mb-8">
+              <div class="relative mb-8 min-h-[0]">
                 <div v-if="activePopover" class="w-full max-w-[360px]">
                   <TaskModalLabelsPanel
                     v-if="activePopover === 'labels'"
@@ -49,17 +49,17 @@
                       <input
                         v-model="dateInput"
                         type="date"
-                        class="w-full rounded-lg bg-white/10 border border-white/10 px-3 py-2 text-white outline-none"
+                        class="w-full rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-white outline-none"
                       />
                       <div class="flex gap-2">
                         <button
-                          class="flex-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-white px-3 py-2"
+                          class="flex-1 rounded-lg bg-blue-500 px-3 py-2 text-white hover:bg-blue-600"
                           @click="applyDate"
                         >
                           Lưu
                         </button>
                         <button
-                          class="flex-1 rounded-lg bg-white/10 hover:bg-white/15 text-white px-3 py-2"
+                          class="flex-1 rounded-lg bg-white/10 px-3 py-2 text-white hover:bg-white/15"
                           @click="clearDate"
                         >
                           Xóa ngày
@@ -76,12 +76,12 @@
                     <div class="space-y-3">
                       <input
                         v-model.trim="newChecklistTitle"
-                        class="w-full rounded-lg bg-white/10 border border-white/10 px-3 py-2 text-white outline-none"
+                        class="w-full rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-white outline-none"
                         placeholder="Tên checklist"
                         @keyup.enter="addChecklist"
                       />
                       <button
-                        class="w-full rounded-lg bg-blue-500 hover:bg-blue-600 text-white px-3 py-2"
+                        class="w-full rounded-lg bg-blue-500 px-3 py-2 text-white hover:bg-blue-600"
                         @click="addChecklist"
                       >
                         Thêm checklist
@@ -98,7 +98,7 @@
                       <button
                         v-for="member in memberOptions"
                         :key="member.id"
-                        class="w-full rounded-lg bg-white/5 hover:bg-white/10 px-3 py-2 flex items-center justify-between text-white"
+                        class="flex w-full items-center justify-between rounded-lg bg-white/5 px-3 py-2 text-white hover:bg-white/10"
                         @click="toggleMember(member.name)"
                       >
                         <span>{{ member.name }}</span>
@@ -183,7 +183,7 @@
 
           <div class="absolute bottom-5 right-5">
             <button
-              class="px-5 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow-lg"
+              class="rounded-xl bg-blue-500 px-5 py-3 font-semibold text-white shadow-lg hover:bg-blue-600"
               @click="saveTask"
             >
               Lưu thay đổi
@@ -307,15 +307,16 @@ watch(
               time: formatActivityTime(new Date()),
             },
           ];
-
-    watch(
-      () => props.initialPopover,
-      (val) => {
-        activePopover.value = val || null;
-      }
-    );
   },
   { immediate: true, deep: true }
+);
+
+watch(
+  () => props.initialPopover,
+  (val) => {
+    activePopover.value = val || null;
+  },
+  { immediate: true }
 );
 
 function togglePopover(name) {

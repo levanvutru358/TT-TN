@@ -2,6 +2,7 @@
   <button
     type="button"
     class="w-full text-left px-2 py-2 rounded-xl hover:bg-white/5 transition flex items-center gap-3"
+    @click="$emit('click')"
   >
     <span
       class="w-9 h-9 rounded-xl bg-black/25 border border-white/10 flex items-center justify-center text-white/80"
@@ -24,5 +25,6 @@ defineProps({
   svg: { type: String, default: "" },
   active: { type: Boolean, default: false },
 });
-</script>
 
+defineEmits(["click"]);
+</script>
