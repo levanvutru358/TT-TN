@@ -15,7 +15,8 @@
         class="relative flex-1 p-3 md:p-4 overflow-hidden rounded-none bg-[#0b0f19] border border-black/10 shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
       >
         <div
-          class="h-full w-full overflow-auto rounded-[22px] bg-gradient-to-r from-[#4b3f72] via-[#7b3ea8] to-[#c1558b] hide-scrollbar"
+          class="h-full w-full overflow-auto rounded-[22px] hide-scrollbar"
+          :style="boardBackgroundStyle"
         >
           <div class="max-w-6xl mx-auto pb-28">
             <StageBoardHeader
@@ -71,12 +72,17 @@
       @update-filters="updateFilters"
     />
 
-    <BoardMenu :open="showBoardMenu" @close="showBoardMenu = false" />
+    <BoardMenu
+      :open="showBoardMenu"
+      :background="boardBackground"
+      @close="showBoardMenu = false"
+      @save-background="handleSaveBoardBackground"
+    />
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import WorkspaceHeader from "@/components/common/WorkspaceHeader.vue";
 import AppSidebarInbox from "@/components/common/AppSidebarInbox.vue";
 import AppSidebarPlanner from "@/components/common/AppSidebarPlanner.vue";
@@ -89,7 +95,15 @@ import FilterPanel from "@/components/filters/FilterPanel.vue";
 import BoardMenu from "@/components/kanban/menus/BoardMenu.vue";
 import { useStageProject } from "@/composables/stages/useStageProject.js";
 
+const DEFAULT_BACKGROUND = {
+  type: "color",
+  value: "linear-gradient(90deg, #4b3f72 0%, #7b3ea8 50%, #c1558b 100%)",
+};
+
+const STORAGE_KEY = "stage-board-background";
+
 const searchKeyword = ref("");
+const boardBackground = ref(loadBoardBackground());
 
 const {
   project,
@@ -112,6 +126,52 @@ const {
   updateFilters,
   closeFilter,
 } = useStageProject();
+
+function loadBoardBackground() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+
+  if (!raw) return DEFAULT_BACKGROUND;
+
+  try {
+    const parsed = JSON.parse(raw);
+
+    if (!parsed || !parsed.type || !parsed.value) {
+      return DEFAULT_BACKGROUND;
+    }
+
+    return parsed;
+  } catch {
+    return DEFAULT_BACKGROUND;
+  }
+}
+
+function handleSaveBoardBackground(newBackground) {
+  boardBackground.value = newBackground;
+}
+
+watch(
+  boardBackground,
+  (value) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+  },
+  { deep: true }
+);
+
+const boardBackgroundStyle = computed(() => {
+  if (boardBackground.value?.type === "image") {
+    return {
+      backgroundImage: `linear-gradient(rgba(0,0,0,.20), rgba(0,0,0,.35)), url("${boardBackground.value.value}")`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment: "scroll",
+    };
+  }
+
+  return {
+    background: boardBackground.value?.value || DEFAULT_BACKGROUND.value,
+  };
+});
 
 const filteredProject = computed(() => {
   const keyword = searchKeyword.value.trim().toLowerCase();
