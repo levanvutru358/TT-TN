@@ -111,6 +111,7 @@
               @archive-task="handleArchiveTask"
               @drag-start="handleTaskDragStart"
               @drag-end="handleTaskDragEnd"
+              @toggle-completed="handleToggleCompleted"
             />
 
             <button
@@ -324,6 +325,26 @@ function onDrop(column, event) {
   });
 }
 
+/** ============ Đồng bộ completed giữa TaskCard và TaskModal ============ */
+function handleToggleCompleted(updatedTask) {
+  const tasks = Array.isArray(props.project?.tasks) ? [...props.project.tasks] : [];
+  const taskIndex = tasks.findIndex(
+    (task) => String(task.id) === String(updatedTask.id)
+  );
+
+  if (taskIndex === -1) return;
+
+  tasks.splice(taskIndex, 1, {
+    ...tasks[taskIndex],
+    completed: Boolean(updatedTask.completed),
+  });
+
+  emit("update-project", {
+    ...props.project,
+    tasks,
+  });
+}
+
 /** ============ Add task ============ */
 const showAddTask = ref(false);
 const selectedColumn = ref(null);
@@ -358,7 +379,7 @@ const taskMatchesFilters = (task) => {
   }
 
   if (cardStatus.length > 0) {
-    const taskStatus = task.isCompleted ? "completed" : "pending";
+    const taskStatus = task.completed ? "completed" : "pending";
     if (!cardStatus.includes(taskStatus)) return false;
   }
 
@@ -415,6 +436,7 @@ const addTask = (task) => {
   const taskWithList = {
     ...task,
     listId: selectedColumn.value?.id ?? null,
+    completed: Boolean(task?.completed),
   };
 
   const updated = {

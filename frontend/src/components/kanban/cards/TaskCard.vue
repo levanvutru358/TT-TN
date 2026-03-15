@@ -8,7 +8,10 @@
     <!-- Card -->
     <div
       class="group cursor-grab rounded-xl border border-[#3f474f] bg-[#22272b] p-3 shadow-sm transition-colors hover:bg-[#2c333a] active:cursor-grabbing"
-      :class="isDragging ? 'opacity-60 ring-1 ring-[#579dff]' : ''"
+      :class="[
+        isDragging ? 'opacity-60 ring-1 ring-[#579dff]' : '',
+        isCompleted ? 'border-[#2f6b45] bg-[#1f2a24] hover:bg-[#25332b]' : '',
+      ]"
       draggable="true"
       @click="openCardFromBody"
       @dragstart="onCardDragStart"
@@ -24,9 +27,41 @@
           </div>
 
           <!-- Title -->
-          <h4 class="break-words text-sm font-medium leading-5 text-white">
-            {{ task.title }}
-          </h4>
+          <div class="flex items-start gap-2">
+            <button
+              type="button"
+              class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition"
+              :class="
+                isCompleted
+                  ? 'border-green-500 bg-green-500 text-white'
+                  : 'border-[#738496] bg-transparent text-transparent hover:border-green-500'
+              "
+              :aria-label="isCompleted ? 'Đánh dấu chưa hoàn thành' : 'Đánh dấu hoàn thành'"
+              :title="isCompleted ? 'Đánh dấu chưa hoàn thành' : 'Đánh dấu hoàn thành'"
+              @click.stop="toggleCompleted"
+            >
+              <svg
+                v-if="isCompleted"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-3 w-3"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.704 5.29a1 1 0 010 1.42l-7.2 7.2a1 1 0 01-1.414 0l-3.2-3.2a1 1 0 111.414-1.42l2.493 2.494 6.493-6.494a1 1 0 011.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+
+            <h4
+              class="break-words text-sm font-medium leading-5"
+              :class="isCompleted ? 'text-white/70' : 'text-white'"
+            >
+              {{ task.title }}
+            </h4>
+          </div>
         </div>
 
         <!-- Edit / Actions button -->
@@ -53,7 +88,8 @@
       <!-- Description -->
       <p
         v-if="task.description"
-        class="mb-3 line-clamp-2 text-xs text-[#9fadbc]"
+        class="mb-3 line-clamp-2 text-xs"
+        :class="isCompleted ? 'text-[#9fadbc]/70' : 'text-[#9fadbc]'"
       >
         {{ task.description }}
       </p>
@@ -70,7 +106,8 @@
 
         <div
           v-if="task.dueDate"
-          class="flex items-center gap-1 text-xs text-[#9fadbc]"
+          class="flex items-center gap-1 text-xs"
+          :class="isCompleted ? 'text-[#9fadbc]/70' : 'text-[#9fadbc]'"
         >
           <span>📅</span>
           <span>{{ shortDate }}</span>
@@ -110,7 +147,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import TaskModal from "@/components/modals/task-modal/TaskModal.vue";
 import TaskActionsMenu from "@/components/kanban/menus/TaskActionsMenu.vue";
 
@@ -134,6 +171,7 @@ const emit = defineEmits([
   "archive-task",
   "drag-start",
   "drag-end",
+  "toggle-completed",
 ]);
 
 const open = ref(false);
@@ -141,6 +179,16 @@ const menuOpen = ref(false);
 const rootRef = ref(null);
 const initialPopover = ref(null);
 const isDragging = ref(false);
+const localCompleted = ref(Boolean(props.task?.completed));
+
+watch(
+  () => props.task?.completed,
+  (value) => {
+    localCompleted.value = Boolean(value);
+  }
+);
+
+const isCompleted = computed(() => localCompleted.value);
 
 const priorityConfig = computed(() => {
   const map = {
@@ -200,6 +248,15 @@ function closeMenu() {
   menuOpen.value = false;
 }
 
+function toggleCompleted() {
+  localCompleted.value = !localCompleted.value;
+
+  emit("toggle-completed", {
+    ...props.task,
+    completed: localCompleted.value,
+  });
+}
+
 function openCardFromBody() {
   initialPopover.value = null;
   open.value = true;
@@ -250,9 +307,7 @@ async function handleCopyCard() {
 
   try {
     await navigator.clipboard.writeText(JSON.stringify(props.task, null, 2));
-  } catch {
-    // ignore
-  }
+  } catch {}
 }
 
 async function handleCopyLink() {
@@ -270,9 +325,7 @@ async function handleCopyLink() {
 
   try {
     await navigator.clipboard.writeText(link);
-  } catch {
-    // ignore
-  }
+  } catch {}
 }
 
 function handleMirror() {
