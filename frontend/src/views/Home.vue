@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-[#f1f2f4] text-[#172b4d]">
     <WorkspaceHeader
       v-model="searchKeyword"
-      @create-click="openCreateBoardModal('header')"
+      @create-click="openCreateBoardModal"
     />
 
     <div class="max-w-[1760px] mx-auto flex">
@@ -1059,20 +1059,23 @@ const positionCreateBoardModal = (source, anchorRect) => {
   };
 };
 
-const openCreateBoardModal = async (source = "header") => {
+const openCreateBoardModal = async (payload = "header") => {
+  const source = typeof payload === "string" ? payload : payload?.source ?? "header";
+  const anchorRect = typeof payload === "object" ? payload?.anchorRect : null;
+
   newBoardTitle.value = "";
   selectedBoardBackground.value = createBoardImageBackgrounds[0];
   selectedVisibility.value = "workspace";
   showVisibilityDropdown.value = false;
 
   const buttonEl = source === "tile" ? createBoardTileRef.value : null;
+  const triggerRect = anchorRect ?? buttonEl?.getBoundingClientRect?.() ?? null;
 
-  if (buttonEl && typeof window !== "undefined") {
-    const rect = buttonEl.getBoundingClientRect();
-    positionCreateBoardModal(source, rect);
+  if (triggerRect && typeof window !== "undefined") {
+    positionCreateBoardModal(source, triggerRect);
     showCreateBoardModal.value = true;
     await nextTick();
-    positionCreateBoardModal(source, rect);
+    positionCreateBoardModal(source, triggerRect);
     return;
   }
 
