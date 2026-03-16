@@ -499,12 +499,11 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useWorkspaceBoardsState } from "@/composables/stages/useWorkspaceBoardsState.js";
 
 const router = useRouter();
-
-const STORAGE_KEY = "workspace_boards";
 
 const isSidebarCollapsed = ref(false);
 
@@ -519,7 +518,7 @@ const showSortDropdown = ref(false);
 const selectedSort = ref("recent-desc");
 const searchQuery = ref("");
 
-const workspaceBoards = ref([]);
+const { workspaceBoards } = useWorkspaceBoardsState();
 
 const showCreateBoardModal = ref(false);
 const createBoardTileRef = ref(null);
@@ -609,38 +608,6 @@ const displayedBoards = computed(() => {
   }
 
   return boards;
-});
-
-const saveBoardsToStorage = () => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(workspaceBoards.value));
-};
-
-const loadBoardsFromStorage = () => {
-  const raw = localStorage.getItem(STORAGE_KEY);
-
-  if (!raw) {
-    workspaceBoards.value = [];
-    return;
-  }
-
-  try {
-    const parsed = JSON.parse(raw);
-    workspaceBoards.value = Array.isArray(parsed) ? parsed : [];
-  } catch {
-    workspaceBoards.value = [];
-  }
-};
-
-watch(
-  workspaceBoards,
-  () => {
-    saveBoardsToStorage();
-  },
-  { deep: true }
-);
-
-onMounted(() => {
-  loadBoardsFromStorage();
 });
 
 const selectSortOption = (id) => {

@@ -555,6 +555,98 @@
           </div>
 
           <div
+            v-if="displayedCards.length"
+            class="overflow-hidden rounded-lg border border-[#d0d4db] bg-white"
+          >
+            <div
+              class="grid grid-cols-[minmax(0,2.2fr)_1fr_1fr_1.25fr_1.45fr] gap-4 border-b border-[#dfe1e6] px-5 py-3 text-[14px] font-medium text-[#44546f]"
+            >
+              <div>Thẻ</div>
+              <div>Danh sách</div>
+              <div>Nhãn</div>
+              <div>Ngày đến hạn</div>
+              <div>Bảng thông tin</div>
+            </div>
+
+            <div
+              v-for="card in displayedCards"
+              :key="card.id"
+              class="grid grid-cols-[minmax(0,2.2fr)_1fr_1fr_1.25fr_1.45fr] items-center gap-4 border-b border-[#dfe1e6] px-5 py-3 text-[14px] last:border-b-0"
+            >
+              <div class="flex min-w-0 items-center gap-3">
+                <span
+                  class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#5aac44] text-white"
+                >
+                  <svg
+                    class="h-3 w-3"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M7 12.5L10.2 15.7L17 8.8"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <span class="truncate text-[15px] text-[#44546f]">{{ card.title }}</span>
+              </div>
+
+              <div class="text-[15px] text-[#44546f]">{{ card.listName }}</div>
+
+              <div>
+                <span
+                  class="inline-flex min-w-[52px] items-center justify-center rounded-[4px] px-3 py-1 text-[12px] font-semibold"
+                  :class="card.labelClass"
+                >
+                  {{ card.label }}
+                </span>
+              </div>
+
+              <div>
+                <span
+                  class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium"
+                  :class="card.dueDateClass"
+                >
+                  <svg
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8" />
+                    <path
+                      d="M12 8V12L14.8 14.4"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>{{ card.dueDateLabel }}</span>
+                </span>
+              </div>
+
+              <div class="flex min-w-0 items-center gap-3">
+                <div
+                  class="h-8 w-12 shrink-0 rounded-[3px]"
+                  :style="{ background: card.boardBackground }"
+                ></div>
+                <div class="min-w-0">
+                  <div class="truncate text-[15px] text-[#172b4d]">{{ card.boardName }}</div>
+                  <div class="truncate text-[12px] text-[#626f86]">{{ card.boardSubtitle }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-else
             class="flex h-[144px] items-center justify-center rounded-lg bg-[#dfe1e6] px-5 text-center text-[18px] text-[#44546f]"
           >
             Không nhìn thấy thẻ nào. Bạn phải được thêm vào thẻ để thẻ xuất hiện ở đây.
@@ -618,14 +710,33 @@ const dueDateOptions = [
   },
 ];
 
-const boardOptions = [{ id: "trello-workspace", label: "Trello Không gian làm việc" }];
-
 const activityOptions = [
   { id: "lastDay", label: "Hoạt động trong ngày vừa qua" },
   { id: "lastWeek", label: "Hoạt động trong tuần vừa qua" },
   { id: "lastMonth", label: "Hoạt động trong tháng vừa qua" },
   { id: "lastYear", label: "Hoạt động trong năm vừa qua" },
 ];
+
+const workspaceCards = ref([
+  {
+    id: "card-header",
+    title: "Header",
+    listName: "Done",
+    label: "FE",
+    labelClass: "bg-[#4bce97] text-[#164b35]",
+    dueDateLabel: "20 thg 6, 2025",
+    dueDateClass: "bg-[#dcfff1] text-[#216e4e]",
+    dueTimestamp: new Date("2025-06-20").getTime(),
+    boardId: "cellphones",
+    boardName: "CellPhoneS",
+    boardSubtitle: "không gian làm việc của Lô...",
+    boardBackground: "linear-gradient(135deg,#4f46d9,#d9469b)",
+    completed: true,
+    dueFilterIds: ["nextMonth"],
+    activityFilterIds: ["lastMonth", "lastYear"],
+    updatedAt: new Date("2025-06-19").getTime(),
+  },
+]);
 
 const selectedSort = ref("board");
 const filterState = reactive({
@@ -650,13 +761,86 @@ const filterState = reactive({
   },
 });
 
+const boardOptions = computed(() => {
+  const seenBoards = new Set();
+
+  return workspaceCards.value.reduce((options, card) => {
+    if (seenBoards.has(card.boardId)) {
+      return options;
+    }
+
+    seenBoards.add(card.boardId);
+    options.push({
+      id: card.boardId,
+      label: card.boardName,
+    });
+
+    return options;
+  }, []);
+});
+
 const selectedSortOption = computed(
   () => sortOptions.find((option) => option.id === selectedSort.value) ?? sortOptions[0]
 );
 
 const selectedBoardLabel = computed(() => {
-  const selectedBoard = boardOptions.find((option) => option.id === filterState.board);
+  const selectedBoard = boardOptions.value.find((option) => option.id === filterState.board);
   return selectedBoard?.label ?? "Lọc theo bảng thông tin...";
+});
+
+const displayedCards = computed(() => {
+  let cards = [...workspaceCards.value];
+  const keyword = filterState.keyword.trim().toLowerCase();
+
+  if (keyword) {
+    cards = cards.filter((card) => card.title.toLowerCase().includes(keyword));
+  }
+
+  const activeStatuses = Object.entries(filterState.statuses)
+    .filter(([, isActive]) => isActive)
+    .map(([id]) => id);
+
+  if (activeStatuses.length === 1) {
+    cards = cards.filter((card) =>
+      activeStatuses[0] === "completed" ? card.completed : !card.completed
+    );
+  }
+
+  const activeDueDates = Object.entries(filterState.dueDates)
+    .filter(([, isActive]) => isActive)
+    .map(([id]) => id);
+
+  if (activeDueDates.length) {
+    cards = cards.filter((card) =>
+      activeDueDates.some((dueDateId) => card.dueFilterIds.includes(dueDateId))
+    );
+  }
+
+  if (filterState.board) {
+    cards = cards.filter((card) => card.boardId === filterState.board);
+  }
+
+  const activeActivity = Object.entries(filterState.activity)
+    .filter(([, isActive]) => isActive)
+    .map(([id]) => id);
+
+  if (activeActivity.length) {
+    cards = cards.filter((card) =>
+      activeActivity.some((activityId) => card.activityFilterIds.includes(activityId))
+    );
+  }
+
+  if (selectedSort.value === "due-date") {
+    cards.sort((a, b) => a.dueTimestamp - b.dueTimestamp);
+  } else {
+    cards.sort((a, b) => {
+      const boardCompare = a.boardName.localeCompare(b.boardName, "vi");
+      if (boardCompare !== 0) return boardCompare;
+      return a.title.localeCompare(b.title, "vi");
+    });
+  }
+
+  return cards;
 });
 
 const hasActiveFilters = computed(() => {
