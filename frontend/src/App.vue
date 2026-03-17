@@ -60,6 +60,8 @@ const hideHeaderNavRoutes = [
   "PersonalSettings",
   "PersonalActivity",
   "PersonalProfile",
+  "Login",
+  "Register",
 ];
 const showHeaderNav = () =>
   !hideHeaderNavRoutes.includes(String(route.name || ""));
