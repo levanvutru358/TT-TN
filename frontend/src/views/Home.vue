@@ -1001,6 +1001,13 @@ const selectVisibilityMode = (mode) => {
   showVisibilityDropdown.value = false;
 };
 
+const resetCreateBoardState = () => {
+  newBoardTitle.value = "";
+  selectedBoardBackground.value = createBoardImageBackgrounds[0];
+  selectedVisibility.value = "workspace";
+  showVisibilityDropdown.value = false;
+};
+
 const selectMainMenu = (menuId) => {
   activeMenu.value = menuId;
   if (menuId === "boards") {
@@ -1063,10 +1070,7 @@ const openCreateBoardModal = async (payload = "header") => {
   const source = typeof payload === "string" ? payload : payload?.source ?? "header";
   const anchorRect = typeof payload === "object" ? payload?.anchorRect : null;
 
-  newBoardTitle.value = "";
-  selectedBoardBackground.value = createBoardImageBackgrounds[0];
-  selectedVisibility.value = "workspace";
-  showVisibilityDropdown.value = false;
+  resetCreateBoardState();
 
   const buttonEl = source === "tile" ? createBoardTileRef.value : null;
   const triggerRect = anchorRect ?? buttonEl?.getBoundingClientRect?.() ?? null;
@@ -1090,7 +1094,7 @@ const openCreateBoardModal = async (payload = "header") => {
 
 const closeCreateBoardModal = () => {
   showCreateBoardModal.value = false;
-  showVisibilityDropdown.value = false;
+  resetCreateBoardState();
 };
 
 const submitCreateBoard = () => {
@@ -1100,18 +1104,8 @@ const submitCreateBoard = () => {
   const boardBackground = selectedBoardBackground.value;
   const boardVisibility = selectedVisibility.value;
 
-  homeRecentBoards.value.unshift({
-    name: boardTitle,
-    background: boardBackground,
-    template: false,
-  });
-
-  if (homeRecentBoards.value.length > 6) {
-    homeRecentBoards.value = homeRecentBoards.value.slice(0, 6);
-  }
-
   showCreateBoardModal.value = false;
-  newBoardTitle.value = "";
+  resetCreateBoardState();
 
   router.push({
     path: "/projects/1",
