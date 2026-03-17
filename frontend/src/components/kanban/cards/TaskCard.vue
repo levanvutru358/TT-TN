@@ -5,7 +5,6 @@
     :data-task-id="task.id"
     :data-task-list-id="task.listId || ''"
   >
-    <!-- Card -->
     <div
       class="group cursor-grab rounded-xl border border-[#3f474f] bg-[#22272b] p-3 shadow-sm transition-colors hover:bg-[#2c333a] active:cursor-grabbing"
       :class="[
@@ -17,16 +16,13 @@
       @dragstart="onCardDragStart"
       @dragend="onCardDragEnd"
     >
-      <!-- Top -->
       <div class="mb-3 flex items-start justify-between gap-2">
         <div class="min-w-0 flex-1">
-          <!-- Priority -->
           <div class="mb-2 flex items-center gap-2">
             <div class="h-2 w-2 rounded-full" :class="priorityConfig.bg" />
             <span class="text-xs text-[#9fadbc]">{{ task.priority }}</span>
           </div>
 
-          <!-- Title -->
           <div class="flex items-start gap-2">
             <button
               type="button"
@@ -64,7 +60,6 @@
           </div>
         </div>
 
-        <!-- Edit / Actions button -->
         <button
           class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-white transition hover:bg-white/20"
           type="button"
@@ -85,7 +80,6 @@
         </button>
       </div>
 
-      <!-- Description -->
       <p
         v-if="task.description"
         class="mb-3 line-clamp-2 text-xs"
@@ -94,7 +88,6 @@
         {{ task.description }}
       </p>
 
-      <!-- Footer -->
       <div class="mt-2 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <div
@@ -115,7 +108,6 @@
       </div>
     </div>
 
-    <!-- Dropdown menu -->
     <transition name="fade">
       <TaskActionsMenu
         v-if="menuOpen"
@@ -133,7 +125,6 @@
       />
     </transition>
 
-    <!-- Modal -->
     <TaskModal
       v-if="open"
       :task="task"
@@ -172,6 +163,7 @@ const emit = defineEmits([
   "drag-start",
   "drag-end",
   "toggle-completed",
+  "update-task",
 ]);
 
 const open = ref(false);
@@ -209,7 +201,9 @@ const shortDate = computed(() => {
 });
 
 const assigneeInitial = computed(() => {
-  const value = String(props.task?.assignee || props.task?.assignees?.[0] || "?").trim();
+  const value = String(
+    props.task?.assignee || props.task?.assignees?.[0] || "?"
+  ).trim();
   return value ? value.charAt(0).toUpperCase() : "?";
 });
 
@@ -346,7 +340,8 @@ function handleCloseModal() {
 function handleUpdateTask(updatedTask) {
   open.value = false;
   initialPopover.value = null;
-  emit("open-card", updatedTask);
+  localCompleted.value = Boolean(updatedTask?.completed);
+  emit("update-task", updatedTask);
 }
 
 function handleArchiveFromModal(taskFromModal) {
