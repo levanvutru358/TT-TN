@@ -3,7 +3,7 @@
     <div class="fixed inset-0 z-[200]">
       <div
         class="absolute inset-0 bg-black/60 backdrop-blur-[1px]"
-        @click="emit('close')"
+        @click="closeWithSave"
       />
 
       <div class="absolute inset-0 flex items-center justify-center p-4 md:p-6">
@@ -19,12 +19,11 @@
             @update:status="localTask.status = $event"
             @toggle-cover="togglePopover('cover')"
             @toggle-more="togglePopover('more')"
-            @close="emit('close')"
+            @close="closeWithSave"
           />
 
           <div class="grid h-[calc(92vh-70px)] grid-cols-1 lg:grid-cols-[1.3fr_0.95fr]">
             <div class="custom-scrollbar min-h-0 overflow-y-auto border-r border-white/10 px-5 py-6 md:px-8">
-              <!-- Title row: giữ ở trên cùng như ảnh -->
               <div class="mb-8 flex items-start gap-3">
                 <button
                   type="button"
@@ -454,8 +453,8 @@ function selectCover(color) {
   activePopover.value = null;
 }
 
-function saveTask() {
-  const payload = {
+function buildPayload() {
+  return {
     ...localTask.value,
     labels: [...selectedLabels.value],
     members: [...selectedMembers.value],
@@ -466,7 +465,16 @@ function saveTask() {
     })),
     activities: [...activities.value],
   };
+}
 
+function closeWithSave() {
+  const payload = buildPayload();
+  emit("update-task", payload);
+  emit("close");
+}
+
+function saveTask() {
+  const payload = buildPayload();
   emit("update-task", payload);
   emit("close");
 }
@@ -489,7 +497,7 @@ function formatActivityTime(date) {
 }
 
 function onKeydown(e) {
-  if (e.key === "Escape") emit("close");
+  if (e.key === "Escape") closeWithSave();
 }
 
 window.addEventListener("keydown", onKeydown);
