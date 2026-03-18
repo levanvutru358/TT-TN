@@ -60,6 +60,7 @@ const hideHeaderNavRoutes = [
   "PersonalSettings",
   "PersonalActivity",
   "PersonalProfile",
+  "TrelloAccountProfile",
 ];
 const showHeaderNav = () =>
   !hideHeaderNavRoutes.includes(String(route.name || ""));

@@ -108,9 +108,16 @@
       </button>
 
       <div class="ml-auto hidden items-center gap-1 text-[#44546f] md:flex">
+        <div class="relative z-40">
         <button
           type="button"
-          class="flex h-7 w-7 items-center justify-center rounded-md hover:bg-[#e9ebef]"
+          @click="toggleBroadcastMenu"
+          class="flex h-7 w-7 items-center justify-center rounded-md border transition-colors"
+          :class="
+            showBroadcastMenu
+              ? 'border-[#0c66e4] bg-white text-[#0c66e4]'
+              : 'border-transparent hover:bg-[#e9ebef]'
+          "
           aria-label="Thông báo cập nhật"
         >
           <svg
@@ -135,36 +142,173 @@
           </svg>
         </button>
 
-        <button
-          type="button"
-          class="flex h-7 w-7 items-center justify-center rounded-md hover:bg-[#e9ebef]"
-          aria-label="Thông báo"
-        >
-          <svg
-            class="h-4 w-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
+          <div
+            v-if="showBroadcastMenu"
+            class="absolute right-0 top-11 z-50 w-[280px] max-w-[calc(100vw-1rem)] overflow-hidden rounded-[10px] border border-[#d0d4db] bg-white p-2 shadow-[0_12px_24px_rgba(9,30,66,0.18)]"
           >
-            <path d="M12 20C13.1 20 14 19.1 14 18H10C10 19.1 10.9 20 12 20Z" fill="currentColor" />
-            <path
-              d="M6 16H18L16.5 14V10.5C16.5 8 14.7 6 12 6C9.3 6 7.5 8 7.5 10.5V14L6 16Z"
-              stroke="currentColor"
-              stroke-width="1.8"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+            <button
+              type="button"
+              class="flex w-full items-center rounded-[7px] bg-white px-3.5 py-3.5 text-left text-[15px] font-normal leading-6 text-[#172b4d] transition-colors hover:bg-[#f1f2f4] active:bg-[#f1f2f4]"
+            >
+              Chia sẻ cảm nghĩ của bạn về Trello
+            </button>
+          </div>
+        </div>
 
+        <div class="relative z-40">
+          <button
+            type="button"
+            class="flex h-7 w-7 items-center justify-center rounded-md border transition-colors"
+            :class="
+              showNotificationMenu
+                ? 'border-[#0c66e4] bg-white text-[#0c66e4]'
+                : 'border-transparent hover:bg-[#e9ebef]'
+            "
+            aria-label="Thông báo"
+            @click="toggleNotificationMenu"
+          >
+            <svg
+              class="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path d="M12 20C13.1 20 14 19.1 14 18H10C10 19.1 10.9 20 12 20Z" fill="currentColor" />
+              <path
+                d="M6 16H18L16.5 14V10.5C16.5 8 14.7 6 12 6C9.3 6 7.5 8 7.5 10.5V14L6 16Z"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div
+            v-if="showNotificationMenu"
+            class="absolute right-0 top-11 z-50 w-[400px] max-w-[calc(100vw-1rem)] overflow-hidden rounded-[12px] border border-[#d0d4db] bg-white shadow-[0_12px_24px_rgba(9,30,66,0.18)]"
+          >
+            <div class="flex items-center justify-between gap-2 px-4 py-4">
+              <h2 class="text-[18px] font-semibold text-[#172b4d]">Thông báo</h2>
+
+              <div class="flex items-center gap-2">
+                <span class="text-[12px] text-[#626f86]">Chỉ hiển thị chưa đọc</span>
+
+                <button
+                  type="button"
+                  class="relative inline-flex h-[18px] w-[32px] items-center rounded-full transition-colors"
+                  :class="notificationUnreadOnly ? 'bg-[#5f8f1f]' : 'bg-[#8590a2]'"
+                  :aria-pressed="notificationUnreadOnly"
+                  @click="notificationUnreadOnly = !notificationUnreadOnly"
+                >
+                  <span
+                    v-if="notificationUnreadOnly"
+                    class="absolute left-[5px] text-[9px] font-semibold leading-none text-white"
+                  >
+                    ✓
+                  </span>
+                  <span
+                    class="inline-block h-[14px] w-[14px] rounded-full bg-white transition-transform"
+                    :class="notificationUnreadOnly ? 'translate-x-[16px]' : 'translate-x-[2px]'"
+                  ></span>
+                </button>
+
+                <button
+                  type="button"
+                  class="flex h-6 w-6 items-center justify-center rounded-full text-[#44546f] hover:bg-[#f1f2f4]"
+                  aria-label="Thêm tùy chọn thông báo"
+                >
+                  <svg
+                    class="h-3 w-3"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="5" r="1.8" />
+                    <circle cx="12" cy="12" r="1.8" />
+                    <circle cx="12" cy="19" r="1.8" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="border-t border-[#dfe1e6]"></div>
+
+            <div class="flex min-h-[270px] flex-col items-center justify-center px-5 py-7 text-center">
+              <div class="relative mb-5 flex h-[126px] w-[126px] items-center justify-center">
+                <div class="absolute inset-[10px] rounded-full bg-[#f3eafb]"></div>
+                <span class="absolute left-[24px] top-[18px] text-[16px] text-[#d3b1ef]">✦</span>
+                <span class="absolute left-[40px] top-[38px] text-[12px] text-[#d3b1ef]">✦</span>
+                <span class="absolute right-[33px] top-[32px] text-[11px] text-[#d3b1ef]">✦</span>
+                <span class="absolute left-[22px] top-[60px] text-[12px] text-[#d3b1ef]">✦</span>
+
+                <svg
+                  class="relative h-[98px] w-[98px]"
+                  viewBox="0 0 160 160"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M39 78C39 54.8 57.8 36 81 36C104.2 36 123 54.8 123 78V98C123 121.2 104.2 140 81 140C57.8 140 39 121.2 39 98V78Z"
+                    fill="#8C9CAA"
+                  />
+                  <path d="M54 70L63 34L86 55L100 31L111 70" fill="#8C9CAA" />
+                  <path
+                    d="M64 43L81 58L91 46L98 56L101 36L111 70H49L58 37L64 43Z"
+                    fill="#EEF2F6"
+                  />
+                  <ellipse cx="81" cy="93" rx="36" ry="29" fill="#FDFDFE" />
+                  <ellipse cx="66.5" cy="85.5" rx="6.5" ry="8.5" fill="#FDFDFE" />
+                  <ellipse cx="95.5" cy="85.5" rx="6.5" ry="8.5" fill="#FDFDFE" />
+                  <path
+                    d="M66 94C68.8 94 71 91.8 71 89"
+                    stroke="#1D2125"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M91 89C91 91.8 93.2 94 96 94"
+                    stroke="#1D2125"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M76 108C79.8 111.2 84.2 111.2 88 108"
+                    stroke="#1D2125"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                  />
+                  <path d="M80.5 97L75.8 102.8H85.2L80.5 97Z" fill="#1D2125" />
+                  <path
+                    d="M47 111C57.5 123.5 71.6 130 89.5 130C102.5 130 112.6 126.4 120 119V124.5C111.3 134.1 99.4 139 84.5 139C66.5 139 53.4 132.9 45 120.7L47 111Z"
+                    fill="#8C9CAA"
+                  />
+                  <path
+                    d="M42 106C48.5 107 55.5 113.1 60 120.5L43.5 129L33.5 115L42 106Z"
+                    fill="#1473E6"
+                  />
+                </svg>
+              </div>
+
+              <p class="text-[16px] font-medium text-[#253858]">Không có Thông báo chưa đọc</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative z-40">
         <button
           type="button"
-          class="relative flex h-7 w-7 items-center justify-center rounded-md hover:bg-[#e9ebef]"
+          @click="toggleHelpMenu"
+          class="relative flex h-7 w-7 items-center justify-center rounded-md border transition-colors"
+          :class="
+            showHelpMenu
+              ? 'border-[#0c66e4] bg-white text-[#0c66e4]'
+              : 'border-transparent hover:bg-[#e9ebef]'
+          "
           aria-label="Trợ giúp"
         >
-          <span
-            class="absolute right-[3px] top-[3px] h-2.5 w-2.5 rounded-full bg-[#8f5fd3] ring-2 ring-[#f8f9fb]"
-          />
           <svg
             class="h-4 w-4"
             viewBox="0 0 24 24"
@@ -182,6 +326,25 @@
             <circle cx="12" cy="16.8" r="1" fill="currentColor" />
           </svg>
         </button>
+
+          <div
+            v-if="showHelpMenu"
+            class="absolute right-0 top-11 z-50 w-[336px] max-w-[calc(100vw-1rem)] overflow-hidden rounded-[12px] border border-[#d0d4db] bg-white px-6 py-5 shadow-[0_12px_24px_rgba(9,30,66,0.18)]"
+          >
+            <h2 class="text-[16px] font-semibold leading-7 text-[#172b4d]">
+              Khám phá những điểm mới trên Trello
+            </h2>
+            <p class="mt-3 text-[14px] leading-6 text-[#44546f]">
+              Tận dụng Trello hiệu quả hơn nhờ các tính năng mới nhất.
+            </p>
+            <button
+              type="button"
+              class="mt-4 flex h-10 w-full items-center justify-center rounded-[6px] bg-[#0c66e4] px-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#0055cc]"
+            >
+              Xem bản cập nhật
+            </button>
+          </div>
+        </div>
 
         <div class="relative z-40 ml-1">
           <button
@@ -225,9 +388,10 @@
               Chuyển đổi Tài khoản
             </button>
 
-            <button
-              type="button"
+            <router-link
+              :to="{ name: 'TrelloAccountProfile' }"
               class="mt-4 flex w-full items-center justify-between text-[14px] text-[#172b4d] hover:underline"
+              @click="closeFloatingMenus"
             >
               <span>Quản lý tài khoản</span>
               <svg
@@ -251,7 +415,7 @@
                   stroke-linecap="round"
                 />
               </svg>
-            </button>
+            </router-link>
 
             <div class="my-5 border-t border-[#d0d4db]" />
 
@@ -263,7 +427,7 @@
                 :key="item.label"
                 :to="item.to"
                 class="block hover:underline"
-                @click="closeAccountMenu"
+                @click="closeFloatingMenus"
               >
                 {{ item.label }}
               </router-link>
@@ -333,11 +497,11 @@
     </div>
 
     <button
-      v-if="showAccountMenu"
+      v-if="showAccountMenu || showBroadcastMenu || showNotificationMenu || showHelpMenu"
       type="button"
       class="fixed inset-0 z-30 cursor-default"
-      aria-label="Đóng menu tài khoản"
-      @click="closeAccountMenu"
+      aria-label="Đóng menu"
+      @click="closeFloatingMenus"
     />
   </header>
 </template>
@@ -369,6 +533,10 @@ const emit = defineEmits(["update:modelValue", "create-click"]);
 
 const isLauncherOpen = ref(false);
 const showAccountMenu = ref(false);
+const showBroadcastMenu = ref(false);
+const showNotificationMenu = ref(false);
+const showHelpMenu = ref(false);
+const notificationUnreadOnly = ref(true);
 
 const accountLinks = [
   { label: "Hồ sơ và Hiển thị", to: { name: "PersonalProfile" } },
@@ -381,6 +549,9 @@ const toggleLauncher = () => {
   isLauncherOpen.value = !isLauncherOpen.value;
   if (isLauncherOpen.value) {
     showAccountMenu.value = false;
+    showBroadcastMenu.value = false;
+    showNotificationMenu.value = false;
+    showHelpMenu.value = false;
   }
 };
 
@@ -388,11 +559,47 @@ const toggleAccountMenu = () => {
   showAccountMenu.value = !showAccountMenu.value;
   if (showAccountMenu.value) {
     isLauncherOpen.value = false;
+    showBroadcastMenu.value = false;
+    showNotificationMenu.value = false;
+    showHelpMenu.value = false;
   }
 };
 
-const closeAccountMenu = () => {
+const toggleBroadcastMenu = () => {
+  showBroadcastMenu.value = !showBroadcastMenu.value;
+  if (showBroadcastMenu.value) {
+    isLauncherOpen.value = false;
+    showAccountMenu.value = false;
+    showNotificationMenu.value = false;
+    showHelpMenu.value = false;
+  }
+};
+
+const toggleNotificationMenu = () => {
+  showNotificationMenu.value = !showNotificationMenu.value;
+  if (showNotificationMenu.value) {
+    isLauncherOpen.value = false;
+    showAccountMenu.value = false;
+    showBroadcastMenu.value = false;
+    showHelpMenu.value = false;
+  }
+};
+
+const toggleHelpMenu = () => {
+  showHelpMenu.value = !showHelpMenu.value;
+  if (showHelpMenu.value) {
+    isLauncherOpen.value = false;
+    showAccountMenu.value = false;
+    showBroadcastMenu.value = false;
+    showNotificationMenu.value = false;
+  }
+};
+
+const closeFloatingMenus = () => {
   showAccountMenu.value = false;
+  showBroadcastMenu.value = false;
+  showNotificationMenu.value = false;
+  showHelpMenu.value = false;
 };
 
 const handleCreateClick = (event) => {

@@ -12,6 +12,7 @@ import WorkspaceCards from "@/views/WorkspaceCards.vue";
 import PersonalSettings from "@/views/PersonalSettings.vue";
 import PersonalActivity from "@/views/PersonalActivity.vue";
 import PersonalProfile from "@/views/PersonalProfile.vue";
+import TrelloAccountProfile from "@/views/TrelloAccountProfile.vue";
 
 const routes = [
   {
@@ -78,6 +79,11 @@ const routes = [
     path: "/personal/profile",
     name: "PersonalProfile",
     component: PersonalProfile,
+  },
+  {
+    path: "/account/profile-display",
+    name: "TrelloAccountProfile",
+    component: TrelloAccountProfile,
   },
   {
     path: "/:pathMatch(.*)*",
