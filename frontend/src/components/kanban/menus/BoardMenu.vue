@@ -5,20 +5,20 @@
 
       <div class="absolute right-4 top-20 md:right-6 md:top-16">
         <div
-          class="w-[23rem] max-w-[92vw] rounded-2xl border border-white/10 bg-[#1f2328] shadow-2xl overflow-hidden"
+          class="w-[23rem] max-w-[92vw] overflow-hidden rounded-2xl border border-white/10 bg-[#1f2328] shadow-2xl"
         >
           <template v-if="currentView === 'main'">
-            <div class="px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center justify-between px-4 py-3">
               <div class="text-sm font-semibold text-white/90">Menu</div>
               <button
-                class="w-9 h-9 rounded-xl bg-black/25 border border-white/10 hover:bg-black/35 flex items-center justify-center"
+                class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-black/25 hover:bg-black/35"
                 type="button"
                 aria-label="Đóng"
                 title="Đóng"
                 @click="handleClose"
               >
                 <svg
-                  class="w-5 h-5"
+                  class="h-5 w-5"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -35,9 +35,9 @@
             </div>
 
             <div class="max-h-[72vh] overflow-auto px-2 pb-3">
-              <div class="rounded-xl bg-black/20 border border-white/10 p-3 mx-2 mb-2">
+              <div class="mx-2 mb-2 rounded-xl border border-white/10 bg-black/20 p-3">
                 <div class="flex items-center gap-2">
-                  <span class="w-8 h-8 rounded-lg bg-[#0c66e4] flex items-center justify-center text-white text-sm font-semibold">
+                  <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0c66e4] text-sm font-semibold text-white">
                     Jira
                   </span>
                   <div class="min-w-0">
@@ -51,9 +51,9 @@
                 </div>
               </div>
 
-              <div class="rounded-xl bg-black/20 border border-white/10 p-3 mx-2 mb-3">
+              <div class="mx-2 mb-3 rounded-xl border border-white/10 bg-black/20 p-3">
                 <div class="flex items-center gap-2">
-                  <span class="w-8 h-8 rounded-lg bg-[#0c66e4] flex items-center justify-center text-white text-sm font-semibold">
+                  <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0c66e4] text-sm font-semibold text-white">
                     Jira
                   </span>
                   <div class="min-w-0">
@@ -67,22 +67,32 @@
                 </div>
               </div>
 
-              <div class="space-y-1 mx-2">
-                <BoardMenuItem label="Chia sẻ" :svg="ICONS.share" />
+              <div class="mx-2 space-y-1">
+                <BoardMenuItem label="Chia sẻ" :svg="ICONS.share" @click="openFeature('share')" />
                 <BoardMenuItem
                   label="Về bảng này"
                   sub="Thêm mô tả vào bảng của bạn"
                   :svg="ICONS.info"
+                  @click="openFeature('about')"
                 />
                 <BoardMenuItem
                   label="Khả năng hiển thị: Không gian làm việc"
                   :svg="ICONS.eye"
+                  @click="openFeature('visibility')"
                 />
-                <BoardMenuItem label="In, xuất và chia sẻ" :svg="ICONS.print" />
-                <BoardMenuItem label="Gắn sao" :svg="ICONS.star" />
+                <BoardMenuItem
+                  label="In, xuất và chia sẻ"
+                  :svg="ICONS.print"
+                  @click="openFeature('print')"
+                />
+                <BoardMenuItem
+                  label="Gắn sao"
+                  :svg="ICONS.star"
+                  @click="openFeature('star')"
+                />
               </div>
 
-              <div class="my-3 border-t border-white/10 mx-2" />
+              <div class="mx-2 my-3 border-t border-white/10" />
 
               <div class="mx-2 space-y-1">
                 <div class="px-2 py-2 text-[11px] text-white/45">Cài đặt</div>
@@ -92,30 +102,82 @@
                   :svg="ICONS.bg"
                   @click="openBackgroundPanel"
                 />
-
-                <BoardMenuItem label="Trường tùy chỉnh" :svg="ICONS.fields" />
-                <BoardMenuItem label="Tự động hóa" :svg="ICONS.bolt" active />
-                <BoardMenuItem label="Tiện ích bổ sung" :svg="ICONS.power" />
-                <BoardMenuItem label="Nhãn" :svg="ICONS.tag" />
-                <BoardMenuItem label="Các nhãn dán" :svg="ICONS.sticker" />
-                <BoardMenuItem label="Tạo mẫu" :svg="ICONS.template" />
-                <BoardMenuItem label="Hoạt động" :svg="ICONS.activity" />
-                <BoardMenuItem label="Mục đã lưu trữ" :svg="ICONS.archive" />
+                <BoardMenuItem
+                  label="Trường tùy chỉnh"
+                  :svg="ICONS.fields"
+                  @click="openFeature('fields')"
+                />
+                <BoardMenuItem
+                  label="Tự động hóa"
+                  :svg="ICONS.bolt"
+                  active
+                  @click="openFeature('automation')"
+                />
+                <BoardMenuItem
+                  label="Tiện ích bổ sung"
+                  :svg="ICONS.power"
+                  @click="openFeature('powerups')"
+                />
+                <BoardMenuItem
+                  label="Nhãn"
+                  :svg="ICONS.tag"
+                  @click="openFeature('labels')"
+                />
+                <BoardMenuItem
+                  label="Các nhãn dán"
+                  :svg="ICONS.sticker"
+                  @click="openFeature('stickers')"
+                />
+                <BoardMenuItem
+                  label="Tạo mẫu"
+                  :svg="ICONS.template"
+                  @click="openFeature('templates')"
+                />
+                <BoardMenuItem
+                  label="Hoạt động"
+                  :svg="ICONS.activity"
+                  @click="openFeature('activity')"
+                />
+                <BoardMenuItem
+                  label="Mục đã lưu trữ"
+                  :svg="ICONS.archive"
+                  @click="openFeature('archive')"
+                />
               </div>
 
-              <div class="my-3 border-t border-white/10 mx-2" />
+              <div class="mx-2 my-3 border-t border-white/10" />
 
               <div class="mx-2 space-y-1">
-                <BoardMenuItem label="Theo dõi" :svg="ICONS.follow" />
-                <BoardMenuItem label="Thu gọn tất cả danh sách" :svg="ICONS.collapse" />
-                <BoardMenuItem label="Sao chép bảng thông tin" :svg="ICONS.copy" />
-                <BoardMenuItem label="Cài đặt Email-tới-bảng" :svg="ICONS.mail" />
-                <BoardMenuItem label="Đóng bảng thông tin" :svg="ICONS.close" />
+                <BoardMenuItem
+                  label="Theo dõi"
+                  :svg="ICONS.follow"
+                  @click="openFeature('watch')"
+                />
+                <BoardMenuItem
+                  label="Thu gọn tất cả danh sách"
+                  :svg="ICONS.collapse"
+                  @click="openFeature('collapse')"
+                />
+                <BoardMenuItem
+                  label="Sao chép bảng thông tin"
+                  :svg="ICONS.copy"
+                  @click="openFeature('copyBoard')"
+                />
+                <BoardMenuItem
+                  label="Cài đặt Email-tới-bảng"
+                  :svg="ICONS.mail"
+                  @click="openFeature('emailToBoard')"
+                />
+                <BoardMenuItem
+                  label="Đóng bảng thông tin"
+                  :svg="ICONS.close"
+                  @click="openFeature('closeBoard')"
+                />
               </div>
             </div>
           </template>
 
-          <template v-else>
+          <template v-else-if="currentView === 'background'">
             <BoardBackgroundPanel
               v-model="draftBackground"
               :image-options="imageOptions"
@@ -125,6 +187,13 @@
               @reset="handleResetBackground"
             />
           </template>
+
+          <template v-else>
+            <BoardMenuFeaturePanel
+              :screen="currentScreen"
+              @back="currentView = 'main'"
+            />
+          </template>
         </div>
       </div>
     </div>
@@ -132,9 +201,11 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import BoardMenuItem from "@/components/kanban/menus/BoardMenuItem.vue";
 import BoardBackgroundPanel from "@/components/kanban/menus/BoardBackgroundPanel.vue";
+import BoardMenuFeaturePanel from "@/components/kanban/menus/BoardMenuFeaturePanel.vue";
+import { BOARD_MENU_SCREENS } from "@/components/kanban/menus/data/boardMenuScreens.js";
 
 const DEFAULT_BACKGROUND = "linear-gradient(135deg,#4b3f72,#7b3ea8,#c1558b)";
 
@@ -187,7 +258,12 @@ const props = defineProps({
 const emit = defineEmits(["close", "save-background"]);
 
 const currentView = ref("main");
+const currentScreenKey = ref("share");
 const draftBackground = ref(props.background || DEFAULT_BACKGROUND);
+
+const currentScreen = computed(
+  () => BOARD_MENU_SCREENS[currentScreenKey.value] || BOARD_MENU_SCREENS.share
+);
 
 watch(
   () => props.open,
@@ -207,6 +283,11 @@ watch(
     }
   }
 );
+
+function openFeature(key) {
+  currentScreenKey.value = key;
+  currentView.value = "feature";
+}
 
 function openBackgroundPanel() {
   draftBackground.value = props.background || DEFAULT_BACKGROUND;
@@ -230,6 +311,10 @@ function handleClose() {
 
 function onKeydown(e) {
   if (e.key === "Escape" && props.open) {
+    if (currentView.value !== "main") {
+      currentView.value = "main";
+      return;
+    }
     handleClose();
   }
 }

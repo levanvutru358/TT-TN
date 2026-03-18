@@ -1,7 +1,6 @@
 <template>
   <div class="trello-scrollbar h-full overflow-x-auto">
     <div class="flex h-full gap-4">
-      <!-- Tutorial column -->
       <div class="flex h-full w-80 flex-shrink-0 flex-col">
         <div
           class="mb-3 flex items-center justify-between rounded-xl bg-[#4b2d7f] px-3 py-2 shadow"
@@ -43,7 +42,6 @@
         </div>
       </div>
 
-      <!-- Task columns -->
       <div
         v-for="(column, idx) in computedColumns"
         :key="column.id"
@@ -112,6 +110,7 @@
               @drag-start="handleTaskDragStart"
               @drag-end="handleTaskDragEnd"
               @toggle-completed="handleToggleCompleted"
+              @update-task="handleUpdateTask"
             />
 
             <button
@@ -126,7 +125,6 @@
         </div>
       </div>
 
-      <!-- Add another list -->
       <div class="h-full w-80 flex-shrink-0">
         <div
           class="mb-3 flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-3 py-2 shadow-sm"
@@ -244,7 +242,6 @@ const computedColumns = computed(() => {
   return defaultColumns;
 });
 
-/** ============ Drag drop task ============ */
 const draggingTaskPayload = ref(null);
 const dragOverColumnId = ref(null);
 
@@ -325,7 +322,6 @@ function onDrop(column, event) {
   });
 }
 
-/** ============ Đồng bộ completed giữa TaskCard và TaskModal ============ */
 function handleToggleCompleted(updatedTask) {
   const tasks = Array.isArray(props.project?.tasks) ? [...props.project.tasks] : [];
   const taskIndex = tasks.findIndex(
@@ -345,7 +341,25 @@ function handleToggleCompleted(updatedTask) {
   });
 }
 
-/** ============ Add task ============ */
+function handleUpdateTask(updatedTask) {
+  const tasks = Array.isArray(props.project?.tasks) ? [...props.project.tasks] : [];
+  const taskIndex = tasks.findIndex(
+    (task) => String(task.id) === String(updatedTask.id)
+  );
+
+  if (taskIndex === -1) return;
+
+  tasks.splice(taskIndex, 1, {
+    ...tasks[taskIndex],
+    ...updatedTask,
+  });
+
+  emit("update-project", {
+    ...props.project,
+    tasks,
+  });
+}
+
 const showAddTask = ref(false);
 const selectedColumn = ref(null);
 
@@ -452,7 +466,6 @@ const openAddTask = (column) => {
   showAddTask.value = true;
 };
 
-/** ============ Add list ============ */
 const showAddList = ref(false);
 const newListTitle = ref("");
 const newListStatus = ref("Todo");
@@ -577,9 +590,7 @@ function onToggleWatch(columnId) {
   updateColumns(cols);
 }
 
-function onCopyList() {
-  // tạm giữ UI
-}
+function onCopyList() {}
 
 function hexToRgba(hex, alpha) {
   const h = String(hex || "").replace("#", "").trim();
@@ -598,7 +609,6 @@ function listHeaderStyle(column) {
   };
 }
 
-/** ============ Task card actions ============ */
 function handleOpenCard(task) {
   console.log("open-card", task);
 }

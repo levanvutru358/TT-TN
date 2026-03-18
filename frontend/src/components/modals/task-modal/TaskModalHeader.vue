@@ -15,13 +15,7 @@
           {{ item }}
         </option>
       </select>
-
-      <input
-        :value="title"
-        class="bg-transparent text-white text-[20px] md:text-[22px] font-semibold outline-none min-w-0 w-full"
-        placeholder="Tên thẻ"
-        @input="$emit('update:title', $event.target.value)"
-      />
+      
     </div>
 
     <div class="flex items-center gap-2">

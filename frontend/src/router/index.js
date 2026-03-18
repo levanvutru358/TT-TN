@@ -13,12 +13,24 @@ import PersonalSettings from "@/views/PersonalSettings.vue";
 import PersonalActivity from "@/views/PersonalActivity.vue";
 import PersonalProfile from "@/views/PersonalProfile.vue";
 import TrelloAccountProfile from "@/views/TrelloAccountProfile.vue";
+import LoginPage from "@/views/auth/LoginPage.vue";
+import RegisterPage from "@/views/auth/RegisterPage.vue";
 
 const routes = [
   {
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/auth/login",
+    name: "Login",
+    component: LoginPage,
+  },
+  {
+    path: "/auth/register",
+    name: "Register",
+    component: RegisterPage,
   },
   {
     path: "/stages",

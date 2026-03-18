@@ -5,10 +5,11 @@
     <div class="max-h-[74vh] overflow-y-auto">
       <div class="px-2 py-2">
         <button
-          v-for="item in primaryApps"
+          v-for="item in visiblePrimaryApps"
           :key="item.label"
           type="button"
           class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/10"
+          @click="handlePrimaryClick(item)"
         >
           <span
             class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
@@ -115,7 +116,12 @@
 </template>
 
 <script setup>
-import { h } from "vue";
+import { computed, h } from "vue";
+import { useRouter } from "vue-router";
+import { useAuth } from "@/composables/useAuth.js";
+
+const router = useRouter();
+const { isAuthenticated } = useAuth();
 
 const HomeIcon = {
   render() {
@@ -417,4 +423,22 @@ const suggestedApps = [
     iconBg: "bg-[#377DFF]",
   },
 ];
+
+const visiblePrimaryApps = computed(() => {
+  if (isAuthenticated.value) {
+    return primaryApps.filter((item) => item.label !== "Trang chủ");
+  }
+  return primaryApps;
+});
+
+function handlePrimaryClick(item) {
+  if (item.label === "Trang chủ") {
+    router.push("/auth/login");
+    return;
+  }
+
+  if (item.label === "Trello") {
+    router.push("/");
+  }
+}
 </script>
