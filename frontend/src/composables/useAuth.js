@@ -6,7 +6,7 @@ const authUser = ref(loadAuthUser());
 
 function loadAuthUser() {
   try {
-    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    const raw = sessionStorage.getItem(AUTH_STORAGE_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -19,13 +19,13 @@ function syncAuthUser() {
 
 function saveAuthUser(user) {
   authUser.value = user;
-  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+  sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
   window.dispatchEvent(new CustomEvent("trello-auth-changed"));
 }
 
 function clearAuthUser() {
   authUser.value = null;
-  localStorage.removeItem(AUTH_STORAGE_KEY);
+  sessionStorage.removeItem(AUTH_STORAGE_KEY);
   window.dispatchEvent(new CustomEvent("trello-auth-changed"));
 }
 

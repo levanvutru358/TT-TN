@@ -16,19 +16,78 @@
             workspace của bạn
           </h1>
 
-          <p class="mt-4 max-w-md text-white/85">
-            Tiếp tục theo dõi công việc, quản lý task và cộng tác cùng đội nhóm trong Trello.
+          <p class="mt-4 max-w-lg text-lg leading-8 text-white/85">
+            Tiếp tục theo dõi công việc, quản lý task, phân chia danh sách và cộng tác cùng đội nhóm
+            trong Trello với giao diện trực quan, dễ dùng và phù hợp cho cả học tập lẫn dự án thực tế.
           </p>
-        </div>
 
-        <div class="rounded-2xl bg-black/20 p-5 text-sm text-white/85">
-          <div class="font-semibold text-white">Gợi ý</div>
-          <div class="mt-2">
-            Bạn có thể đăng nhập bằng email hoặc dùng nút Google để chuẩn bị cho bước tích hợp sau.
+          <div class="mt-8 space-y-4">
+            <div class="flex items-start gap-3 rounded-2xl bg-white/10 p-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 text-lg">
+                📌
+              </div>
+              <div>
+                <div class="text-base font-semibold text-white">Quản lý công việc rõ ràng</div>
+                <div class="mt-1 text-sm leading-6 text-white/75">
+                  Sắp xếp thẻ theo từng giai đoạn, theo dõi trạng thái hoàn thành và kiểm soát tiến độ
+                  công việc dễ dàng hơn mỗi ngày.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 rounded-2xl bg-white/10 p-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 text-lg">
+                👥
+              </div>
+              <div>
+                <div class="text-base font-semibold text-white">Cộng tác cùng đội nhóm</div>
+                <div class="mt-1 text-sm leading-6 text-white/75">
+                  Chia sẻ bảng, phân công thành viên, thêm ghi chú, checklist và trao đổi nhanh ngay
+                  trên từng thẻ công việc.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 rounded-2xl bg-white/10 p-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 text-lg">
+                🚀
+              </div>
+              <div>
+                <div class="text-base font-semibold text-white">Làm việc linh hoạt hơn</div>
+                <div class="mt-1 text-sm leading-6 text-white/75">
+                  Phù hợp để quản lý đồ án, lịch học, kế hoạch cá nhân hoặc các dự án nhóm với cách tổ chức
+                  trực quan giống Trello.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 grid grid-cols-3 gap-3">
+            <div class="rounded-2xl bg-black/20 p-4 text-center">
+              <div class="text-2xl font-bold text-white">10+</div>
+              <div class="mt-1 text-xs uppercase tracking-wide text-white/60">Danh sách</div>
+            </div>
+            <div class="rounded-2xl bg-black/20 p-4 text-center">
+              <div class="text-2xl font-bold text-white">100+</div>
+              <div class="mt-1 text-xs uppercase tracking-wide text-white/60">Công việc</div>
+            </div>
+            <div class="rounded-2xl bg-black/20 p-4 text-center">
+              <div class="text-2xl font-bold text-white">24/7</div>
+              <div class="mt-1 text-xs uppercase tracking-wide text-white/60">Theo dõi</div>
+            </div>
           </div>
         </div>
-      </div>
+        
+          <!-- phần gợi ý tạm thời, sẽ dùng để hướng dẫn cách đăng nhập và tích hợp Google sau này
+        <div class="rounded-2xl bg-black/20 p-5 text-sm text-white/85">
+          <div class="font-semibold text-white">Gợi ý</div>
+          <div class="mt-2 leading-6">
+            Bạn có thể đăng nhập bằng email để sử dụng ngay, hoặc dùng nút Google để chuẩn bị cho bước
+            tích hợp sau. Sau khi đăng nhập thành công, bạn sẽ được chuyển lại trang chủ Trello để tiếp tục làm việc.
+          </div>
+        </div> -->
 
+      </div>
       <div class="bg-[#1f232b] p-6 sm:p-8 lg:p-10">
         <div class="mx-auto max-w-md">
           <div class="mb-8">
@@ -80,13 +139,11 @@
             <div class="h-px flex-1 bg-white/10"></div>
           </div>
 
-          <!-- Google login UI only -->
           <button
             type="button"
             class="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm font-semibold text-[#1f232b] transition hover:bg-white/90"
             @click="handleGoogleUiOnly"
           >
-            <!-- Thay ảnh này bằng logo Google của bạn nếu muốn -->
             <img
               src="/images/logo-google.png"
               alt="Google"
@@ -94,6 +151,7 @@
             />
             <span>Đăng nhập với Google</span>
           </button>
+
           <div class="mt-6 text-center text-sm text-white/60">
             Chưa có tài khoản?
             <button
@@ -104,15 +162,40 @@
               Đăng ký ngay
             </button>
           </div>
-
           <div class="mt-8">
             <button
               type="button"
-              class="text-sm text-white/60 hover:text-white"
+              class="text-sm text-white/60 hover:text-white text-center w-full"
               @click="goHome"
             >
               ← Quay về trang chủ Trello
             </button>
+          </div>
+
+          <div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div class="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div class="flex items-center gap-2">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0c66e4]/20 text-lg">
+                  🔒
+                </div>
+                <div class="text-sm font-semibold text-white">An toàn đăng nhập</div>
+              </div>
+              <div class="mt-3 text-xs leading-6 text-white/60">
+                Thông tin đăng nhập được quản lý gọn gàng để bạn truy cập workspace nhanh hơn.
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div class="flex items-center gap-2">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7c3aed]/20 text-lg">
+                  ⚡
+                </div>
+                <div class="text-sm font-semibold text-white">Truy cập nhanh</div>
+              </div>
+              <div class="mt-3 text-xs leading-6 text-white/60">
+                Sau khi đăng nhập, bạn sẽ quay lại ngay trang chủ Trello để tiếp tục công việc đang làm.
+              </div>
+            </div>
           </div>
         </div>
       </div>
