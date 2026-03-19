@@ -16,17 +16,78 @@
             công việc ngay hôm nay
           </h1>
 
-          <p class="mt-4 max-w-md text-white/85">
+          <p class="mt-4 max-w-lg text-lg leading-8 text-white/85">
             Tạo tài khoản mới để sử dụng board, danh sách, card và các công cụ cộng tác trong Trello.
+            Đây là không gian phù hợp để quản lý dự án học tập, công việc cá nhân hoặc làm việc nhóm
+            theo cách trực quan và dễ theo dõi hơn.
           </p>
-        </div>
 
-        <div class="rounded-2xl bg-black/20 p-5 text-sm text-white/85">
-          <div class="font-semibold text-white">Lưu ý</div>
-          <div class="mt-2">
-            Sau khi đăng ký thành công, bạn sẽ được chuyển thẳng về trang chủ Trello.
+          <div class="mt-8 space-y-4">
+            <div class="flex items-start gap-3 rounded-2xl bg-white/10 p-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 text-lg">
+                🧩
+              </div>
+              <div>
+                <div class="text-base font-semibold text-white">Tạo không gian làm việc riêng</div>
+                <div class="mt-1 text-sm leading-6 text-white/75">
+                  Bắt đầu với bảng riêng của bạn, thêm danh sách công việc, chia nhỏ task và tổ chức mọi thứ
+                  theo cách dễ hiểu ngay từ đầu.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 rounded-2xl bg-white/10 p-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 text-lg">
+                📋
+              </div>
+              <div>
+                <div class="text-base font-semibold text-white">Theo dõi tiến độ hiệu quả</div>
+                <div class="mt-1 text-sm leading-6 text-white/75">
+                  Di chuyển thẻ giữa các giai đoạn, thêm ghi chú, ngày hạn, checklist và theo dõi quá trình
+                  hoàn thành công việc một cách trực quan.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 rounded-2xl bg-white/10 p-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 text-lg">
+                🤝
+              </div>
+              <div>
+                <div class="text-base font-semibold text-white">Sẵn sàng để cộng tác</div>
+                <div class="mt-1 text-sm leading-6 text-white/75">
+                  Khi cần, bạn có thể mời thêm thành viên, phân quyền, chia sẻ bảng và làm việc cùng nhau
+                  trên cùng một quy trình rõ ràng.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 grid grid-cols-3 gap-3">
+            <div class="rounded-2xl bg-black/20 p-4 text-center">
+              <div class="text-2xl font-bold text-white">Mới</div>
+              <div class="mt-1 text-xs uppercase tracking-wide text-white/60">Tài khoản</div>
+            </div>
+            <div class="rounded-2xl bg-black/20 p-4 text-center">
+              <div class="text-2xl font-bold text-white">Nhanh</div>
+              <div class="mt-1 text-xs uppercase tracking-wide text-white/60">Khởi tạo</div>
+            </div>
+            <div class="rounded-2xl bg-black/20 p-4 text-center">
+              <div class="text-2xl font-bold text-white">Sẵn sàng</div>
+              <div class="mt-1 text-xs uppercase tracking-wide text-white/60">Làm việc</div>
+            </div>
           </div>
         </div>
+        
+        <!-- phần lưu ý của đăng kí chưa cần sử dụng -->
+        <!-- <div class="rounded-2xl bg-black/20 p-5 text-sm text-white/85">
+          <div class="font-semibold text-white">Lưu ý</div>
+          <div class="mt-2 leading-6">
+            Sau khi đăng ký thành công, bạn sẽ được chuyển thẳng về trang chủ Trello để bắt đầu tạo bảng,
+            quản lý danh sách và làm việc ngay.
+          </div>
+        </div> -->
+
       </div>
 
       <div class="bg-[#1f232b] p-6 sm:p-8 lg:p-10">
@@ -108,11 +169,41 @@
           <div class="mt-8">
             <button
               type="button"
-              class="text-sm text-white/60 hover:text-white"
+              class="text-sm text-white/60 hover:text-white text-center w-full"
               @click="goHome"
             >
               ← Quay về trang chủ Trello
             </button>
+          </div>
+
+          <div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div class="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div class="flex items-center gap-2">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#16a34a]/20 text-lg">
+                  ✅
+                </div>
+                <div class="text-sm font-semibold text-white">Thiết lập nhanh</div>
+              </div>
+              <div class="mt-3 text-xs leading-6 text-white/60">
+                Chỉ cần vài thông tin cơ bản để tạo tài khoản và bắt đầu quản lý công việc ngay.
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div class="flex items-center gap-2">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7c3aed]/20 text-lg">
+                  🌟
+                </div>
+                <div class="text-sm font-semibold text-white">Sẵn sàng sử dụng</div>
+              </div>
+              <div class="mt-3 text-xs leading-6 text-white/60">
+                Sau khi đăng ký thành công, bạn sẽ được đưa về trang chủ để bắt đầu làm việc luôn.
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 text-center text-xs text-white/40 leading-6">
+            Việc tạo tài khoản giúp bạn lưu lại tiến độ, quản lý bảng cá nhân và sẵn sàng cộng tác với đội nhóm về sau.
           </div>
         </div>
       </div>
