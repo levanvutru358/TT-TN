@@ -67,6 +67,7 @@ const hideHeaderNavRoutes = [
   "admin-users",
   "admin-workspaces",
   "admin-boards",
+  "admin-statistics",
 ];
 
 const shouldShowHeaderNav = computed(() => {

@@ -29,8 +29,9 @@ const route = useRoute()
 
 const menuItems = [
   { label: 'Dashboard', to: '/admin/dashboard' },
-  { label: 'Quản lý User', to: '/admin/users' },
-  { label: 'Quản lý Workspace', to: '/admin/workspaces' },
-  { label: 'Quản lý Board', to: '/admin/boards' }
+  { label: 'Quan ly User', to: '/admin/users' },
+  { label: 'Quan ly Workspace', to: '/admin/workspaces' },
+  { label: 'Quan ly Board', to: '/admin/boards' },
+  { label: 'Thong ke', to: '/admin/statistics' }
 ]
 </script>

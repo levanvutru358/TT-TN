@@ -123,7 +123,12 @@ export const adminService = {
 
   async getWorkspaces(): Promise<WorkspaceItem[]> {
     await wait()
-    return [...mockWorkspaces]
+    return mockWorkspaces.map((workspace) => ({
+      ...workspace,
+      totalBoards: mockBoards.filter(
+        (board) => board.workspaceName === workspace.name
+      ).length
+    }))
   },
 
   async getBoards(): Promise<BoardItem[]> {
