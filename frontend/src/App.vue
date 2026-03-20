@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Header -->
-    <header v-if="showHeaderNav()" class="bg-white shadow-md">
+    <header v-if="shouldShowHeaderNav" class="bg-white shadow-md">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <h1 class="text-3xl font-bold text-gray-900">
           Stage Management System
@@ -10,7 +10,7 @@
     </header>
 
     <!-- Navigation -->
-    <nav v-if="showHeaderNav()" class="bg-blue-600 text-white">
+    <nav v-if="shouldShowHeaderNav" class="bg-blue-600 text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex space-x-8 items-center">
@@ -32,7 +32,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main :class="{ 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8': showHeaderNav() }">
+    <main :class="{ 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8': shouldShowHeaderNav }">
       <router-view />
     </main>
 
@@ -42,6 +42,7 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useUIStore } from "@/stores/uiStore";
 import { useRoute } from "vue-router";
 import Notification from "@/components/common/Notification.vue";
@@ -49,7 +50,6 @@ import Notification from "@/components/common/Notification.vue";
 const uiStore = useUIStore();
 const route = useRoute();
 
-// Ẩn header/nav khi ở trang project
 const hideHeaderNavRoutes = [
   "ProjectDetail",
   "Home",
@@ -63,9 +63,13 @@ const hideHeaderNavRoutes = [
   "TrelloAccountProfile",
   "Login",
   "Register",
+  "admin-dashboard",
+  "admin-users",
+  "admin-workspaces",
+  "admin-boards",
 ];
-const showHeaderNav = () =>
-  !hideHeaderNavRoutes.includes(String(route.name || ""));
-</script>
 
-<style scoped></style>
+const shouldShowHeaderNav = computed(() => {
+  return !hideHeaderNavRoutes.includes(String(route.name || ""));
+});
+</script>
