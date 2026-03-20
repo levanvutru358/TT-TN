@@ -1,20 +1,27 @@
 <template>
   <section class="space-y-8">
-    <div>
-      <h1 class="text-3xl font-bold tracking-tight text-slate-950 text-black">
-        Quản lý Workspace
-      </h1>
-      <p class="mt-2 text-base text-slate-600">
-        Theo dõi danh sách workspace trong toàn hệ thống.
-      </p>
+    <PageHeader
+      breadcrumb="Admin / Workspaces"
+      title="Workspaces Management"
+      description="Track workspace ownership, growth and collaboration volume."
+    >
+      <template #actions>
+        <button
+          type="button"
+          class="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+        >
+          Add workspace
+        </button>
+      </template>
+    </PageHeader>
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <SummaryMiniCard label="Total Workspaces" :value="adminStore.workspaces.length" />
+      <SummaryMiniCard label="Total Members" :value="totalMembers" />
+      <SummaryMiniCard label="Total Boards" :value="totalBoards" />
     </div>
 
-    <div
-      v-if="adminStore.isLoadingWorkspaces"
-      class="rounded-3xl border border-slate-200 bg-white p-6 text-slate-700 shadow-sm"
-    >
-      Đang tải dữ liệu workspace...
-    </div>
+    <LoadingBlock v-if="adminStore.isLoadingWorkspaces" />
 
     <WorkspaceTable
       v-else
@@ -23,14 +30,25 @@
   </section>
 </template>
 
-<script setup lang="ts">
-import { onMounted } from 'vue'
-import { useAdminStore } from '@/admin/stores/admin.store'
-import WorkspaceTable from '@/admin/components/AdminDashbord/WorkspaceTable.vue'
+<script setup>
+import { computed, onMounted } from "vue";
+import { useAdminStore } from "@/admin/stores/admin.store";
+import PageHeader from "@/admin/components/AdminDashbord/common/PageHeader.vue";
+import SummaryMiniCard from "@/admin/components/AdminDashbord/common/SummaryMiniCard.vue";
+import LoadingBlock from "@/admin/components/AdminDashbord/common/LoadingBlock.vue";
+import WorkspaceTable from "@/admin/components/AdminDashbord/tables/WorkspaceTable.vue";
 
-const adminStore = useAdminStore()
+const adminStore = useAdminStore();
 
 onMounted(() => {
-  adminStore.fetchWorkspaces()
-})
+  adminStore.fetchWorkspaces();
+});
+
+const totalMembers = computed(() =>
+  adminStore.workspaces.reduce((sum, item) => sum + item.totalMembers, 0)
+);
+
+const totalBoards = computed(() =>
+  adminStore.workspaces.reduce((sum, item) => sum + item.totalBoards, 0)
+);
 </script>

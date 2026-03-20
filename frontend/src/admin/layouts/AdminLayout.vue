@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import AdminHeader from '@/admin/components/AdminDashbord/AdminHeader.vue'
-import AdminSidebar from '@/admin/components/AdminDashbord/AdminSidebar.vue'
+<script setup>
+import AdminHeader from "@/admin/components/AdminDashbord/layout/AdminHeader.vue";
+import AdminSidebar from "@/admin/components/AdminDashbord/layout/AdminSidebar.vue";
 </script>

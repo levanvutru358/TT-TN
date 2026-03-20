@@ -1,92 +1,80 @@
 <template>
   <section class="space-y-8">
-    <div>
-      <h1 class="text-3xl font-bold tracking-tight text-slate-950 text-black">
-        Tổng quan hệ thống
-      </h1>
-      <p class="mt-2 text-base text-slate-600">
-        Theo dõi nhanh số lượng user, workspace, board và trạng thái hoạt động.
-      </p>
-    </div>
+    <PageHeader
+      breadcrumb="Admin / Dashboard"
+      title="Dashboard"
+      description="Overview of users, workspaces, boards and current system activity."
+    >
+      <template #actions>
+        <button
+          type="button"
+          class="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+        >
+          Last 30 days
+        </button>
+        <button
+          type="button"
+          class="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+        >
+          Export report
+        </button>
+      </template>
+    </PageHeader>
 
-    <div class="grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-5">
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2 2xl:grid-cols-4">
       <StatCard
-        title="Tổng user"
+        title="Total Users"
         :value="stats?.totalUsers ?? 0"
-        subtitle="Tổng số user trong hệ thống"
+        subtitle="Total accounts in the system"
+        :icon="Users"
+        iconBg="bg-blue-500"
       />
       <StatCard
-        title="Tổng workspace"
+        title="Workspaces"
         :value="stats?.totalWorkspaces ?? 0"
-        subtitle="Tổng số workspace hiện có"
+        subtitle="Total team workspaces"
+        :icon="Layers3"
+        iconBg="bg-violet-500"
       />
       <StatCard
-        title="Tổng board"
+        title="Boards"
         :value="stats?.totalBoards ?? 0"
-        subtitle="Tổng board toàn hệ thống"
+        subtitle="Boards across all workspaces"
+        :icon="FolderKanban"
+        iconBg="bg-emerald-500"
       />
       <StatCard
-        title="Tổng card"
-        :value="stats?.totalCards ?? 0"
-        subtitle="Tổng số card hiện có"
-      />
-      <StatCard
-        title="Active users"
+        title="Active Users"
         :value="stats?.activeUsers ?? 0"
-        subtitle="Số user đang hoạt động"
+        subtitle="Users currently marked active"
+        :icon="Activity"
+        iconBg="bg-amber-500"
       />
     </div>
-
-    <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-      <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h3 class="text-xl font-bold text-slate-950">Tổng quan quản trị</h3>
-        <p class="mt-3 text-sm leading-7 text-slate-600">
-          Khu vực này dùng để theo dõi các chỉ số chính của hệ thống. Sau này bạn có
-          thể mở rộng thêm biểu đồ, báo cáo theo ngày, tỉ lệ user active hoặc thống kê
-          board theo workspace.
-        </p>
-      </div>
-
-      <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h3 class="text-xl font-bold text-slate-950">Tác vụ nhanh</h3>
-
-        <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <RouterLink
-            to="/admin/users"
-            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100"
-          >
-            Đi tới quản lý user
-          </RouterLink>
-
-          <RouterLink
-            to="/admin/workspaces"
-            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100"
-          >
-            Đi tới quản lý workspace
-          </RouterLink>
-
-          <RouterLink
-            to="/admin/boards"
-            class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100"
-          >
-            Đi tới quản lý board
-          </RouterLink>
-        </div>
-      </div>
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <div class="xl:col-span-2">
+      <UserGrowthChart />
     </div>
+
+    <UserStatusChart />
+</div>
   </section>
 </template>
 
-<script setup lang="ts">
-import { computed, onMounted } from 'vue'
-import { useAdminStore } from '@/admin/stores/admin.store'
-import StatCard from '@/admin/components/AdminDashbord/StatCard.vue'
+<script setup>
+import UserGrowthChart from "@/admin/components/AdminDashbord/charts/UserGrowthChart.vue";
+import UserStatusChart from "@/admin/components/AdminDashbord/charts/UserStatusChart.vue";
+import { computed, onMounted } from "vue";
+import { Users, Layers3, FolderKanban, Activity } from "lucide-vue-next";
+import { useAdminStore } from "@/admin/stores/admin.store";
+import PageHeader from "@/admin/components/AdminDashbord/common/PageHeader.vue";
+import StatCard from "@/admin/components/AdminDashbord/common/StatCard.vue";
 
-const adminStore = useAdminStore()
+const adminStore = useAdminStore();
 
 onMounted(() => {
-  adminStore.fetchStats()
-})
+  adminStore.fetchStats();
+});
 
-const stats = computed(() => adminStore.stats)
+const stats = computed(() => adminStore.stats);
 </script>
