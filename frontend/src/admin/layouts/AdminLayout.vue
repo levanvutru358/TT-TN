@@ -16,7 +16,14 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import AdminHeader from "@/admin/components/AdminDashbord/layout/AdminHeader.vue";
 import AdminSidebar from "@/admin/components/AdminDashbord/layout/AdminSidebar.vue";
+
+export default {
+  components: {
+    AdminHeader,
+    AdminSidebar,
+  },
+};
 </script>

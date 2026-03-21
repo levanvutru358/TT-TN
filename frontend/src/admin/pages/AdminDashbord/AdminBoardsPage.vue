@@ -2,53 +2,77 @@
   <section class="space-y-8">
     <PageHeader
       breadcrumb="Admin / Boards"
-      title="Boards Management"
-      description="View board visibility, member volume and overall board activity."
-    >
-      <template #actions>
-        <button
-          type="button"
-          class="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
-        >
-          Add board
-        </button>
-      </template>
-    </PageHeader>
+      title="Board Management"
+      description="Tìm kiếm theo board hoặc workspace, lọc private/public, sắp xếp mới nhất hoặc cũ nhất."
+    />
 
     <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <SummaryMiniCard label="Total Boards" :value="adminStore.boards.length" />
-      <SummaryMiniCard label="Public Boards" :value="publicBoards" />
-      <SummaryMiniCard label="Private Boards" :value="privateBoards" />
+      <SummaryMiniCard label="Tổng board" :value="adminStore.boards.length" />
+      <SummaryMiniCard label="Public" :value="publicCount" />
+      <SummaryMiniCard label="Private" :value="privateCount" />
     </div>
+
+    <BoardFilterBar
+      v-model:search="search"
+      v-model:visibility="visibility"
+      v-model:sort="sort"
+    />
 
     <LoadingBlock v-if="adminStore.isLoadingBoards" />
 
     <BoardTable
       v-else
-      :boards="adminStore.boards"
+      :boards="filteredBoards"
     />
   </section>
 </template>
 
-<script setup>
-import { computed, onMounted } from "vue";
-import { useAdminStore } from "@/admin/stores/admin.store";
-import PageHeader from "@/admin/components/AdminDashbord/common/PageHeader.vue";
-import SummaryMiniCard from "@/admin/components/AdminDashbord/common/SummaryMiniCard.vue";
-import LoadingBlock from "@/admin/components/AdminDashbord/common/LoadingBlock.vue";
-import BoardTable from "@/admin/components/AdminDashbord/tables/BoardTable.vue";
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
+import { useAdminStore } from '@/admin/stores/admin.store'
+import type { BoardItem } from '@/admin/types/admin'
+import PageHeader from '@/admin/components/AdminDashbord/common/PageHeader.vue'
+import SummaryMiniCard from '@/admin/components/AdminDashbord/common/SummaryMiniCard.vue'
+import LoadingBlock from '@/admin/components/AdminDashbord/common/LoadingBlock.vue'
+import BoardFilterBar from '@/admin/components/AdminDashbord/board/BoardFilterBar.vue'
+import BoardTable from '@/admin/components/AdminDashbord/board/BoardTable.vue'
 
-const adminStore = useAdminStore();
+const adminStore = useAdminStore()
+const search = ref('')
+const visibility = ref('')
+const sort = ref<'newest' | 'oldest'>('newest')
 
 onMounted(() => {
-  adminStore.fetchBoards();
-});
+  adminStore.fetchBoards()
+})
 
-const publicBoards = computed(
-  () => adminStore.boards.filter((item) => item.visibility === "public").length
-);
+const filteredBoards = computed<BoardItem[]>(() => {
+  const list = adminStore.boards.filter((board) => {
+    const keyword = search.value.toLowerCase()
 
-const privateBoards = computed(
-  () => adminStore.boards.filter((item) => item.visibility === "private").length
-);
+    const matchesSearch =
+      !search.value ||
+      board.name.toLowerCase().includes(keyword) ||
+      board.workspaceName.toLowerCase().includes(keyword)
+
+    const matchesVisibility =
+      !visibility.value || board.visibility === visibility.value
+
+    return matchesSearch && matchesVisibility
+  })
+
+  return [...list].sort((a, b) => {
+    const aTime = new Date(a.createdAt).getTime()
+    const bTime = new Date(b.createdAt).getTime()
+    return sort.value === 'newest' ? bTime - aTime : aTime - bTime
+  })
+})
+
+const publicCount = computed(
+  () => adminStore.boards.filter((item) => item.visibility === 'public').length
+)
+
+const privateCount = computed(
+  () => adminStore.boards.filter((item) => item.visibility === 'private').length
+)
 </script>

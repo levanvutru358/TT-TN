@@ -1,5 +1,5 @@
 <template>
-  <aside class="hidden min-h-screen w-72 shrink-0 border-r border-slate-800 bg-slate-950 text-white lg:flex lg:flex-col">
+  <aside class="flex min-h-screen w-72 shrink-0 flex-col border-r border-slate-800 bg-slate-950 text-white">
     <div class="border-b border-slate-800 px-6 py-6">
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
         Management
@@ -25,17 +25,6 @@
         <span>{{ item.label }}</span>
       </RouterLink>
     </nav>
-
-    <div class="border-t border-slate-800 px-4 py-4">
-      <div class="rounded-2xl bg-slate-900 p-4">
-        <p class="text-xs font-medium uppercase tracking-wide text-slate-400">
-          Admin Area
-        </p>
-        <p class="mt-2 text-sm text-slate-200">
-          Manage users, workspaces, boards and analytics in one place.
-        </p>
-      </div>
-    </div>
   </aside>
 </template>
 
@@ -46,6 +35,7 @@ import {
   Users,
   Layers3,
   FolderKanban,
+  BarChart3,
 } from "lucide-vue-next";
 
 const route = useRoute();
@@ -55,6 +45,7 @@ const menuItems = [
   { label: "Users", to: "/admin/users", icon: Users },
   { label: "Workspaces", to: "/admin/workspaces", icon: Layers3 },
   { label: "Boards", to: "/admin/boards", icon: FolderKanban },
+  { label: "Statistics", to: "/admin/statistics", icon: BarChart3 },
 ];
 
 const isActive = (path) => route.path.startsWith(path);

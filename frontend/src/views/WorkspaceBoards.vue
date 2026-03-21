@@ -153,7 +153,10 @@
                     ? 'border-[#0c66e4] shadow-[inset_0_0_0_1px_#0c66e4]'
                     : 'border-[#9fadbc]'
                 "
-                @click="showSortDropdown = !showSortDropdown"
+                @click="
+                  showSortDropdown = !showSortDropdown;
+                  if (showSortDropdown) showFilterDropdown = false;
+                "
               >
                 <span class="truncate pr-3 text-[15px]">{{ selectedSortLabel }}</span>
                 <svg
@@ -202,15 +205,21 @@
               </div>
             </div>
 
-            <div class="xl:col-span-3">
+            <div class="relative xl:col-span-3">
               <label class="mb-1 block text-[15px] font-semibold">Lọc theo</label>
               <button
-                type="button"
-                class="flex h-10 w-full items-center justify-between rounded-md border border-[#9fadbc] bg-white px-3"
+                type="button" @click="showFilterDropdown = !showFilterDropdown; if (showFilterDropdown) showSortDropdown = false;"
+                class="flex h-10 w-full items-center justify-between rounded-md border bg-white px-3 text-left transition-colors"
+                :class="
+                  showFilterDropdown
+                    ? 'border-[#0c66e4] shadow-[inset_0_0_0_1px_#0c66e4]'
+                    : 'border-[#9fadbc]'
+                "
               >
-                <span class="text-[15px] text-[#7a869a]">Chọn bộ sưu tập</span>
-                <span>⌄</span>
+                <span class="truncate pr-3 text-[15px]" :class="selectedFilter === 'all' ? 'text-[#7a869a]' : 'text-[#172b4d]'">{{ selectedFilter === 'all' ? 'Chon bo suu tap' : selectedFilter === 'private' ? 'Rieng tu' : selectedFilter === 'workspace' ? 'Khong gian lam viec' : 'Cong khai' }}</span>
+                <svg class="h-4 w-4 text-[#44546f]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
               </button>
+              <button v-if="showFilterDropdown" type="button" class="fixed inset-0 z-10 cursor-default" aria-label="????ng l???c" @click="showFilterDropdown = false" /><div v-if="showFilterDropdown" class="absolute left-0 top-[calc(100%+8px)] z-20 w-full overflow-hidden rounded-md border border-[#d0d4db] bg-white shadow-[0_8px_16px_rgba(9,30,66,0.16)]"><button v-for="option in filterOptions" :key="option.id" type="button" class="w-full border-l-2 px-4 py-3 text-left text-[15px] transition-colors" :class="selectedFilter === option.id ? 'border-l-[#0c66e4] bg-[#dce4f0] text-[#0c66e4]' : 'border-l-transparent text-[#172b4d] hover:bg-[#f4f5f7]'" @click="selectFilterOption(option.id)">{{ option.label }}</button></div>
             </div>
 
             <div class="xl:col-span-3 xl:col-start-10">
@@ -513,11 +522,11 @@ const sortOptions = [
   { id: "alpha-asc", label: "Theo bảng chữ cái A-Z" },
   { id: "alpha-desc", label: "Theo bảng chữ cái Z-A" },
 ];
-
+const filterOptions = [{ id: "all", label: "Chon bo suu tap" }, { id: "private", label: "Rieng tu" }, { id: "workspace", label: "Khong gian lam viec" }, { id: "public", label: "Cong khai" }];
 const showSortDropdown = ref(false);
 const selectedSort = ref("recent-desc");
 const searchQuery = ref("");
-
+const showFilterDropdown = ref(false); const selectedFilter = ref("all");
 const { workspaceBoards } = useWorkspaceBoardsState();
 
 const showCreateBoardModal = ref(false);
@@ -587,7 +596,7 @@ const selectedSortLabel = computed(
 const displayedBoards = computed(() => {
   const query = searchQuery.value.trim().toLowerCase();
   let boards = [...workspaceBoards.value];
-
+  if (selectedFilter.value !== "all") { boards = boards.filter((board) => board.visibility === selectedFilter.value); }
   if (query) {
     boards = boards.filter((board) => board.name.toLowerCase().includes(query));
   }
@@ -614,7 +623,7 @@ const selectSortOption = (id) => {
   selectedSort.value = id;
   showSortDropdown.value = false;
 };
-
+const selectFilterOption = (id) => { selectedFilter.value = id; showFilterDropdown.value = false; };
 const selectVisibilityMode = (mode) => {
   selectedVisibility.value = mode;
   showVisibilityDropdown.value = false;
@@ -657,7 +666,7 @@ const positionCreateBoardModal = (anchorRect) => {
 };
 
 const openCreateBoardModal = async () => {
-  showSortDropdown.value = false;
+  showSortDropdown.value = false; showFilterDropdown.value = false;
   newBoardTitle.value = "";
   selectedBoardBackground.value = createBoardImageBackgrounds[0];
   selectedVisibility.value = "workspace";
@@ -678,7 +687,7 @@ const openCreateBoardModal = async () => {
 };
 
 const closeCreateBoardModal = () => {
-  showCreateBoardModal.value = false;
+  showCreateBoardModal.value = false; showFilterDropdown.value = false;
   showVisibilityDropdown.value = false;
 };
 

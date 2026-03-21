@@ -3,7 +3,7 @@
     <PageHeader
       breadcrumb="Admin / Users"
       title="Users Management"
-      description="Search, filter and manage user accounts with enterprise-friendly controls."
+      description="Search, filter and manage user accounts."
     >
       <template #actions>
         <button
@@ -38,7 +38,7 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useAdminStore } from "@/admin/stores/admin.store";
 import PageHeader from "@/admin/components/AdminDashbord/common/PageHeader.vue";
@@ -63,8 +63,7 @@ const filteredUsers = computed(() => {
       user.name.toLowerCase().includes(search.value.toLowerCase()) ||
       user.email.toLowerCase().includes(search.value.toLowerCase());
 
-    const matchesStatus =
-      !status.value || user.status === status.value;
+    const matchesStatus = !status.value || user.status === status.value;
 
     return matchesSearch && matchesStatus;
   });
@@ -87,7 +86,7 @@ const handleReset = () => {
   status.value = "";
 };
 
-const handleToggleLock = async (userId) => {
+const handleToggleLock = async (userId: string) => {
   await adminStore.toggleUserLock(userId);
 };
 </script>

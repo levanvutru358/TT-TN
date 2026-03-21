@@ -2,53 +2,66 @@
   <section class="space-y-8">
     <PageHeader
       breadcrumb="Admin / Workspaces"
-      title="Workspaces Management"
-      description="Track workspace ownership, growth and collaboration volume."
-    >
-      <template #actions>
-        <button
-          type="button"
-          class="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
-        >
-          Add workspace
-        </button>
-      </template>
-    </PageHeader>
+      title="Workspace Management"
+      description="Tìm kiếm theo tên workspace, lọc theo trạng thái và xem chi tiết workspace."
+    />
 
     <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-      <SummaryMiniCard label="Total Workspaces" :value="adminStore.workspaces.length" />
-      <SummaryMiniCard label="Total Members" :value="totalMembers" />
-      <SummaryMiniCard label="Total Boards" :value="totalBoards" />
+      <SummaryMiniCard label="Tổng workspace" :value="adminStore.workspaces.length" />
+      <SummaryMiniCard label="Hoạt động" :value="activeCount" />
+      <SummaryMiniCard label="Lưu trữ" :value="archivedCount" />
     </div>
+
+    <WorkspaceFilterBar
+      v-model:search="search"
+      v-model:status="status"
+    />
 
     <LoadingBlock v-if="adminStore.isLoadingWorkspaces" />
 
     <WorkspaceTable
       v-else
-      :workspaces="adminStore.workspaces"
+      :workspaces="filteredWorkspaces"
     />
   </section>
 </template>
 
-<script setup>
-import { computed, onMounted } from "vue";
-import { useAdminStore } from "@/admin/stores/admin.store";
-import PageHeader from "@/admin/components/AdminDashbord/common/PageHeader.vue";
-import SummaryMiniCard from "@/admin/components/AdminDashbord/common/SummaryMiniCard.vue";
-import LoadingBlock from "@/admin/components/AdminDashbord/common/LoadingBlock.vue";
-import WorkspaceTable from "@/admin/components/AdminDashbord/tables/WorkspaceTable.vue";
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
+import { useAdminStore } from '@/admin/stores/admin.store'
+import type { WorkspaceItem } from '@/admin/types/admin'
+import PageHeader from '@/admin/components/AdminDashbord/common/PageHeader.vue'
+import SummaryMiniCard from '@/admin/components/AdminDashbord/common/SummaryMiniCard.vue'
+import LoadingBlock from '@/admin/components/AdminDashbord/common/LoadingBlock.vue'
+import WorkspaceFilterBar from '@/admin/components/AdminDashbord/workspace/WorkspaceFilterBar.vue'
+import WorkspaceTable from '@/admin/components/AdminDashbord/workspace/WorkspaceTable.vue'
 
-const adminStore = useAdminStore();
+const adminStore = useAdminStore()
+const search = ref('')
+const status = ref('')
 
 onMounted(() => {
-  adminStore.fetchWorkspaces();
-});
+  adminStore.fetchWorkspaces()
+})
 
-const totalMembers = computed(() =>
-  adminStore.workspaces.reduce((sum, item) => sum + item.totalMembers, 0)
-);
+const filteredWorkspaces = computed<WorkspaceItem[]>(() =>
+  adminStore.workspaces.filter((workspace) => {
+    const matchesSearch =
+      !search.value ||
+      workspace.name.toLowerCase().includes(search.value.toLowerCase())
 
-const totalBoards = computed(() =>
-  adminStore.workspaces.reduce((sum, item) => sum + item.totalBoards, 0)
-);
+    const matchesStatus =
+      !status.value || workspace.status === status.value
+
+    return matchesSearch && matchesStatus
+  })
+)
+
+const activeCount = computed(
+  () => adminStore.workspaces.filter((item) => item.status === 'active').length
+)
+
+const archivedCount = computed(
+  () => adminStore.workspaces.filter((item) => item.status === 'archived').length
+)
 </script>
