@@ -33,9 +33,9 @@
                 <button
                   type="button"
                   class="rounded-xl bg-red-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-red-700"
-                  @click="$emit('remove-member', member.id)"
+                  @click="$emit('request-remove-member', member)"
                 >
-                  Delete
+                  Xoá
                 </button>
               </div>
             </td>
@@ -55,13 +55,20 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { PropType } from 'vue'
+import type { BoardMemberItem } from '@/admin/types/admin'
 import AppBadge from '@/admin/components/AdminDashbord/common/AppBadge.vue'
 import EmptyState from '@/admin/components/AdminDashbord/common/EmptyState.vue'
 
 defineProps({
-  members: { type: Array, default: () => [] },
+  members: {
+    type: Array as PropType<BoardMemberItem[]>,
+    default: () => [],
+  },
 })
 
-defineEmits(['remove-member'])
+defineEmits<{
+  (e: 'request-remove-member', member: BoardMemberItem): void
+}>()
 </script>
