@@ -61,6 +61,7 @@ const hideHeaderNavRoutes = [
   "PersonalActivity",
   "PersonalProfile",
   "TrelloAccountProfile",
+  "AccountSwitcher",
   "Login",
   "Register",
   "admin-dashboard",
