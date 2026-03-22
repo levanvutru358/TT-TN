@@ -4,7 +4,6 @@ import AdminDashboardPage from '@/admin/pages/AdminDashbord/AdminDashboardPage.v
 import AdminUsersPage from '@/admin/pages/AdminDashbord/AdminUsersPage.vue'
 import AdminWorkspacesPage from '@/admin/pages/AdminDashbord/AdminWorkspacesPage.vue'
 import AdminBoardsPage from '@/admin/pages/AdminDashbord/AdminBoardsPage.vue'
-import AdminStatisticsPage from '@/admin/pages/AdminDashbord/AdminStatisticsPage.vue'
 
 export const adminRoutes: RouteRecordRaw[] = [
   {
@@ -34,11 +33,6 @@ export const adminRoutes: RouteRecordRaw[] = [
         path: 'boards',
         name: 'admin-boards',
         component: AdminBoardsPage
-      },
-      {
-        path: 'statistics',
-        name: 'admin-statistics',
-        component: AdminStatisticsPage
       }
     ]
   }

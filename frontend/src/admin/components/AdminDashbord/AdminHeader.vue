@@ -6,7 +6,7 @@
           Admin Management
         </h2>
         <p class="mt-1 text-sm text-slate-600">
-          Quan ly user, workspace, board va thong ke he thong
+          Quan ly user, workspace va board he thong
         </p>
       </div>
 
