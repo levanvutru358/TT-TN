@@ -13,6 +13,7 @@ import PersonalSettings from "@/views/PersonalSettings.vue";
 import PersonalActivity from "@/views/PersonalActivity.vue";
 import PersonalProfile from "@/views/PersonalProfile.vue";
 import TrelloAccountProfile from "@/views/TrelloAccountProfile.vue";
+import AccountSwitcherPage from "@/views/AccountSwitcherPage.vue";
 import LoginPage from "@/views/auth/LoginPage.vue";
 import RegisterPage from "@/views/auth/RegisterPage.vue";
 import { adminRoutes } from "@/admin/router/admin.routes";
@@ -97,6 +98,11 @@ const userRoutes = [
     path: "/account/profile-display",
     name: "TrelloAccountProfile",
     component: TrelloAccountProfile,
+  },
+  {
+    path: "/account/switch",
+    name: "AccountSwitcher",
+    component: AccountSwitcherPage,
   },
 ];
 
