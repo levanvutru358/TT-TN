@@ -13,10 +13,12 @@ import PersonalSettings from "@/views/PersonalSettings.vue";
 import PersonalActivity from "@/views/PersonalActivity.vue";
 import PersonalProfile from "@/views/PersonalProfile.vue";
 import TrelloAccountProfile from "@/views/TrelloAccountProfile.vue";
+import AccountSwitcherPage from "@/views/AccountSwitcherPage.vue";
 import LoginPage from "@/views/auth/LoginPage.vue";
 import RegisterPage from "@/views/auth/RegisterPage.vue";
+import { adminRoutes } from "@/admin/router/admin.routes";
 
-const routes = [
+const userRoutes = [
   {
     path: "/",
     name: "Home",
@@ -98,15 +100,23 @@ const routes = [
     component: TrelloAccountProfile,
   },
   {
-    path: "/:pathMatch(.*)*",
-    name: "NotFound",
-    component: NotFound,
+    path: "/account/switch",
+    name: "AccountSwitcher",
+    component: AccountSwitcherPage,
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: [
+    ...userRoutes,
+    ...adminRoutes,
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: NotFound,
+    },
+  ],
 });
 
 export default router;

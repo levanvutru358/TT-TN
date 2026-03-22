@@ -346,7 +346,7 @@
           </div>
         </div>
 
-        <div class="relative z-40 ml-1">
+        <div ref="accountMenuAnchor" class="relative z-40 ml-1">
           <button
             type="button"
             class="flex h-9 w-9 items-center justify-center rounded-md border transition-colors"
@@ -366,8 +366,87 @@
           </button>
 
           <div
+            v-if="showAccountMenu && showThemeMenu"
+            class="absolute z-[60] w-[292px] max-w-[calc(100vw-1rem)] overflow-hidden rounded-[14px] border border-[#d0d4db] bg-white py-2 shadow-[0_12px_24px_rgba(9,30,66,0.18)]"
+            :style="themeMenuStyle"
+          >
+            <button
+              v-for="option in themeOptions"
+              :key="option.id"
+              type="button"
+              class="relative flex w-full items-center gap-4 px-5 py-3 text-left transition-colors"
+              :class="
+                currentTheme === option.id
+                  ? 'bg-[#e9f2ff] text-[#0c66e4]'
+                  : 'text-[#172b4d] hover:bg-[#f1f2f4]'
+              "
+              @click="selectTheme(option.id)"
+            >
+              <span
+                v-if="currentTheme === option.id"
+                class="absolute inset-y-0 left-0 w-[3px] bg-[#0c66e4]"
+              ></span>
+
+              <span
+                class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border bg-white"
+                :class="currentTheme === option.id ? 'border-[#0c66e4]' : 'border-[#c7ced8]'"
+              >
+                <span
+                  v-if="currentTheme === option.id"
+                  class="h-[10px] w-[10px] rounded-full bg-[#0c66e4]"
+                ></span>
+              </span>
+
+              <div
+                class="relative h-[60px] w-[76px] shrink-0 overflow-hidden rounded-[12px] border"
+                :class="
+                  option.id === 'dark'
+                    ? 'border-[#1d2125] bg-[#1d2125]'
+                    : 'border-[#d0d4db] bg-[#f7f8f9]'
+                "
+              >
+                <template v-if="option.id === 'light'">
+                  <div class="absolute inset-x-0 top-0 h-[16px] bg-white"></div>
+                  <div class="absolute left-[8px] top-[6px] h-[4px] w-[16px] rounded-full bg-[#d7dde6]"></div>
+                  <div class="absolute left-[7px] top-[21px] h-[30px] w-[14px] rounded-[5px] bg-[#d6dbe4]"></div>
+                  <div class="absolute left-[25px] top-[21px] h-[26px] w-[11px] rounded-[5px] bg-[#d6dbe4]"></div>
+                  <div class="absolute left-[40px] top-[21px] h-[22px] w-[11px] rounded-[5px] bg-[#d6dbe4]"></div>
+                  <div class="absolute left-[55px] top-[21px] h-[28px] w-[12px] rounded-[5px] bg-[#d6dbe4]"></div>
+                </template>
+
+                <template v-else-if="option.id === 'dark'">
+                  <div class="absolute inset-x-0 top-0 h-[16px] bg-[#2c333a]"></div>
+                  <div class="absolute left-[8px] top-[6px] h-[4px] w-[16px] rounded-full bg-[#778496]"></div>
+                  <div class="absolute left-[7px] top-[21px] h-[30px] w-[14px] rounded-[5px] bg-[#5b6676]"></div>
+                  <div class="absolute left-[25px] top-[21px] h-[26px] w-[11px] rounded-[5px] bg-[#4f5968]"></div>
+                  <div class="absolute left-[40px] top-[21px] h-[22px] w-[11px] rounded-[5px] bg-[#45505f]"></div>
+                  <div class="absolute left-[55px] top-[21px] h-[28px] w-[12px] rounded-[5px] bg-[#6d798a]"></div>
+                </template>
+
+                <template v-else>
+                  <div class="absolute inset-y-0 left-0 w-1/2 bg-[#f7f8f9]"></div>
+                  <div class="absolute inset-y-0 right-0 w-1/2 bg-[#1d2125]"></div>
+                  <div class="absolute left-0 top-0 h-[16px] w-1/2 bg-white"></div>
+                  <div class="absolute right-0 top-0 h-[16px] w-1/2 bg-[#2c333a]"></div>
+                  <div class="absolute left-[8px] top-[6px] h-[4px] w-[16px] rounded-full bg-[#d7dde6]"></div>
+                  <div class="absolute right-[8px] top-[6px] h-[4px] w-[16px] rounded-full bg-[#778496]"></div>
+                  <div class="absolute left-[7px] top-[21px] h-[30px] w-[12px] rounded-[5px] bg-[#d6dbe4]"></div>
+                  <div class="absolute left-[23px] top-[21px] h-[24px] w-[10px] rounded-[5px] bg-[#d6dbe4]"></div>
+                  <div class="absolute right-[22px] top-[21px] h-[24px] w-[10px] rounded-[5px] bg-[#4f5968]"></div>
+                  <div class="absolute right-[7px] top-[21px] h-[30px] w-[12px] rounded-[5px] bg-[#6d798a]"></div>
+                  <div class="absolute left-[35px] top-[-7px] h-[78px] w-[20px] rotate-[35deg] bg-black/70"></div>
+                </template>
+              </div>
+
+              <span class="max-w-[108px] text-[15px] leading-6">{{ option.label }}</span>
+            </button>
+          </div>
+
+          <div
             v-if="showAccountMenu"
+            ref="accountMenuPanel"
             class="absolute right-0 top-11 z-50 max-h-[calc(100vh-4rem)] w-[320px] overflow-y-auto overscroll-contain rounded-[14px] border border-[#d0d4db] bg-white px-5 py-5 shadow-[0_8px_24px_rgba(9,30,66,0.25)]"
+            @scroll="handleAccountMenuScroll"
           >
             <p class="text-[12px] font-semibold text-[#626f86]">TÀI KHOẢN</p>
 
@@ -384,9 +463,13 @@
               </div>
             </div>
 
-            <button type="button" class="mt-5 block text-[14px] text-[#172b4d] hover:underline">
+            <router-link
+              :to="{ name: 'AccountSwitcher' }"
+              class="mt-5 block text-[14px] text-[#172b4d] hover:underline"
+              @click="closeFloatingMenus"
+            >
               Chuyển đổi Tài khoản
-            </button>
+            </router-link>
 
             <router-link
               :to="{ name: 'TrelloAccountProfile' }"
@@ -432,10 +515,18 @@
                 {{ item.label }}
               </router-link>
 
-              <button
-                type="button"
-                class="flex w-full items-center justify-between text-left hover:underline"
-              >
+              <div ref="themeMenuTrigger">
+                <button
+                  type="button"
+                  class="flex w-full items-center justify-between rounded-[10px] px-4 py-3 text-left transition-colors"
+                  :class="
+                    showThemeMenu
+                      ? 'bg-[#e9f2ff] text-[#0c66e4] shadow-[inset_3px_0_0_0_#0c66e4]'
+                      : 'text-[#172b4d] hover:bg-[#f1f2f4]'
+                  "
+                  :aria-expanded="showThemeMenu"
+                  @click="toggleThemeMenu"
+                >
                 <span>Chủ đề</span>
                 <svg
                   class="h-4 w-4"
@@ -452,7 +543,8 @@
                     stroke-linejoin="round"
                   />
                 </svg>
-              </button>
+                </button>
+              </div>
             </div>
 
             <div class="my-5 border-t border-[#d0d4db]" />
@@ -507,7 +599,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { nextTick, onMounted, onUnmounted, ref } from "vue";
 import AppLauncherMenu from "@/components/common/AppLauncherMenu.vue";
 
 defineProps({
@@ -536,7 +628,16 @@ const showAccountMenu = ref(false);
 const showBroadcastMenu = ref(false);
 const showNotificationMenu = ref(false);
 const showHelpMenu = ref(false);
+const showThemeMenu = ref(false);
 const notificationUnreadOnly = ref(true);
+const currentTheme = ref("system");
+const accountMenuAnchor = ref(null);
+const accountMenuPanel = ref(null);
+const themeMenuTrigger = ref(null);
+const themeMenuStyle = ref({
+  right: "calc(100% + 12px)",
+  top: "44px",
+});
 
 const accountLinks = [
   { label: "Hồ sơ và Hiển thị", to: { name: "PersonalProfile" } },
@@ -545,6 +646,119 @@ const accountLinks = [
   { label: "Cài đặt", to: { name: "PersonalSettings" } },
 ];
 
+const themeOptions = [
+  { id: "light", label: "Màu sáng" },
+  { id: "dark", label: "Tối" },
+  { id: "system", label: "Hệ thống so khớp" },
+];
+
+const THEME_STORAGE_KEY = "workspace-theme-preference";
+let systemThemeMediaQuery;
+
+const resolveTheme = (theme) => {
+  if (theme !== "system" || typeof window === "undefined") {
+    return theme;
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+};
+
+const applyThemePreference = (theme) => {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  const resolvedTheme = resolveTheme(theme);
+  document.documentElement.dataset.themePreference = theme;
+  document.documentElement.dataset.colorMode = resolvedTheme;
+  document.documentElement.style.colorScheme = resolvedTheme;
+};
+
+const selectTheme = (theme) => {
+  currentTheme.value = theme;
+
+  if (typeof window !== "undefined") {
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }
+
+  applyThemePreference(theme);
+};
+
+const handleSystemThemeChange = () => {
+  if (currentTheme.value === "system") {
+    applyThemePreference("system");
+  }
+};
+
+const updateThemeMenuPosition = () => {
+  if (!accountMenuAnchor.value || !themeMenuTrigger.value) {
+    return;
+  }
+
+  const anchorRect = accountMenuAnchor.value.getBoundingClientRect();
+  const triggerRect = themeMenuTrigger.value.getBoundingClientRect();
+  const panelRect = accountMenuPanel.value?.getBoundingClientRect?.();
+  const rightOffset = panelRect ? anchorRect.right - panelRect.left + 12 : 332;
+
+  themeMenuStyle.value = {
+    right: `${rightOffset}px`,
+    top: `${Math.max(triggerRect.top - anchorRect.top, 44)}px`,
+  };
+};
+
+const handleOpenMenuLayoutChange = () => {
+  if (showThemeMenu.value) {
+    updateThemeMenuPosition();
+  }
+};
+
+const handleAccountMenuScroll = () => {
+  if (showThemeMenu.value) {
+    updateThemeMenuPosition();
+  }
+};
+
+onMounted(() => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+
+  if (themeOptions.some((option) => option.id === savedTheme)) {
+    currentTheme.value = savedTheme;
+  }
+
+  applyThemePreference(currentTheme.value);
+  systemThemeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+  if (typeof systemThemeMediaQuery.addEventListener === "function") {
+    systemThemeMediaQuery.addEventListener("change", handleSystemThemeChange);
+    window.addEventListener("resize", handleOpenMenuLayoutChange);
+    return;
+  }
+
+  systemThemeMediaQuery.addListener(handleSystemThemeChange);
+  window.addEventListener("resize", handleOpenMenuLayoutChange);
+});
+
+onUnmounted(() => {
+  if (typeof window !== "undefined") {
+    window.removeEventListener("resize", handleOpenMenuLayoutChange);
+  }
+
+  if (!systemThemeMediaQuery) {
+    return;
+  }
+
+  if (typeof systemThemeMediaQuery.removeEventListener === "function") {
+    systemThemeMediaQuery.removeEventListener("change", handleSystemThemeChange);
+    return;
+  }
+
+  systemThemeMediaQuery.removeListener(handleSystemThemeChange);
+});
+
 const toggleLauncher = () => {
   isLauncherOpen.value = !isLauncherOpen.value;
   if (isLauncherOpen.value) {
@@ -552,17 +766,22 @@ const toggleLauncher = () => {
     showBroadcastMenu.value = false;
     showNotificationMenu.value = false;
     showHelpMenu.value = false;
+    showThemeMenu.value = false;
   }
 };
 
 const toggleAccountMenu = () => {
   showAccountMenu.value = !showAccountMenu.value;
-  if (showAccountMenu.value) {
-    isLauncherOpen.value = false;
-    showBroadcastMenu.value = false;
-    showNotificationMenu.value = false;
-    showHelpMenu.value = false;
+  showThemeMenu.value = false;
+
+  if (!showAccountMenu.value) {
+    return;
   }
+
+  isLauncherOpen.value = false;
+  showBroadcastMenu.value = false;
+  showNotificationMenu.value = false;
+  showHelpMenu.value = false;
 };
 
 const toggleBroadcastMenu = () => {
@@ -572,6 +791,7 @@ const toggleBroadcastMenu = () => {
     showAccountMenu.value = false;
     showNotificationMenu.value = false;
     showHelpMenu.value = false;
+    showThemeMenu.value = false;
   }
 };
 
@@ -582,6 +802,7 @@ const toggleNotificationMenu = () => {
     showAccountMenu.value = false;
     showBroadcastMenu.value = false;
     showHelpMenu.value = false;
+    showThemeMenu.value = false;
   }
 };
 
@@ -592,6 +813,15 @@ const toggleHelpMenu = () => {
     showAccountMenu.value = false;
     showBroadcastMenu.value = false;
     showNotificationMenu.value = false;
+    showThemeMenu.value = false;
+  }
+};
+
+const toggleThemeMenu = () => {
+  showThemeMenu.value = !showThemeMenu.value;
+
+  if (showThemeMenu.value) {
+    nextTick(updateThemeMenuPosition);
   }
 };
 
@@ -600,6 +830,7 @@ const closeFloatingMenus = () => {
   showBroadcastMenu.value = false;
   showNotificationMenu.value = false;
   showHelpMenu.value = false;
+  showThemeMenu.value = false;
 };
 
 const handleCreateClick = (event) => {
