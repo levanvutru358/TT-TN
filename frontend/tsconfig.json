@@ -28,6 +28,6 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "src/**/*.css"
-],
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

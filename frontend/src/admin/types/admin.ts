@@ -4,6 +4,8 @@ export interface AdminStats {
   totalBoards: number
   totalCards: number
   activeUsers: number
+  lockedUsers: number
+  archivedWorkspaces: number
 }
 
 export type UserRole = 'admin' | 'member'
@@ -17,6 +19,10 @@ export interface AdminUser {
   email: string
   role: UserRole
   status: UserStatus
+  jobTitle: string
+  department: string
+  location: string
+  phone: string
   createdAt: string
   lastActiveAt: string
 }
@@ -24,7 +30,9 @@ export interface AdminUser {
 export interface WorkspaceItem {
   id: string
   name: string
+  ownerId: string
   ownerName: string
+  memberIds: string[]
   totalMembers: number
   totalAdmins: number
   totalMemberUsers: number
@@ -37,14 +45,17 @@ export interface WorkspaceMemberItem {
   id: string
   name: string
   email: string
-  role: 'admin' | 'member'
+  role: UserRole
   status: UserStatus
 }
 
 export interface WorkspaceBoardItem {
   id: string
   name: string
+  workspaceId: string
+  workspaceName: string
   visibility: BoardVisibility
+  memberIds: string[]
   totalMembers: number
   totalCards: number
   createdAt: string
@@ -71,6 +82,7 @@ export interface BoardItem {
   workspaceName: string
   ownerName: string
   visibility: BoardVisibility
+  memberIds: string[]
   totalMembers: number
   totalLists: number
   totalCards: number

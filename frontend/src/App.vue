@@ -68,7 +68,6 @@ const hideHeaderNavRoutes = [
   "admin-users",
   "admin-workspaces",
   "admin-boards",
-  "admin-statistics",
   "admin-user-detail",
   "admin-workspace-detail",
   "admin-board-detail",
