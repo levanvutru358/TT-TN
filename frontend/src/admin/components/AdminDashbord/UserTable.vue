@@ -132,6 +132,7 @@ defineProps({
 
 defineEmits<{
   (e: 'toggle-lock', userId: string): void
+  (e: 'select-user', userId: string): void
 }>()
 
 const router = useRouter()

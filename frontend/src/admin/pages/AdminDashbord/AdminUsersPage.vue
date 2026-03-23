@@ -153,6 +153,7 @@ import PageHeader from '@/admin/components/AdminDashbord/common/PageHeader.vue'
 import SummaryMiniCard from '@/admin/components/AdminDashbord/common/SummaryMiniCard.vue'
 import LoadingBlock from '@/admin/components/AdminDashbord/common/LoadingBlock.vue'
 import UserTable from '@/admin/components/AdminDashbord/UserTable.vue'
+import AdminUserDetailPanel from '@/admin/components/AdminDashbord/AdminUserDetailPanel.vue'
 
 const adminStore = useAdminStore()
 const search = ref('')
