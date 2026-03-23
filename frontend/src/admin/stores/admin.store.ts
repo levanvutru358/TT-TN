@@ -3,8 +3,10 @@ import { adminService } from '@/admin/api/admin.service'
 import type {
   AdminStats,
   AdminUser,
+  BoardDetail,
   BoardItem,
-  WorkspaceItem
+  WorkspaceDetail,
+  WorkspaceItem,
 } from '@/admin/types/admin'
 
 interface AdminState {
@@ -12,11 +14,16 @@ interface AdminState {
   users: AdminUser[]
   workspaces: WorkspaceItem[]
   boards: BoardItem[]
+  currentWorkspaceDetail: WorkspaceDetail | null
+  currentBoardDetail: BoardDetail | null
   isLoadingStats: boolean
   isLoadingUsers: boolean
   isLoadingWorkspaces: boolean
   isLoadingBoards: boolean
+  isLoadingWorkspaceDetail: boolean
+  isLoadingBoardDetail: boolean
   isUpdatingUser: boolean
+  isRemovingBoardMember: boolean
 }
 
 export const useAdminStore = defineStore('admin-store', {
@@ -25,11 +32,16 @@ export const useAdminStore = defineStore('admin-store', {
     users: [],
     workspaces: [],
     boards: [],
+    currentWorkspaceDetail: null,
+    currentBoardDetail: null,
     isLoadingStats: false,
     isLoadingUsers: false,
     isLoadingWorkspaces: false,
     isLoadingBoards: false,
-    isUpdatingUser: false
+    isLoadingWorkspaceDetail: false,
+    isLoadingBoardDetail: false,
+    isUpdatingUser: false,
+    isRemovingBoardMember: false,
   }),
 
   actions: {
@@ -60,12 +72,39 @@ export const useAdminStore = defineStore('admin-store', {
       }
     },
 
+    async fetchWorkspaceDetail(workspaceId: string) {
+      this.isLoadingWorkspaceDetail = true
+      try {
+        this.currentWorkspaceDetail = await adminService.getWorkspaceDetail(workspaceId)
+      } finally {
+        this.isLoadingWorkspaceDetail = false
+      }
+    },
+
     async fetchBoards() {
       this.isLoadingBoards = true
       try {
         this.boards = await adminService.getBoards()
       } finally {
         this.isLoadingBoards = false
+      }
+    },
+
+    async fetchBoardDetail(boardId: string) {
+      this.isLoadingBoardDetail = true
+      try {
+        this.currentBoardDetail = await adminService.getBoardDetail(boardId)
+      } finally {
+        this.isLoadingBoardDetail = false
+      }
+    },
+
+    async removeBoardMember(boardId: string, memberId: string) {
+      this.isRemovingBoardMember = true
+      try {
+        this.currentBoardDetail = await adminService.removeBoardMember(boardId, memberId)
+      } finally {
+        this.isRemovingBoardMember = false
       }
     },
 
@@ -76,9 +115,7 @@ export const useAdminStore = defineStore('admin-store', {
         if (!updatedUser) return
 
         const index = this.users.findIndex((item) => item.id === userId)
-        if (index !== -1) {
-          this.users[index] = updatedUser
-        }
+        if (index !== -1) this.users[index] = updatedUser
 
         if (this.stats) {
           this.stats.activeUsers = this.users.filter(
@@ -91,6 +128,6 @@ export const useAdminStore = defineStore('admin-store', {
       } finally {
         this.isUpdatingUser = false
       }
-    }
-  }
+    },
+  },
 })

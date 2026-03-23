@@ -68,9 +68,13 @@ const hideHeaderNavRoutes = [
   "admin-users",
   "admin-workspaces",
   "admin-boards",
+  "admin-user-detail",
+  "admin-workspace-detail",
+  "admin-board-detail",
 ];
 
 const shouldShowHeaderNav = computed(() => {
   return !hideHeaderNavRoutes.includes(String(route.name || ""));
 });
+
 </script>

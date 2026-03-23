@@ -1,58 +1,59 @@
 <template>
   <section class="space-y-8">
-    <div>
-      <h1 class="text-3xl font-bold tracking-tight text-slate-950 text-black">
-        Quan ly user
-      </h1>
-      <p class="mt-2 text-base text-slate-600">
-        Tim kiem, loc, xem chi tiet va khoa hoac mo tai khoan nguoi dung.
-      </p>
+    <PageHeader
+      breadcrumb="Admin / Users"
+      title="Users Management"
+      description="Search users by name or email, filter by status and role, then manage account access."
+    />
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <SummaryMiniCard label="Tong user" :value="adminStore.users.length" />
+      <SummaryMiniCard label="Hoat dong" :value="activeCount" />
+      <SummaryMiniCard label="Da khoa" :value="lockedCount" />
+      <SummaryMiniCard label="Admin" :value="adminCount" />
     </div>
 
-    <div
-      v-if="isPageLoading"
-      class="rounded-3xl border border-slate-200 bg-white p-6 text-slate-700 shadow-sm"
-    >
-      Dang tai du lieu user...
-    </div>
+    <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+        <div class="flex flex-1 flex-col gap-3 md:flex-row">
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Search user name or email..."
+            class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-900 md:flex-1"
+          />
 
-    <div v-else class="space-y-6">
-      <UserTable
-        :users="adminStore.users"
-        :selected-user-id="selectedUserId"
-        :is-updating-user="adminStore.isUpdatingUser"
-        @toggle-lock="requestToggleLock"
-        @select-user="handleSelectUser"
-      />
-    </div>
+          <select
+            v-model="status"
+            class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-900 md:w-48"
+          >
+            <option value="">All status</option>
+            <option value="active">Hoat dong</option>
+            <option value="locked">Da khoa</option>
+          </select>
 
-    <div
-      v-if="selectedUser"
-      class="fixed inset-0 z-40"
-    >
-      <button
-        type="button"
-        class="absolute inset-0 bg-slate-950/45 backdrop-blur-[3px]"
-        aria-label="Dong chi tiet user"
-        @click="handleCloseDetail"
-      ></button>
-
-      <div class="relative z-10 flex min-h-full items-center justify-center p-4 sm:p-6">
-        <AdminUserDetailPanel
-          :user="selectedUser"
-          :workspaces="selectedUserWorkspaces"
-          :boards="selectedUserBoards"
-          :is-updating-user="adminStore.isUpdatingUser"
-          @toggle-lock="requestToggleLock"
-          @close="handleCloseDetail"
-        />
+          <select
+            v-model="role"
+            class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-900 md:w-48"
+          >
+            <option value="">All role</option>
+            <option value="admin">Admin</option>
+            <option value="member">Member</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <div
-      v-if="confirmTargetUser"
-      class="fixed inset-0 z-50"
-    >
+    <LoadingBlock v-if="adminStore.isLoadingUsers" />
+
+    <UserTable
+      v-else
+      :users="filteredUsers"
+      :is-updating-user="adminStore.isUpdatingUser"
+      @toggle-lock="requestToggleLock"
+    />
+
+    <div v-if="confirmTargetUser" class="fixed inset-0 z-50">
       <button
         type="button"
         class="absolute inset-0 bg-slate-950/55 backdrop-blur-[3px]"
@@ -77,7 +78,11 @@
                 {{ confirmTargetUser.status === 'active' ? 'Khoa tai khoan' : 'Mo tai khoan' }}
               </div>
               <h3 class="mt-4 text-2xl font-black tracking-tight text-slate-950">
-                {{ confirmTargetUser.status === 'active' ? 'Xac nhan khoa tai khoan' : 'Xac nhan mo tai khoan' }}
+                {{
+                  confirmTargetUser.status === 'active'
+                    ? 'Xac nhan khoa tai khoan'
+                    : 'Xac nhan mo tai khoan'
+                }}
               </h3>
             </div>
 
@@ -105,9 +110,11 @@
           </div>
 
           <p class="mt-4 text-sm leading-7 text-slate-600">
-            {{ confirmTargetUser.status === 'active'
-              ? `Ban co chac muon khoa tai khoan ${confirmTargetUser.name}? User se khong the truy cap he thong cho den khi duoc mo lai.`
-              : `Ban co chac muon mo tai khoan ${confirmTargetUser.name}? User se duoc phep dang nhap va su dung he thong tro lai.` }}
+            {{
+              confirmTargetUser.status === 'active'
+                ? `Ban co chac muon khoa tai khoan ${confirmTargetUser.name}? User se khong the truy cap he thong cho den khi duoc mo lai.`
+                : `Ban co chac muon mo tai khoan ${confirmTargetUser.name}? User se duoc phep dang nhap va su dung he thong tro lai.`
+            }}
           </p>
 
           <div class="mt-6 flex justify-end gap-3">
@@ -139,93 +146,56 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useAdminStore } from '@/admin/stores/admin.store'
+import type { AdminUser, UserRole, UserStatus } from '@/admin/types/admin'
+import PageHeader from '@/admin/components/AdminDashbord/common/PageHeader.vue'
+import SummaryMiniCard from '@/admin/components/AdminDashbord/common/SummaryMiniCard.vue'
+import LoadingBlock from '@/admin/components/AdminDashbord/common/LoadingBlock.vue'
 import UserTable from '@/admin/components/AdminDashbord/UserTable.vue'
 import AdminUserDetailPanel from '@/admin/components/AdminDashbord/AdminUserDetailPanel.vue'
 
 const adminStore = useAdminStore()
-const selectedUserId = ref<string | null>(null)
+const search = ref('')
+const status = ref<UserStatus | ''>('')
+const role = ref<UserRole | ''>('')
 const pendingToggleUserId = ref<string | null>(null)
 
-const isPageLoading = computed(
-  () =>
-    adminStore.isLoadingUsers ||
-    adminStore.isLoadingWorkspaces ||
-    adminStore.isLoadingBoards
+onMounted(() => {
+  void adminStore.fetchUsers()
+})
+
+const filteredUsers = computed<AdminUser[]>(() => {
+  const keyword = search.value.trim().toLowerCase()
+
+  return adminStore.users.filter((user) => {
+    const matchesSearch =
+      !keyword ||
+      user.name.toLowerCase().includes(keyword) ||
+      user.email.toLowerCase().includes(keyword)
+
+    const matchesStatus = !status.value || user.status === status.value
+    const matchesRole = !role.value || user.role === role.value
+
+    return matchesSearch && matchesStatus && matchesRole
+  })
+})
+
+const activeCount = computed(
+  () => adminStore.users.filter((item) => item.status === 'active').length
 )
 
-const selectedUser = computed(
-  () =>
-    adminStore.users.find((item) => item.id === selectedUserId.value) ?? null
+const lockedCount = computed(
+  () => adminStore.users.filter((item) => item.status === 'locked').length
+)
+
+const adminCount = computed(
+  () => adminStore.users.filter((item) => item.role === 'admin').length
 )
 
 const confirmTargetUser = computed(
-  () =>
-    adminStore.users.find((item) => item.id === pendingToggleUserId.value) ?? null
+  () => adminStore.users.find((item) => item.id === pendingToggleUserId.value) ?? null
 )
-
-const selectedUserWorkspaces = computed(() => {
-  if (!selectedUser.value) {
-    return []
-  }
-
-  const userId = selectedUser.value.id
-
-  return adminStore.workspaces.filter((workspace) =>
-    workspace.memberIds.includes(userId)
-  )
-})
-
-const selectedUserBoards = computed(() => {
-  if (!selectedUser.value) {
-    return []
-  }
-
-  const userId = selectedUser.value.id
-
-  return adminStore.boards.filter((board) =>
-    board.memberIds.includes(userId)
-  )
-})
-
-const syncSelectedUser = () => {
-  if (!selectedUserId.value) {
-    return
-  }
-
-  const stillExists = adminStore.users.some(
-    (item) => item.id === selectedUserId.value
-  )
-
-  if (!stillExists) {
-    selectedUserId.value = null
-  }
-}
-
-onMounted(async () => {
-  await Promise.all([
-    adminStore.fetchUsers(),
-    adminStore.fetchWorkspaces(),
-    adminStore.fetchBoards()
-  ])
-})
-
-watch(
-  () => adminStore.users,
-  () => {
-    syncSelectedUser()
-  },
-  { deep: true }
-)
-
-const handleSelectUser = (userId: string) => {
-  selectedUserId.value = userId
-}
-
-const handleCloseDetail = () => {
-  selectedUserId.value = null
-}
 
 const closeToggleConfirmation = () => {
   pendingToggleUserId.value = null
@@ -241,7 +211,7 @@ const confirmToggleLock = async () => {
   }
 
   const userId = pendingToggleUserId.value
-  closeToggleConfirmation()
   await adminStore.toggleUserLock(userId)
+  closeToggleConfirmation()
 }
 </script>

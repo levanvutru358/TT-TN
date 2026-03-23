@@ -114,8 +114,8 @@
               aria-hidden="true"
             >
               <rect x="3" y="3" width="18" height="18" rx="5" fill="currentColor" />
-              <rect x="7" y="7" width="4" height="10" rx="1.5" fill="#0C66E4" />
-              <rect x="13" y="7" width="4" height="7" rx="1.5" fill="#0C66E4" />
+              <rect x="7" y="7" width="4" height="10" rx="1.5" fill="var(--workspace-accent)" />
+              <rect x="13" y="7" width="4" height="7" rx="1.5" fill="var(--workspace-accent)" />
             </svg>
           </div>
           <button

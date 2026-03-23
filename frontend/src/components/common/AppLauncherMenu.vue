@@ -196,7 +196,7 @@ const TrelloIcon = {
           width: "3",
           height: "8",
           rx: "1.2",
-          fill: "#0C66E4",
+          fill: "var(--workspace-accent)",
         }),
         h("rect", {
           x: "13",
@@ -204,7 +204,7 @@ const TrelloIcon = {
           width: "3",
           height: "5.5",
           rx: "1.2",
-          fill: "#0C66E4",
+          fill: "var(--workspace-accent)",
         }),
       ]
     );

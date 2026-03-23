@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-[#f1f2f4] text-[#172b4d]">
+  <div class="min-h-screen flex flex-col text-[#172b4d]" :style="pageThemeStyle">
     <WorkspaceHeader
       v-model="searchKeyword"
       @create-click="showBoardMenu = true"
@@ -12,7 +12,8 @@
 
       <main
         ref="boardWrapper"
-        class="relative flex-1 p-3 md:p-4 overflow-hidden rounded-none bg-[#0b0f19] border border-black/10 shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
+        class="relative flex-1 overflow-hidden rounded-none border p-3 shadow-[0_20px_60px_rgba(0,0,0,0.65)] md:p-4"
+        :style="boardShellStyle"
       >
         <div
           class="h-full w-full overflow-auto rounded-[22px] hide-scrollbar"
@@ -97,13 +98,22 @@ import { useStageProject } from "@/composables/stages/useStageProject.js";
 
 const DEFAULT_BACKGROUND = {
   type: "color",
-  value: "linear-gradient(90deg, #4b3f72 0%, #7b3ea8 50%, #c1558b 100%)",
+  value: "linear-gradient(90deg, var(--workspace-brand-text) 0%, var(--workspace-accent) 55%, var(--workspace-accent-hover) 100%)",
 };
 
 const STORAGE_KEY = "stage-board-background";
 
 const searchKeyword = ref("");
 const boardBackground = ref(loadBoardBackground());
+
+const pageThemeStyle = computed(() => ({
+  background: "var(--workspace-page-bg, #f1f2f4)",
+}));
+
+const boardShellStyle = computed(() => ({
+  background: "linear-gradient(180deg, rgba(11,15,25,0.96) 0%, rgba(11,15,25,0.88) 100%)",
+  borderColor: "var(--workspace-accent-subtle, rgba(12,102,228,0.24))",
+}));
 
 const {
   project,

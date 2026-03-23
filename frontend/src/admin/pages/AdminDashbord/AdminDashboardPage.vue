@@ -246,7 +246,7 @@ const stats = computed(() => ({
   totalCards: adminStore.stats?.totalCards ?? 0,
   activeUsers: adminStore.stats?.activeUsers ?? 0,
   lockedUsers: adminStore.stats?.lockedUsers ?? 0,
-  archivedWorkspaces: adminStore.stats?.archivedWorkspaces ?? 0
+  archivedWorkspaces: adminStore.stats?.archivedWorkspaces ?? 0,
 }))
 
 const activeWorkspaces = computed(() =>
@@ -289,7 +289,7 @@ const totalChartItems = computed(() => [
     value: stats.value.totalUsers,
     to: '/admin/users',
     colorClass: 'bg-[linear-gradient(180deg,#fb7185_0%,#e11d48_100%)]',
-    height: barHeight(stats.value.totalUsers)
+    height: barHeight(stats.value.totalUsers),
   },
   {
     label: 'Workspace',
@@ -297,7 +297,7 @@ const totalChartItems = computed(() => [
     value: stats.value.totalWorkspaces,
     to: '/admin/workspaces',
     colorClass: 'bg-[linear-gradient(180deg,#38bdf8_0%,#0284c7_100%)]',
-    height: barHeight(stats.value.totalWorkspaces)
+    height: barHeight(stats.value.totalWorkspaces),
   },
   {
     label: 'Board',
@@ -305,7 +305,7 @@ const totalChartItems = computed(() => [
     value: stats.value.totalBoards,
     to: '/admin/boards',
     colorClass: 'bg-[linear-gradient(180deg,#a78bfa_0%,#7c3aed_100%)]',
-    height: barHeight(stats.value.totalBoards)
+    height: barHeight(stats.value.totalBoards),
   },
   {
     label: 'Card',
@@ -313,8 +313,8 @@ const totalChartItems = computed(() => [
     value: stats.value.totalCards,
     to: '/admin/boards',
     colorClass: 'bg-[linear-gradient(180deg,#fbbf24_0%,#d97706_100%)]',
-    height: barHeight(stats.value.totalCards)
-  }
+    height: barHeight(stats.value.totalCards),
+  },
 ])
 
 const userStatusItems = computed(() => [
@@ -323,43 +323,46 @@ const userStatusItems = computed(() => [
     value: stats.value.activeUsers,
     percent: userActivePercent.value,
     dotClass: 'bg-emerald-500',
-    barClass: 'bg-emerald-500'
+    barClass: 'bg-emerald-500',
   },
   {
     label: 'Bi khoa',
     value: stats.value.lockedUsers,
     percent: Math.max(100 - userActivePercent.value, stats.value.lockedUsers ? 8 : 0),
     dotClass: 'bg-amber-500',
-    barClass: 'bg-amber-500'
-  }
+    barClass: 'bg-amber-500',
+  },
 ])
 
 const workspaceStatusItems = computed(() => [
   {
     label: 'Dang hoat dong',
     value: activeWorkspaces.value,
-    percent: Math.max(100 - workspaceArchivedPercent.value, activeWorkspaces.value ? 8 : 0),
+    percent: Math.max(
+      100 - workspaceArchivedPercent.value,
+      activeWorkspaces.value ? 8 : 0
+    ),
     dotClass: 'bg-sky-500',
-    barClass: 'bg-sky-500'
+    barClass: 'bg-sky-500',
   },
   {
     label: 'Luu tru',
     value: stats.value.archivedWorkspaces,
     percent: workspaceArchivedPercent.value,
     dotClass: 'bg-slate-400',
-    barClass: 'bg-slate-400'
-  }
+    barClass: 'bg-slate-400',
+  },
 ])
 
 const userStatusChartStyle = computed(() => ({
-  background: `conic-gradient(#10b981 0 ${userActivePercent.value}%, #f59e0b ${userActivePercent.value}% 100%)`
+  background: `conic-gradient(#10b981 0 ${userActivePercent.value}%, #f59e0b ${userActivePercent.value}% 100%)`,
 }))
 
 const workspaceStatusChartStyle = computed(() => ({
-  background: `conic-gradient(#0ea5e9 0 ${100 - workspaceArchivedPercent.value}%, #94a3b8 ${100 - workspaceArchivedPercent.value}% 100%)`
+  background: `conic-gradient(#0ea5e9 0 ${100 - workspaceArchivedPercent.value}%, #94a3b8 ${100 - workspaceArchivedPercent.value}% 100%)`,
 }))
 
 onMounted(() => {
-  adminStore.fetchStats()
+  void adminStore.fetchStats()
 })
 </script>

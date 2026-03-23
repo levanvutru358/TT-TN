@@ -1,36 +1,67 @@
 <template>
   <section class="space-y-8">
-    <div>
-      <h1 class="text-3xl font-bold tracking-tight text-slate-950 text-black">
-        Quản lý Workspace
-      </h1>
-      <p class="mt-2 text-base text-slate-600">
-        Theo dõi danh sách workspace trong toàn hệ thống.
-      </p>
+    <PageHeader
+      breadcrumb="Admin / Workspaces"
+      title="Workspace Management"
+      description="Tìm kiếm theo tên workspace, lọc theo trạng thái và xem chi tiết workspace."
+    />
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <SummaryMiniCard label="Tổng workspace" :value="adminStore.workspaces.length" />
+      <SummaryMiniCard label="Hoạt động" :value="activeCount" />
+      <SummaryMiniCard label="Lưu trữ" :value="archivedCount" />
     </div>
 
-    <div
-      v-if="adminStore.isLoadingWorkspaces"
-      class="rounded-3xl border border-slate-200 bg-white p-6 text-slate-700 shadow-sm"
-    >
-      Đang tải dữ liệu workspace...
-    </div>
+    <WorkspaceFilterBar
+      v-model:search="search"
+      v-model:status="status"
+    />
+
+    <LoadingBlock v-if="adminStore.isLoadingWorkspaces" />
 
     <WorkspaceTable
       v-else
-      :workspaces="adminStore.workspaces"
+      :workspaces="filteredWorkspaces"
     />
   </section>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useAdminStore } from '@/admin/stores/admin.store'
-import WorkspaceTable from '@/admin/components/AdminDashbord/WorkspaceTable.vue'
+import type { WorkspaceItem } from '@/admin/types/admin'
+import PageHeader from '@/admin/components/AdminDashbord/common/PageHeader.vue'
+import SummaryMiniCard from '@/admin/components/AdminDashbord/common/SummaryMiniCard.vue'
+import LoadingBlock from '@/admin/components/AdminDashbord/common/LoadingBlock.vue'
+import WorkspaceFilterBar from '@/admin/components/AdminDashbord/workspace/WorkspaceFilterBar.vue'
+import WorkspaceTable from '@/admin/components/AdminDashbord/workspace/WorkspaceTable.vue'
 
 const adminStore = useAdminStore()
+const search = ref('')
+const status = ref('')
 
 onMounted(() => {
   adminStore.fetchWorkspaces()
 })
+
+const filteredWorkspaces = computed<WorkspaceItem[]>(() =>
+  adminStore.workspaces.filter((workspace) => {
+    const matchesSearch =
+      !search.value ||
+      workspace.name.toLowerCase().includes(search.value.toLowerCase())
+
+    const matchesStatus =
+      !status.value || workspace.status === status.value
+
+    return matchesSearch && matchesStatus
+  })
+)
+
+const activeCount = computed(
+  () => adminStore.workspaces.filter((item) => item.status === 'active').length
+)
+
+const archivedCount = computed(
+  () => adminStore.workspaces.filter((item) => item.status === 'archived').length
+)
 </script>
