@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="min-h-screen bg-[#f1f2f4] text-[#172b4d]">
+  <div class="min-h-screen text-[#172b4d]" :style="pageThemeStyle">
     <WorkspaceHeader
       v-model="searchKeyword"
       @create-click="openCreateBoardModal"
@@ -15,7 +15,7 @@
             class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-[15px]"
             :class="
               activeMenu === item.id
-                ? 'bg-[#dce4f0] text-[#0c66e4] font-semibold'
+                ? 'bg-[var(--workspace-accent-subtle)] text-[var(--workspace-accent)] font-semibold'
                 : 'hover:bg-[#ebedf1]'
             "
             @click="selectMainMenu(item.id)"
@@ -37,7 +37,8 @@
             :aria-expanded="workspaceOpen"
           >
             <div
-              class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
+              class="flex h-7 w-7 items-center justify-center rounded-md text-sm font-semibold text-white"
+              :style="workspaceBadgeStyle"
             >
               T
             </div>
@@ -68,13 +69,13 @@
               class="w-full flex items-center gap-3 rounded-lg py-2 pl-12 pr-3 text-left transition-colors"
               :class="
                 activeWorkspaceSection === 'board'
-                  ? 'bg-[#dce4f0]'
+                  ? 'bg-[var(--workspace-accent-subtle)] text-[var(--workspace-accent)]'
                   : 'hover:bg-[#e9ebef]'
               "
               @click="openWorkspaceBoards"
             >
               <svg
-                class="w-4 h-4 text-[#2c2f36]"
+                class="w-4 h-4"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +92,7 @@
                 />
                 <path d="M10 4V20" stroke="currentColor" stroke-width="1.8" />
               </svg>
-              <span class="text-[15px] text-[#172b4d]">Bảng</span>
+              <span class="text-[15px]">Bảng</span>
             </button>
 
             <router-link
@@ -150,9 +151,9 @@
 
       <main class="flex-1 px-6 py-6 lg:px-8">
         <template v-if="activeMenu === 'home'">
-          <div class="mx-auto flex max-w-[920px] gap-5">
+          <div class="relative mx-auto w-full xl:pr-[264px]">
             <section
-              class="w-full max-w-[520px] overflow-hidden rounded-md border border-[#d0d4db] bg-white shadow-[0_1px_0_rgba(9,30,66,0.08)]"
+              class="mx-auto w-full max-w-[520px] shrink-0 overflow-hidden rounded-md border border-[#d0d4db] bg-white shadow-[0_1px_0_rgba(9,30,66,0.08)]"
             >
               <template v-if="!showHomeActivityCard">
                 <div class="h-[138px] bg-[#ebdff1]">
@@ -210,8 +211,8 @@
                   <div class="mt-4">
                     <button
                       type="button"
-                      class="inline-flex h-8 items-center justify-center rounded-md bg-[#0c66e4] px-3.5 text-[13px] font-semibold text-white hover:bg-[#0055cc]"
-                      @click="openCreateBoardModal('header')"
+                      class="inline-flex h-8 items-center justify-center rounded-md bg-[var(--workspace-accent)] px-3.5 text-[13px] font-semibold text-white hover:bg-[var(--workspace-accent-hover)]"
+                      @click="openCreateBoardModalAtTarget('hero', $event)"
                     >
                       Tạo một bảng Không gian làm việc
                     </button>
@@ -283,7 +284,7 @@
               </template>
             </section>
 
-            <aside class="hidden w-[232px] shrink-0 pt-2 xl:block">
+            <aside class="hidden w-[232px] shrink-0 pt-2 xl:absolute xl:right-0 xl:top-2 xl:block">
               <section>
                 <h2 class="mb-4 flex items-center gap-2 text-[15px] font-semibold text-[#44546f]">
                   <svg
@@ -336,7 +337,7 @@
                 <button
                   type="button"
                   class="flex w-full items-center gap-3 rounded-md px-1.5 py-1.5 text-[14px] text-[#172b4d] hover:bg-[#ebedf0] text-left"
-                  @click="openCreateBoardModal('header')"
+                  @click="openCreateBoardModalAtTarget('link', $event)"
                 >
                   <span
                     class="flex h-9 w-9 items-center justify-center rounded-md border border-[#c1c7d0] bg-[#dfe1e6] text-[24px] leading-none text-[#626f86]"
@@ -358,7 +359,8 @@
           <section v-if="activeWorkspaceSection === 'board'" class="mx-auto max-w-[1080px]">
             <div class="flex items-center gap-3">
               <div
-                class="flex h-14 w-14 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-[40px] font-semibold text-white"
+                class="flex h-14 w-14 items-center justify-center rounded-md text-[40px] font-semibold text-white"
+                :style="workspaceBadgeStyle"
               >
                 T
               </div>
@@ -478,7 +480,7 @@
               <div class="mt-6 flex justify-center">
                 <button
                   type="button"
-                  class="inline-flex h-10 items-center justify-center rounded-lg border border-[#0055cc] bg-[#0c66e4] px-6 text-[15px] font-semibold text-white hover:bg-[#0055cc]"
+                  class="inline-flex h-10 items-center justify-center rounded-lg border border-[var(--workspace-accent-hover)] bg-[var(--workspace-accent)] px-6 text-[15px] font-semibold text-white hover:bg-[var(--workspace-accent-hover)]"
                   @click="openCreateBoardModal('header')"
                 >
                   Tạo bảng đầu tiên của bạn
@@ -515,13 +517,13 @@
                       class="absolute left-9 top-14 w-28 h-6 border border-dashed border-[#ff7452] rounded-full"
                     ></div>
                     <div
-                      class="absolute right-4 top-6 w-10 h-10 rounded-lg border-2 border-[#0c66e4]"
+                      class="absolute right-4 top-6 h-10 w-10 rounded-lg border-2 border-[var(--workspace-accent)]"
                     ></div>
                     <div
-                      class="absolute left-2 top-2 w-3 h-3 rounded-full border-2 border-[#0c66e4]"
+                      class="absolute left-2 top-2 h-3 w-3 rounded-full border-2 border-[var(--workspace-accent)]"
                     ></div>
                     <div
-                      class="absolute right-3 top-2 w-3 h-3 rounded-full border-2 border-[#0c66e4]"
+                      class="absolute right-3 top-2 h-3 w-3 rounded-full border-2 border-[var(--workspace-accent)]"
                     ></div>
                   </div>
                   <span
@@ -546,7 +548,8 @@
               >
                 <div class="flex items-center gap-3">
                   <div
-                    class="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-lg font-semibold text-white"
+                    class="flex h-8 w-8 items-center justify-center rounded-md text-lg font-semibold text-white"
+                    :style="workspaceBadgeStyle"
                   >
                     T
                   </div>
@@ -614,7 +617,7 @@
         <div class="mb-2.5 flex items-center">
           <button
             type="button"
-            class="flex h-9 w-9 items-center justify-center rounded-xl border border-[#0c66e4] text-[#44546f] hover:bg-[#e9ebef]"
+            class="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--workspace-accent)] text-[#44546f] hover:bg-[var(--workspace-accent-subtle)]"
             aria-label="Quay lại"
             @click="closeCreateBoardModal"
           >
@@ -698,7 +701,7 @@
               class="h-10 rounded-md border transition-colors"
               :class="
                 selectedBoardBackground === bg
-                  ? 'border-[#0c66e4]'
+                  ? 'border-[var(--workspace-accent)]'
                   : 'border-transparent hover:border-[#c7cdd8]'
               "
               :style="{ background: bg }"
@@ -714,7 +717,7 @@
               class="h-8 rounded-md border transition-colors"
               :class="
                 selectedBoardBackground === bg
-                  ? 'border-[#0c66e4]'
+                  ? 'border-[var(--workspace-accent)]'
                   : 'border-transparent hover:border-[#c7cdd8]'
               "
               :style="{ background: bg }"
@@ -742,7 +745,7 @@
             :class="
               newBoardTitle.trim().length === 0
                 ? 'border-[#e2483d] focus:ring-1 focus:ring-[#e2483d]'
-                : 'border-[#c7cdd8] focus:ring-1 focus:ring-[#0c66e4]'
+                : 'border-[#c7cdd8] focus:ring-1 focus:ring-[var(--workspace-accent)]'
             "
           />
         </label>
@@ -790,7 +793,7 @@
               class="w-full border-l-2 px-3 py-2 text-left transition-colors"
               :class="
                 selectedVisibility === option.id
-                  ? 'border-l-[#0c66e4] bg-[#dce4f0]'
+                  ? 'border-l-[var(--workspace-accent)] bg-[var(--workspace-accent-subtle)]'
                   : 'border-l-transparent hover:bg-[#ebedf0]'
               "
               @click="selectVisibilityMode(option.id)"
@@ -877,7 +880,7 @@
           class="mt-3 h-9 w-full rounded-md text-[14px] font-semibold"
           :class="
             canCreateBoard
-              ? 'bg-[#0c66e4] text-white hover:bg-[#0055cc]'
+              ? 'bg-[var(--workspace-accent)] text-white hover:bg-[var(--workspace-accent-hover)]'
               : 'bg-[#dfe1e6] text-[#97a0af] cursor-not-allowed'
           "
           :disabled="!canCreateBoard"
@@ -926,6 +929,14 @@ const createBoardModalStyle = ref({
   width: "320px",
 });
 
+const pageThemeStyle = computed(() => ({
+  background: "var(--workspace-page-bg, #f1f2f4)",
+}));
+
+const workspaceBadgeStyle = computed(() => ({
+  background: "var(--workspace-badge-gradient, linear-gradient(135deg,#8f5fd3 0%,#1669e2 100%))",
+}));
+
 const mainMenus = [
   { id: "boards", label: "Bảng", icon: "▣" },
   { id: "templates", label: "Mẫu", icon: "◫" },
@@ -942,7 +953,7 @@ const workspaceActions = [
 const homeRecentBoards = ref([
   {
     name: "Project Management",
-    background: "linear-gradient(135deg,#2042d9,#8f3cf0)",
+    background: "linear-gradient(135deg,var(--workspace-brand-text),var(--workspace-accent))",
     template: true,
   },
   {
@@ -960,6 +971,7 @@ const createBoardImageBackgrounds = [
 ];
 
 const createBoardColorBackgrounds = [
+  "linear-gradient(135deg,var(--workspace-brand-text),var(--workspace-accent))",
   "#cfdcf0",
   "linear-gradient(135deg,#35b2d6,#2a63d3)",
   "linear-gradient(135deg,#0f5ec8,#1545a4)",
@@ -1039,12 +1051,15 @@ const positionCreateBoardModal = (source, anchorRect) => {
   let top = anchorRect.bottom + 8;
   let left = anchorRect.left;
 
-  if (source === "tile") {
+  if (source === "tile" || source === "link") {
     top = anchorRect.top - 20;
-    left = anchorRect.right + 12;
-    if (left + measuredModalWidth > window.innerWidth - screenPadding) {
-      left = anchorRect.left - measuredModalWidth - 12;
+    left = anchorRect.left - measuredModalWidth - 12;
+    if (left < screenPadding) {
+      left = anchorRect.right + 12;
     }
+  } else if (source === "hero") {
+    top = anchorRect.top;
+    left = anchorRect.right + 16;
   }
 
   const boundedLeft = clampValue(
@@ -1064,6 +1079,18 @@ const positionCreateBoardModal = (source, anchorRect) => {
     left: `${boundedLeft}px`,
     width: `${modalWidth}px`,
   };
+};
+
+const openCreateBoardModalAtTarget = (source, event) => {
+  const anchorEl =
+    source === "hero"
+      ? event?.currentTarget?.closest?.("section")
+      : event?.currentTarget;
+  const anchorRect = anchorEl?.getBoundingClientRect?.();
+  openCreateBoardModal({
+    source,
+    anchorRect,
+  });
 };
 
 const openCreateBoardModal = async (payload = "header") => {

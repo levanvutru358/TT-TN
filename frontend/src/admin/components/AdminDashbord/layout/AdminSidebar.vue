@@ -35,7 +35,6 @@ import {
   Users,
   Layers3,
   FolderKanban,
-  BarChart3,
 } from "lucide-vue-next";
 
 const route = useRoute();
@@ -45,7 +44,6 @@ const menuItems = [
   { label: "Users", to: "/admin/users", icon: Users },
   { label: "Workspaces", to: "/admin/workspaces", icon: Layers3 },
   { label: "Boards", to: "/admin/boards", icon: FolderKanban },
-  { label: "Statistics", to: "/admin/statistics", icon: BarChart3 },
 ];
 
 const isActive = (path) => route.path.startsWith(path);

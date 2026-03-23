@@ -121,6 +121,9 @@ export const useAdminStore = defineStore('admin-store', {
           this.stats.activeUsers = this.users.filter(
             (item) => item.status === 'active'
           ).length
+          this.stats.lockedUsers = this.users.filter(
+            (item) => item.status === 'locked'
+          ).length
         }
       } finally {
         this.isUpdatingUser = false

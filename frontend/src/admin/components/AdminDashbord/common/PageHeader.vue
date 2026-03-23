@@ -12,25 +12,16 @@
       </p>
     </div>
 
-    <div v-if="$slots.actions" class="flex items-center gap-3">
-      <slot name="actions" />
+    <div v-if="$slots.default" class="flex items-center gap-3">
+      <slot />
     </div>
   </div>
 </template>
 
-<script setup>
-defineProps({
-  breadcrumb: {
-    type: String,
-    default: "",
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    default: "",
-  },
-});
+<script setup lang="ts">
+defineProps<{
+  breadcrumb?: string
+  title: string
+  description?: string
+}>()
 </script>
