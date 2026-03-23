@@ -12,7 +12,7 @@
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <SummaryMiniCard label="Tên workspace" :value="workspaceDetail.name" />
         <SummaryMiniCard label="Owner" :value="workspaceDetail.ownerName" />
-        <SummaryMiniCard label="Số thành viên" :value="workspaceDetail.totalMembers" />
+        <SummaryMiniCard label="Tổng thành viên" :value="workspaceDetail.totalMembers" />
         <SummaryMiniCard label="Số board" :value="workspaceDetail.totalBoards" />
       </div>
 
@@ -64,17 +64,29 @@
         </div>
 
         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h3 class="text-xl font-bold text-slate-950">Phân bổ thành viên</h3>
+          <h3 class="text-xl font-bold text-slate-950">Thành phần workspace</h3>
           <p class="mt-1 text-sm text-slate-600">
-            Thống kê nhanh thành viên trong workspace.
+            Xem nhanh thành viên và board trong workspace.
           </p>
 
           <div class="mt-6 space-y-4">
             <div class="rounded-2xl border border-slate-200 p-4">
-              <p class="text-sm font-medium text-slate-500">Tổng thành viên</p>
-              <p class="mt-2 text-2xl font-bold text-slate-950">
-                {{ workspaceDetail.totalMembers }}
-              </p>
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-sm font-medium text-slate-500">Tổng thành viên</p>
+                  <p class="mt-2 text-2xl font-bold text-slate-950">
+                    {{ workspaceDetail.totalMembers }}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+                  @click="toggleMembers"
+                >
+                  {{ showMembersTable ? 'Ẩn bớt' : 'Xem tất cả' }}
+                </button>
+              </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -94,24 +106,43 @@
             </div>
 
             <div class="rounded-2xl border border-slate-200 p-4">
-              <p class="text-sm font-medium text-slate-500">Số board</p>
-              <p class="mt-2 text-2xl font-bold text-slate-950">
-                {{ workspaceDetail.totalBoards }}
-              </p>
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-sm font-medium text-slate-500">Số board</p>
+                  <p class="mt-2 text-2xl font-bold text-slate-950">
+                    {{ workspaceDetail.totalBoards }}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+                  @click="toggleBoards"
+                >
+                  {{ showBoardsTable ? 'Ẩn bớt' : 'Xem tất cả' }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <WorkspaceMembersTable :members="workspaceDetail.members" />
-      <WorkspaceBoardsTable :boards="workspaceDetail.boards" />
+      <WorkspaceMembersTable
+        v-if="showMembersTable"
+        :members="workspaceDetail.members"
+      />
+
+      <WorkspaceBoardsTable
+        v-if="showBoardsTable"
+        :boards="workspaceDetail.boards"
+      />
     </template>
   </section>
 </template>
 
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAdminStore } from '@/admin/stores/admin.store'
 import PageHeader from '@/admin/components/AdminDashbord/common/PageHeader.vue'
@@ -124,10 +155,21 @@ import WorkspaceBoardsTable from '@/admin/components/AdminDashbord/workspace/Wor
 const route = useRoute()
 const adminStore = useAdminStore()
 
+const showMembersTable = ref(false)
+const showBoardsTable = ref(false)
+
 onMounted(() => {
   adminStore.fetchWorkspaceDetail(String(route.params.id))
 })
 
 const workspaceDetail = computed(() => adminStore.currentWorkspaceDetail)
 const formatDate = (date: string) => dayjs(date).format('DD/MM/YYYY')
+
+const toggleMembers = () => {
+  showMembersTable.value = !showMembersTable.value
+}
+
+const toggleBoards = () => {
+  showBoardsTable.value = !showBoardsTable.value
+}
 </script>
