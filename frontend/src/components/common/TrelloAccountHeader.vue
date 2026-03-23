@@ -11,8 +11,8 @@
             aria-hidden="true"
           >
             <rect x="5" y="4" width="14" height="16" rx="3" fill="currentColor" />
-            <rect x="8" y="7" width="3" height="8" rx="1.2" fill="#0C66E4" />
-            <rect x="13" y="7" width="3" height="5.5" rx="1.2" fill="#0C66E4" />
+            <rect x="8" y="7" width="3" height="8" rx="1.2" fill="var(--workspace-accent)" />
+            <rect x="13" y="7" width="3" height="5.5" rx="1.2" fill="var(--workspace-accent)" />
           </svg>
         </div>
         <span class="text-[18px] font-semibold text-[#172b4d]">Trello</span>
