@@ -71,10 +71,22 @@
 
           <div class="mt-6 space-y-4">
             <div class="rounded-2xl border border-slate-200 p-4">
-              <p class="text-sm font-medium text-slate-500">Tổng thành viên</p>
-              <p class="mt-2 text-2xl font-bold text-slate-950">
-                {{ boardDetail.totalMembers }}
-              </p>
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-sm font-medium text-slate-500">Tổng thành viên</p>
+                  <p class="mt-2 text-2xl font-bold text-slate-950">
+                    {{ boardDetail.totalMembers }}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+                  @click="toggleMembers"
+                >
+                  {{ showMembersTable ? 'Ẩn bớt' : 'Xem tất cả' }}
+                </button>
+              </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -104,6 +116,7 @@
       </div>
 
       <BoardMembersTable
+        v-if="showMembersTable"
         :members="boardDetail.members"
         @request-remove-member="openRemoveConfirm"
       />
@@ -137,6 +150,7 @@ const adminStore = useAdminStore()
 
 const isConfirmOpen = ref(false)
 const selectedMember = ref<BoardMemberItem | null>(null)
+const showMembersTable = ref(false)
 
 onMounted(() => {
   adminStore.fetchBoardDetail(String(route.params.id))
@@ -152,6 +166,10 @@ const confirmMessage = computed(() => {
 
   return `Bạn có muốn xóa thành viên "${selectedMember.value.name}" khỏi board không?`
 })
+
+const toggleMembers = () => {
+  showMembersTable.value = !showMembersTable.value
+}
 
 const openRemoveConfirm = (member: BoardMemberItem) => {
   selectedMember.value = member
