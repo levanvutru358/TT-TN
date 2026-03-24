@@ -20,38 +20,91 @@
         <div class="xl:col-span-2 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <h3 class="text-xl font-bold text-slate-950">Thông tin board</h3>
+              <h3 class="text-xl font-bold text-slate-950">
+                {{ selectedBoardMember ? 'Thông tin thành viên trong board' : 'Thông tin board' }}
+              </h3>
               <p class="mt-1 text-sm text-slate-600">
-                Chi tiết board, workspace, owner và trạng thái hiển thị.
+                {{
+                  selectedBoardMember
+                    ? 'Thông tin chi tiết của thành viên được chọn trong board.'
+                    : 'Chi tiết board, workspace, owner và trạng thái hiển thị.'
+                }}
               </p>
             </div>
 
-            <AppBadge
-              :label="boardDetail.visibility"
-              :variant="boardDetail.visibility === 'public' ? 'info' : 'neutral'"
-            />
+            <div class="flex items-center gap-3">
+              <template v-if="selectedBoardMember">
+                <button
+                  type="button"
+                  class="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+                  @click="selectedBoardMember = null"
+                >
+                  Quay lại board
+                </button>
+              </template>
+
+              <template v-else>
+                <AppBadge
+                  :label="boardDetail.visibility"
+                  :variant="boardDetail.visibility === 'public' ? 'info' : 'neutral'"
+                />
+              </template>
+            </div>
           </div>
 
           <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div class="rounded-2xl bg-slate-50 p-4">
-              <p class="text-sm font-medium text-slate-500">Tên board</p>
-              <p class="mt-2 text-base font-semibold text-slate-950">{{ boardDetail.name }}</p>
-            </div>
+            <template v-if="!selectedBoardMember">
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <p class="text-sm font-medium text-slate-500">Tên board</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">
+                  {{ boardDetail.name }}
+                </p>
+              </div>
 
-            <div class="rounded-2xl bg-slate-50 p-4">
-              <p class="text-sm font-medium text-slate-500">Workspace</p>
-              <p class="mt-2 text-base font-semibold text-slate-950">{{ boardDetail.workspaceName }}</p>
-            </div>
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <p class="text-sm font-medium text-slate-500">Workspace</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">
+                  {{ boardDetail.workspaceName }}
+                </p>
+              </div>
 
-            <div class="rounded-2xl bg-slate-50 p-4">
-              <p class="text-sm font-medium text-slate-500">Owner</p>
-              <p class="mt-2 text-base font-semibold text-slate-950">{{ boardDetail.ownerName }}</p>
-            </div>
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <p class="text-sm font-medium text-slate-500">Owner</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">
+                  {{ boardDetail.ownerName }}
+                </p>
+              </div>
 
-            <div class="rounded-2xl bg-slate-50 p-4">
-              <p class="text-sm font-medium text-slate-500">Ngày tạo</p>
-              <p class="mt-2 text-base font-semibold text-slate-950">{{ formatDate(boardDetail.createdAt) }}</p>
-            </div>
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <p class="text-sm font-medium text-slate-500">Ngày tạo</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">
+                  {{ formatDate(boardDetail.createdAt) }}
+                </p>
+              </div>
+            </template>
+
+            <template v-else>
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <p class="text-sm font-medium text-slate-500">Tên thành viên</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">
+                  {{ selectedBoardMember.name }}
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <p class="text-sm font-medium text-slate-500">Email</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">
+                  {{ selectedBoardMember.email }}
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-4 md:col-span-2">
+                <p class="text-sm font-medium text-slate-500">Trạng thái</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">
+                  {{ selectedBoardMember.status === 'active' ? 'Hoạt động' : 'Đã khóa' }}
+                </p>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -93,67 +146,20 @@
 
             <div class="rounded-2xl border border-slate-200 p-4">
               <p class="text-sm font-medium text-slate-500">Visibility</p>
-              <p class="mt-2 text-2xl font-bold capitalize text-slate-950">{{ boardDetail.visibility }}</p>
+              <p class="mt-2 text-2xl font-bold capitalize text-slate-950">
+                {{ boardDetail.visibility }}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       <div v-if="showMembersSection" class="rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <template v-if="!selectedBoardMember">
-          <BoardMembersTable
-            :members="boardDetail.members"
-            @request-remove-member="openRemoveConfirm"
-            @select-member="handleSelectMember"
-          />
-        </template>
-
-        <template v-else>
-          <div class="border-b border-slate-200 px-5 py-4">
-            <div class="flex items-center justify-between gap-4">
-              <h3 class="text-xl font-bold text-slate-950">Chi tiết thành viên trong board</h3>
-
-              <div class="flex items-center gap-3">
-                <button
-                  type="button"
-                  class="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
-                  @click="selectedBoardMember = null"
-                >
-                  Quay lại danh sách
-                </button>
-
-                <button
-                  type="button"
-                  class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
-                  @click="closeMembersSection"
-                >
-                  Đóng
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-6">
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div class="rounded-2xl bg-slate-50 p-4">
-                <p class="text-sm font-medium text-slate-500">Tên</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">{{ selectedBoardMember.name }}</p>
-              </div>
-
-              <div class="rounded-2xl bg-slate-50 p-4">
-                <p class="text-sm font-medium text-slate-500">Email</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">{{ selectedBoardMember.email }}</p>
-              </div>
-
-              <div class="rounded-2xl bg-slate-50 p-4 md:col-span-2">
-                <p class="text-sm font-medium text-slate-500">Trạng thái</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">
-                  {{ selectedBoardMember.status === 'active' ? 'Hoạt động' : 'Đã khóa' }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </template>
+        <BoardMembersTable
+          :members="boardDetail.members"
+          @request-remove-member="openRemoveConfirm"
+          @select-member="handleSelectMember"
+        />
       </div>
     </template>
 
@@ -205,11 +211,6 @@ const confirmMessage = computed(() => {
 const toggleMembers = () => {
   showMembersSection.value = !showMembersSection.value
   if (!showMembersSection.value) selectedBoardMember.value = null
-}
-
-const closeMembersSection = () => {
-  showMembersSection.value = false
-  selectedBoardMember.value = null
 }
 
 const handleSelectMember = (member: BoardMemberItem) => {

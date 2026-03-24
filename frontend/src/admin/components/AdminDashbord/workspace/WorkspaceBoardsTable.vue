@@ -20,7 +20,7 @@
             v-for="board in boards"
             :key="board.id"
             class="cursor-pointer border-t border-slate-100 transition hover:bg-slate-50"
-            @click="$emit('select-board', board)"
+            @click="goToBoardDetail(board.id)"
           >
             <td class="px-5 py-4 font-semibold text-slate-950">{{ board.name }}</td>
             <td class="px-5 py-4">
@@ -51,6 +51,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import type { PropType } from 'vue'
+import { useRouter } from 'vue-router'
 import type { WorkspaceBoardItem } from '@/admin/types/admin'
 import AppBadge from '@/admin/components/AdminDashbord/common/AppBadge.vue'
 import EmptyState from '@/admin/components/AdminDashbord/common/EmptyState.vue'
@@ -62,9 +63,11 @@ defineProps({
   },
 })
 
-defineEmits<{
-  (e: 'select-board', board: WorkspaceBoardItem): void
-}>()
+const router = useRouter()
 
 const formatDate = (date: string) => dayjs(date).format('DD/MM/YYYY')
+
+const goToBoardDetail = (boardId: string) => {
+  router.push(`/admin/boards/${boardId}`)
+}
 </script>
