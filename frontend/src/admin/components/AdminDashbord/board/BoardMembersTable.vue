@@ -18,10 +18,20 @@
           <tr
             v-for="member in members"
             :key="member.id"
-            class="border-t border-slate-100"
+            class="border-t border-slate-100 transition hover:bg-slate-50"
           >
-            <td class="px-5 py-4 font-semibold text-slate-950">{{ member.name }}</td>
-            <td class="px-5 py-4 text-slate-700">{{ member.email }}</td>
+            <td
+              class="cursor-pointer px-5 py-4 font-semibold text-slate-950"
+              @click="$emit('select-member', member)"
+            >
+              {{ member.name }}
+            </td>
+            <td
+              class="cursor-pointer px-5 py-4 text-slate-700"
+              @click="$emit('select-member', member)"
+            >
+              {{ member.email }}
+            </td>
             <td class="px-5 py-4">
               <AppBadge
                 :label="member.status === 'active' ? 'Hoạt động' : 'Đã khóa'"
@@ -35,7 +45,7 @@
                   class="rounded-xl bg-red-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-red-700"
                   @click="$emit('request-remove-member', member)"
                 >
-                  Xoá
+                  Delete
                 </button>
               </div>
             </td>
@@ -70,5 +80,6 @@ defineProps({
 
 defineEmits<{
   (e: 'request-remove-member', member: BoardMemberItem): void
+  (e: 'select-member', member: BoardMemberItem): void
 }>()
 </script>

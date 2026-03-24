@@ -19,33 +19,27 @@
           <tr
             v-for="board in boards"
             :key="board.id"
-            class="border-t border-slate-100"
+            class="cursor-pointer border-t border-slate-100 transition hover:bg-slate-50"
+            @click="goToBoardDetail(board.id)"
           >
-            <td class="px-5 py-4 font-semibold text-slate-950">
-              {{ board.name }}
-            </td>
+            <td class="px-5 py-4 font-semibold text-slate-950">{{ board.name }}</td>
             <td class="px-5 py-4">
               <AppBadge
                 :label="board.visibility"
                 :variant="board.visibility === 'public' ? 'info' : 'neutral'"
               />
             </td>
-            <td class="px-5 py-4 text-slate-700">
-              {{ board.totalMembers }}
-            </td>
-            <td class="px-5 py-4 text-slate-700">
-              {{ board.totalCards }}
-            </td>
-            <td class="px-5 py-4 text-slate-700">
-              {{ formatDate(board.createdAt) }}
-            </td>
+            <td class="px-5 py-4 text-slate-700">{{ board.totalMembers }}</td>
+            <td class="px-5 py-4 text-slate-700">{{ board.totalCards }}</td>
+            <td class="px-5 py-4 text-slate-700">{{ formatDate(board.createdAt) }}</td>
           </tr>
 
           <tr v-if="boards.length === 0">
             <td colspan="5" class="px-5 py-8">
-              <div class="text-center text-sm text-slate-500">
-                Không có board trong workspace
-              </div>
+              <EmptyState
+                title="Không có board trong workspace"
+                description="Hiện chưa có board nào."
+              />
             </td>
           </tr>
         </tbody>
@@ -57,8 +51,10 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
 import type { PropType } from 'vue'
+import { useRouter } from 'vue-router'
 import type { WorkspaceBoardItem } from '@/admin/types/admin'
 import AppBadge from '@/admin/components/AdminDashbord/common/AppBadge.vue'
+import EmptyState from '@/admin/components/AdminDashbord/common/EmptyState.vue'
 
 defineProps({
   boards: {
@@ -67,5 +63,11 @@ defineProps({
   },
 })
 
+const router = useRouter()
+
 const formatDate = (date: string) => dayjs(date).format('DD/MM/YYYY')
+
+const goToBoardDetail = (boardId: string) => {
+  router.push(`/admin/boards/${boardId}`)
+}
 </script>
