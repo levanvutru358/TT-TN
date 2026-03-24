@@ -1,0 +1,29 @@
+[33m8dbfc04[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/project_detail/Nguyenvanthang[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull origin main: Fast-forward
+[33me34de33[m[33m ([m[1;31morigin/feature/project_detail/Nguyenvanthang[m[33m)[m HEAD@{1}: commit (merge): update
+[33me6a55f9[m HEAD@{2}: commit: update admin:
+[33m2dc0125[m HEAD@{3}: commit: update
+[33m9813d3d[m HEAD@{4}: commit (merge): update
+[33m7fd651e[m HEAD@{5}: commit: thêm các giao diện cơ bản
+[33m96aa729[m HEAD@{6}: commit: feat: admindashbord
+[33m975022a[m HEAD@{7}: commit: docs: update login/register instructions and contact info
+[33m091041e[m HEAD@{8}: merge origin/main: Fast-forward
+[33mfb53834[m HEAD@{9}: merge origin/main: Fast-forward
+[33meaf1e2c[m HEAD@{10}: commit: feat(auth): add login/register flow, AppLauncher auth entry, and logout UI
+[33me5b5f93[m HEAD@{11}: commit (merge): merge origin/main into feature/project_detail/Nguyenvanthang
+[33m437e21b[m HEAD@{12}: commit: wip: save current work
+[33mc0fe934[m HEAD@{13}: commit: feat: them tinh nang dau tich TaskModal.vue & TaskCard.vue
+[33mdeccecd[m HEAD@{14}: commit (merge): update thay đổi hình nền bảng BoardBackground.vue
+[33m4d9394a[m HEAD@{15}: commit: WIP: code đang làm dở
+[33m28f75cb[m HEAD@{16}: commit: cập nhật tính năng cho thẻ card kéo thả vào các thẻ
+[33m84995e2[m HEAD@{17}: commit: update
+[33m17e3800[m HEAD@{18}: merge origin/main: Fast-forward
+[33m9a6052b[m HEAD@{19}: checkout: moving from feature/project_detail/Nguyenvanthang to feature/project_detail/Nguyenvanthang
+[33m9a6052b[m HEAD@{20}: commit: thêm phần ApplaucherMenu trên thanh tìm kiếm
+[33mdfab8ff[m HEAD@{21}: commit: tách thanh header trang chủ sang component để tái sử dụng
+[33m6089899[m HEAD@{22}: commit: thêm phần tạo bảng crateboardmodal
+[33md9421ec[m HEAD@{23}: checkout: moving from main to feature/project_detail/Nguyenvanthang
+[33m4afdf87[m[33m ([m[1;32mmain[m[33m)[m HEAD@{24}: checkout: moving from feature/project_detail/Nguyenvanthang to main
+[33md9421ec[m HEAD@{25}: commit: sửa components/kanban/board/cards/menus/modal
+[33medc4ace[m HEAD@{26}: checkout: moving from main to feature/project_detail/Nguyenvanthang
+[33m4afdf87[m[33m ([m[1;32mmain[m[33m)[m HEAD@{27}: commit: sửa components/kanban/board/cards/menus/modal
+[33m37739bb[m HEAD@{28}: clone: from https://github.com/levanvutru358/TT-TN.git

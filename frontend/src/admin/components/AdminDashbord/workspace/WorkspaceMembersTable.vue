@@ -18,15 +18,25 @@
           <tr
             v-for="member in members"
             :key="member.id"
-            class="border-t border-slate-100"
+            class="cursor-pointer border-t border-slate-100 transition hover:bg-slate-50"
+            @click="$emit('select-member', member)"
           >
             <td class="px-5 py-4 font-semibold text-slate-950">{{ member.name }}</td>
             <td class="px-5 py-4 text-slate-700">{{ member.email }}</td>
-            <td class="px-5 py-4 text-slate-700 capitalize">{{ member.role }}</td>
+            <td class="px-5 py-4 capitalize text-slate-700">{{ member.role }}</td>
             <td class="px-5 py-4">
               <AppBadge
                 :label="member.status === 'active' ? 'Hoạt động' : 'Đã khóa'"
                 :variant="member.status === 'active' ? 'success' : 'danger'"
+              />
+            </td>
+          </tr>
+
+          <tr v-if="members.length === 0">
+            <td colspan="4" class="px-5 py-8">
+              <EmptyState
+                title="Không có thành viên"
+                description="Workspace này hiện chưa có thành viên."
               />
             </td>
           </tr>
@@ -36,10 +46,20 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { PropType } from 'vue'
+import type { WorkspaceMemberItem } from '@/admin/types/admin'
 import AppBadge from '@/admin/components/AdminDashbord/common/AppBadge.vue'
+import EmptyState from '@/admin/components/AdminDashbord/common/EmptyState.vue'
 
 defineProps({
-  members: { type: Array, default: () => [] },
+  members: {
+    type: Array as PropType<WorkspaceMemberItem[]>,
+    default: () => [],
+  },
 })
+
+defineEmits<{
+  (e: 'select-member', member: WorkspaceMemberItem): void
+}>()
 </script>

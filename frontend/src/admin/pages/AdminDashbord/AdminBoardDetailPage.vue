@@ -35,30 +35,22 @@
           <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div class="rounded-2xl bg-slate-50 p-4">
               <p class="text-sm font-medium text-slate-500">Tên board</p>
-              <p class="mt-2 text-base font-semibold text-slate-950">
-                {{ boardDetail.name }}
-              </p>
+              <p class="mt-2 text-base font-semibold text-slate-950">{{ boardDetail.name }}</p>
             </div>
 
             <div class="rounded-2xl bg-slate-50 p-4">
               <p class="text-sm font-medium text-slate-500">Workspace</p>
-              <p class="mt-2 text-base font-semibold text-slate-950">
-                {{ boardDetail.workspaceName }}
-              </p>
+              <p class="mt-2 text-base font-semibold text-slate-950">{{ boardDetail.workspaceName }}</p>
             </div>
 
             <div class="rounded-2xl bg-slate-50 p-4">
               <p class="text-sm font-medium text-slate-500">Owner</p>
-              <p class="mt-2 text-base font-semibold text-slate-950">
-                {{ boardDetail.ownerName }}
-              </p>
+              <p class="mt-2 text-base font-semibold text-slate-950">{{ boardDetail.ownerName }}</p>
             </div>
 
             <div class="rounded-2xl bg-slate-50 p-4">
               <p class="text-sm font-medium text-slate-500">Ngày tạo</p>
-              <p class="mt-2 text-base font-semibold text-slate-950">
-                {{ formatDate(boardDetail.createdAt) }}
-              </p>
+              <p class="mt-2 text-base font-semibold text-slate-950">{{ formatDate(boardDetail.createdAt) }}</p>
             </div>
           </div>
         </div>
@@ -74,9 +66,7 @@
               <div class="flex items-center justify-between gap-3">
                 <div>
                   <p class="text-sm font-medium text-slate-500">Tổng thành viên</p>
-                  <p class="mt-2 text-2xl font-bold text-slate-950">
-                    {{ boardDetail.totalMembers }}
-                  </p>
+                  <p class="mt-2 text-2xl font-bold text-slate-950">{{ boardDetail.totalMembers }}</p>
                 </div>
 
                 <button
@@ -84,7 +74,7 @@
                   class="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
                   @click="toggleMembers"
                 >
-                  {{ showMembersTable ? 'Ẩn bớt' : 'Xem tất cả' }}
+                  {{ showMembersSection ? 'Đóng' : 'Xem tất cả' }}
                 </button>
               </div>
             </div>
@@ -92,34 +82,79 @@
             <div class="grid grid-cols-2 gap-4">
               <div class="rounded-2xl border border-slate-200 p-4">
                 <p class="text-sm font-medium text-slate-500">List</p>
-                <p class="mt-2 text-2xl font-bold text-slate-950">
-                  {{ boardDetail.totalLists }}
-                </p>
+                <p class="mt-2 text-2xl font-bold text-slate-950">{{ boardDetail.totalLists }}</p>
               </div>
 
               <div class="rounded-2xl border border-slate-200 p-4">
                 <p class="text-sm font-medium text-slate-500">Card</p>
-                <p class="mt-2 text-2xl font-bold text-slate-950">
-                  {{ boardDetail.totalCards }}
-                </p>
+                <p class="mt-2 text-2xl font-bold text-slate-950">{{ boardDetail.totalCards }}</p>
               </div>
             </div>
 
             <div class="rounded-2xl border border-slate-200 p-4">
               <p class="text-sm font-medium text-slate-500">Visibility</p>
-              <p class="mt-2 text-2xl font-bold capitalize text-slate-950">
-                {{ boardDetail.visibility }}
-              </p>
+              <p class="mt-2 text-2xl font-bold capitalize text-slate-950">{{ boardDetail.visibility }}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <BoardMembersTable
-        v-if="showMembersTable"
-        :members="boardDetail.members"
-        @request-remove-member="openRemoveConfirm"
-      />
+      <div v-if="showMembersSection" class="rounded-3xl border border-slate-200 bg-white shadow-sm">
+        <template v-if="!selectedBoardMember">
+          <BoardMembersTable
+            :members="boardDetail.members"
+            @request-remove-member="openRemoveConfirm"
+            @select-member="handleSelectMember"
+          />
+        </template>
+
+        <template v-else>
+          <div class="border-b border-slate-200 px-5 py-4">
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="text-xl font-bold text-slate-950">Chi tiết thành viên trong board</h3>
+
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  class="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
+                  @click="selectedBoardMember = null"
+                >
+                  Quay lại danh sách
+                </button>
+
+                <button
+                  type="button"
+                  class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+                  @click="closeMembersSection"
+                >
+                  Đóng
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <p class="text-sm font-medium text-slate-500">Tên</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">{{ selectedBoardMember.name }}</p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <p class="text-sm font-medium text-slate-500">Email</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">{{ selectedBoardMember.email }}</p>
+              </div>
+
+              <div class="rounded-2xl bg-slate-50 p-4 md:col-span-2">
+                <p class="text-sm font-medium text-slate-500">Trạng thái</p>
+                <p class="mt-2 text-base font-semibold text-slate-950">
+                  {{ selectedBoardMember.status === 'active' ? 'Hoạt động' : 'Đã khóa' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
     </template>
 
     <ConfirmModal
@@ -150,7 +185,8 @@ const adminStore = useAdminStore()
 
 const isConfirmOpen = ref(false)
 const selectedMember = ref<BoardMemberItem | null>(null)
-const showMembersTable = ref(false)
+const selectedBoardMember = ref<BoardMemberItem | null>(null)
+const showMembersSection = ref(false)
 
 onMounted(() => {
   adminStore.fetchBoardDetail(String(route.params.id))
@@ -163,12 +199,21 @@ const confirmMessage = computed(() => {
   if (!selectedMember.value) {
     return 'Bạn có muốn xóa thành viên này khỏi board không?'
   }
-
   return `Bạn có muốn xóa thành viên "${selectedMember.value.name}" khỏi board không?`
 })
 
 const toggleMembers = () => {
-  showMembersTable.value = !showMembersTable.value
+  showMembersSection.value = !showMembersSection.value
+  if (!showMembersSection.value) selectedBoardMember.value = null
+}
+
+const closeMembersSection = () => {
+  showMembersSection.value = false
+  selectedBoardMember.value = null
+}
+
+const handleSelectMember = (member: BoardMemberItem) => {
+  selectedBoardMember.value = member
 }
 
 const openRemoveConfirm = (member: BoardMemberItem) => {
@@ -185,6 +230,11 @@ const handleConfirmRemove = async () => {
   if (!selectedMember.value) return
 
   await adminStore.removeBoardMember(String(route.params.id), selectedMember.value.id)
+
+  if (selectedBoardMember.value?.id === selectedMember.value.id) {
+    selectedBoardMember.value = null
+  }
+
   closeConfirm()
 }
 </script>
