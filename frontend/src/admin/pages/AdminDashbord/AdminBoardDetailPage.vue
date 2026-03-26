@@ -20,91 +20,46 @@
         <div class="xl:col-span-2 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <h3 class="text-xl font-bold text-slate-950">
-                {{ selectedBoardMember ? 'Thông tin thành viên trong board' : 'Thông tin board' }}
-              </h3>
+              <h3 class="text-xl font-bold text-slate-950">Thông tin board</h3>
               <p class="mt-1 text-sm text-slate-600">
-                {{
-                  selectedBoardMember
-                    ? 'Thông tin chi tiết của thành viên được chọn trong board.'
-                    : 'Chi tiết board, workspace, owner và trạng thái hiển thị.'
-                }}
+                Chi tiết board, workspace, owner và trạng thái hiển thị.
               </p>
             </div>
 
-            <div class="flex items-center gap-3">
-              <template v-if="selectedBoardMember">
-                <button
-                  type="button"
-                  class="rounded-2xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
-                  @click="selectedBoardMember = null"
-                >
-                  Quay lại board
-                </button>
-              </template>
-
-              <template v-else>
-                <AppBadge
-                  :label="boardDetail.visibility"
-                  :variant="boardDetail.visibility === 'public' ? 'info' : 'neutral'"
-                />
-              </template>
-            </div>
+            <AppBadge
+              :label="boardDetail.visibility"
+              :variant="boardDetail.visibility === 'public' ? 'info' : 'neutral'"
+            />
           </div>
 
           <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <template v-if="!selectedBoardMember">
-              <div class="rounded-2xl bg-slate-50 p-4">
-                <p class="text-sm font-medium text-slate-500">Tên board</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">
-                  {{ boardDetail.name }}
-                </p>
-              </div>
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <p class="text-sm font-medium text-slate-500">Tên board</p>
+              <p class="mt-2 text-base font-semibold text-slate-950">
+                {{ boardDetail.name }}
+              </p>
+            </div>
 
-              <div class="rounded-2xl bg-slate-50 p-4">
-                <p class="text-sm font-medium text-slate-500">Workspace</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">
-                  {{ boardDetail.workspaceName }}
-                </p>
-              </div>
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <p class="text-sm font-medium text-slate-500">Workspace</p>
+              <p class="mt-2 text-base font-semibold text-slate-950">
+                {{ boardDetail.workspaceName }}
+              </p>
+            </div>
 
-              <div class="rounded-2xl bg-slate-50 p-4">
-                <p class="text-sm font-medium text-slate-500">Owner</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">
-                  {{ boardDetail.ownerName }}
-                </p>
-              </div>
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <p class="text-sm font-medium text-slate-500">Owner</p>
+              <p class="mt-2 text-base font-semibold text-slate-950">
+                {{ boardDetail.ownerName }}
+              </p>
+            </div>
 
-              <div class="rounded-2xl bg-slate-50 p-4">
-                <p class="text-sm font-medium text-slate-500">Ngày tạo</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">
-                  {{ formatDate(boardDetail.createdAt) }}
-                </p>
-              </div>
-            </template>
-
-            <template v-else>
-              <div class="rounded-2xl bg-slate-50 p-4">
-                <p class="text-sm font-medium text-slate-500">Tên thành viên</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">
-                  {{ selectedBoardMember.name }}
-                </p>
-              </div>
-
-              <div class="rounded-2xl bg-slate-50 p-4">
-                <p class="text-sm font-medium text-slate-500">Email</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">
-                  {{ selectedBoardMember.email }}
-                </p>
-              </div>
-
-              <div class="rounded-2xl bg-slate-50 p-4 md:col-span-2">
-                <p class="text-sm font-medium text-slate-500">Trạng thái</p>
-                <p class="mt-2 text-base font-semibold text-slate-950">
-                  {{ selectedBoardMember.status === 'active' ? 'Hoạt động' : 'Đã khóa' }}
-                </p>
-              </div>
-            </template>
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <p class="text-sm font-medium text-slate-500">Ngày tạo</p>
+              <p class="mt-2 text-base font-semibold text-slate-950">
+                {{ formatDate(boardDetail.createdAt) }}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -158,7 +113,6 @@
         <BoardMembersTable
           :members="boardDetail.members"
           @request-remove-member="openRemoveConfirm"
-          @select-member="handleSelectMember"
         />
       </div>
     </template>
@@ -191,7 +145,6 @@ const adminStore = useAdminStore()
 
 const isConfirmOpen = ref(false)
 const selectedMember = ref<BoardMemberItem | null>(null)
-const selectedBoardMember = ref<BoardMemberItem | null>(null)
 const showMembersSection = ref(false)
 
 onMounted(() => {
@@ -210,11 +163,6 @@ const confirmMessage = computed(() => {
 
 const toggleMembers = () => {
   showMembersSection.value = !showMembersSection.value
-  if (!showMembersSection.value) selectedBoardMember.value = null
-}
-
-const handleSelectMember = (member: BoardMemberItem) => {
-  selectedBoardMember.value = member
 }
 
 const openRemoveConfirm = (member: BoardMemberItem) => {
@@ -231,11 +179,6 @@ const handleConfirmRemove = async () => {
   if (!selectedMember.value) return
 
   await adminStore.removeBoardMember(String(route.params.id), selectedMember.value.id)
-
-  if (selectedBoardMember.value?.id === selectedMember.value.id) {
-    selectedBoardMember.value = null
-  }
-
   closeConfirm()
 }
 </script>
