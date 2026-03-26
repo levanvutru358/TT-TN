@@ -1,10 +1,11 @@
 <template>
   <aside
-    class="hidden sm:flex w-80 bg-[#111827] border-r border-black/60 px-3 py-3"
+    class="hidden sm:flex w-64 bg-[#111827] border-r border-black/60 px-3 py-3"
   >
     <div
-      class="flex-1 rounded-3xl bg-gradient-to-b from-[#073b79] via-[#073469] to-[#082b53] px-4 pt-4 pb-3 flex flex-col shadow-lg"
+      class="flex-1 rounded-3xl bg-gradient-to-b from-[#073b79] via-[#073469] to-[#082b53] px-3 pt-4 pb-3 flex flex-col shadow-lg"
     >
+      <!-- Hộp thư đến -->
       <div class="flex items-center gap-2 mb-5">
         <div
           class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center"

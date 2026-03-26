@@ -12,14 +12,14 @@
         <thead class="bg-slate-50">
           <tr class="text-left font-semibold text-slate-700">
             <th class="w-16 px-4 py-4 text-center">STT</th>
-            <th class="w-[20%] px-4 py-4">Tên workspace</th>
-            <th class="w-[16%] px-4 py-4">Owner</th>
+            <th class="w-[22%] px-4 py-4">Tên workspace</th>
+            <th class="w-[18%] px-4 py-4">Owner</th>
             <th class="w-[10%] px-4 py-4 text-center">Thành viên</th>
             <th class="w-[8%] px-4 py-4 text-center">Admin</th>
             <th class="w-[8%] px-4 py-4 text-center">Member</th>
             <th class="w-[10%] px-4 py-4 text-center">Board</th>
             <th class="w-[12%] px-4 py-4 text-center">Trạng thái</th>
-            <th class="w-[14%] px-4 py-4 text-center">Ngày tạo</th>
+            <th class="w-[12%] px-4 py-4 text-center">Ngày tạo</th>
           </tr>
         </thead>
 
@@ -36,7 +36,7 @@
 
             <td class="px-4 py-4">
               <div class="min-w-0">
-                <p class="truncate font-semibold text-slate-950">
+                <p class="truncate font-semibold text-slate-950" :title="workspace.name">
                   {{ workspace.name }}
                 </p>
               </div>
@@ -44,7 +44,7 @@
 
             <td class="px-4 py-4">
               <div class="min-w-0">
-                <p class="truncate text-slate-700">
+                <p class="truncate text-slate-700" :title="workspace.ownerName">
                   {{ workspace.ownerName }}
                 </p>
               </div>
@@ -76,7 +76,9 @@
             </td>
 
             <td class="px-4 py-4 text-center text-slate-700">
-              {{ formatDate(workspace.createdAt) }}
+              <span class="block truncate" :title="formatDate(workspace.createdAt)">
+                {{ formatDate(workspace.createdAt) }}
+              </span>
             </td>
           </tr>
 
