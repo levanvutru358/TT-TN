@@ -12,7 +12,7 @@
 
       <main
         ref="boardWrapper"
-        class="relative flex-1 overflow-hidden rounded-none border p-3 shadow-[0_20px_60px_rgba(0,0,0,0.65)] md:p-4"
+        class="relative flex-1 overflow-hidden rounded-none p-3 shadow-[0_20px_60px_rgba(0,0,0,0.65)] md:p-4"
         :style="boardShellStyle"
       >
         <div
