@@ -16,12 +16,12 @@
 
           <button
             type="button"
-            class="absolute right-4 top-4 w-8 h-8 rounded-md text-[#9fadbc] hover:bg-[#3a4148] hover:text-[#f1f2f4] flex items-center justify-center transition-colors"
+            class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full text-[#f1f2f4] transition-colors hover:bg-[#3a4148]"
             aria-label="Đóng"
             @click="handleClose"
           >
             <svg
-              class="w-4 h-4"
+              class="h-6 w-6"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -81,11 +81,11 @@
                 v-for="bg in backgrounds"
                 :key="bg.id"
                 type="button"
-                class="relative h-12 rounded-md border overflow-hidden transition-all"
+                class="relative h-12 overflow-hidden rounded-md border-2 transition-[border-color,filter]"
                 :class="
                   selectedBackground.id === bg.id
-                    ? 'border-[#85b8ff] ring-2 ring-[#85b8ff]'
-                    : 'border-[#4a525a] hover:border-[#6b7785]'
+                    ? 'border-[#0c66e4]'
+                    : 'border-transparent hover:brightness-[1.03]'
                 "
                 :style="{ background: bg.style }"
                 @click="selectedBackground = bg"
@@ -126,8 +126,8 @@
               class="w-full h-10 rounded-md border bg-[#22272b] px-3 text-[15px] text-[#f1f2f4] outline-none transition-colors"
               :class="
                 showError && !boardTitle
-                  ? 'border-[#f87462] focus:border-[#f87462]'
-                  : 'border-[#4a525a] focus:border-[#85b8ff]'
+                  ? 'border-[#0c66e4] focus:border-[#0c66e4]'
+                  : 'border-[#4a525a] focus:border-[#0c66e4]'
               "
             />
 

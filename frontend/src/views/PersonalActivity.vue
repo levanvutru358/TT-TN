@@ -63,22 +63,6 @@
             to="/personal/profile"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
-              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8" />
-              <path
-                d="M7.5 18C8.2 16.1 10 14.8 12 14.8C14 14.8 15.8 16.1 16.5 18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
             <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
           </router-link>
 
@@ -86,28 +70,6 @@
             type="button"
             class="flex w-full items-center gap-3 rounded-lg border border-[#0c66e4] bg-[#e9f2ff] px-3 py-2 text-[#0c66e4]"
           >
-            <svg
-              class="h-[18px] w-[18px]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M5 12C5 8.13401 8.13401 5 12 5C14.4987 5 16.6916 6.3081 17.9282 8.27641M17.9282 8.27641V5.7M17.9282 8.27641H15.2"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M19 12C19 15.866 15.866 19 12 19C9.50127 19 7.30839 17.6919 6.0718 15.7236M6.0718 15.7236V18.3M6.0718 15.7236H8.8"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
             <span class="text-[15px] font-semibold">Hoạt động</span>
           </button>
 
@@ -115,24 +77,6 @@
             to="/workspace/cards"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <rect
-                x="4.5"
-                y="7"
-                width="15"
-                height="10"
-                rx="2"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <path d="M9 7V17" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Thẻ</span>
           </router-link>
 
@@ -140,21 +84,6 @@
             to="/personal/settings"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 8.5V6M12 18V15.5M8.5 12H6M18 12H15.5M9.2 9.2L7.4 7.4M16.6 16.6L14.8 14.8M14.8 9.2L16.6 7.4M7.4 16.6L9.2 14.8"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-              <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Cài đặt</span>
           </router-link>
         </div>
@@ -162,14 +91,18 @@
         <div class="mt-7 border-t border-[#d0d4db] pt-6">
           <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
-          <div class="mb-2 flex items-center gap-3 px-2 py-2">
+          <router-link
+            to="/"
+            class="mb-2 flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-[#e9ebef]"
+            aria-label="Về trang chủ Trello"
+          >
             <div
               class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
             >
               T
             </div>
             <span class="text-[15px]">Trello Không gian làm việc</span>
-          </div>
+          </router-link>
 
           <router-link
             to="/workspace/boards"
@@ -278,7 +211,7 @@
         </div>
       </aside>
 
-      <main class="relative flex-1 overflow-hidden px-6 py-6 lg:px-8 lg:py-8">
+      <main class="relative min-w-0 flex-1 overflow-hidden px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <router-link
           to="/workspace/boards"
           class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] hover:bg-[#d0d4db]"
@@ -300,8 +233,8 @@
           </svg>
         </router-link>
 
-        <div class="max-w-[980px] pt-3">
-          <div class="pl-6">
+        <div class="max-w-[980px] pt-3 pr-12 sm:pr-0">
+          <div class="sm:pl-6">
             <h1 class="text-[28px] font-semibold leading-none">Hoạt động</h1>
 
             <div class="mt-6 flex items-center gap-3">
@@ -330,8 +263,8 @@
               <h2 class="text-[18px] font-semibold">Các Không gian làm việc</h2>
             </div>
 
-            <div class="mt-5 border-b border-[#d0d4db] pb-3 pl-10">
-              <div class="flex items-center gap-2 text-[16px]">
+            <div class="mt-5 border-b border-[#d0d4db] pb-3 sm:pl-10">
+              <div class="flex flex-wrap items-center gap-2 text-[16px]">
                 <span>Trello Không gian làm việc</span>
                 <svg
                   class="h-4 w-4 text-[#c9372c]"
@@ -386,7 +319,7 @@
             </div>
           </div>
 
-          <div class="mt-8 max-w-[780px] pl-6">
+          <div class="mt-8 max-w-[780px] sm:pl-6">
             <article
               v-for="item in activityItems"
               :key="item.id"
@@ -398,8 +331,8 @@
                 LT
               </div>
 
-              <div>
-                <p class="max-w-[720px] text-[16px] leading-[1.45]">
+              <div class="min-w-0 flex-1">
+                <p class="max-w-full text-[16px] leading-[1.45] sm:max-w-[720px]">
                   <span class="font-semibold">Lê văn vũ trụ</span>
 
                   <template v-if="item.type === 'create-board'">
@@ -490,9 +423,11 @@
 
 <script setup>
 import { ref } from "vue";
+import { useResponsiveSidebarCollapse } from "@/composables/useResponsiveSidebarCollapse.js";
 
 
 const isSidebarCollapsed = ref(false);
+useResponsiveSidebarCollapse(isSidebarCollapsed);
 
 const activityItems = [
   {

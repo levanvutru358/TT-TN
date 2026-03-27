@@ -91,19 +91,41 @@
         <div class="mt-8 border-t border-[#d0d4db] pt-7">
           <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
-          <div class="mb-2 flex items-center gap-3 px-2 py-2">
+          <router-link
+            to="/"
+            class="mb-2 flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-[#e9ebef]"
+            aria-label="Về trang chủ Trello"
+          >
             <div
               class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
             >
               T
             </div>
             <span class="text-[15px]">Trello Không gian làm việc</span>
-          </div>
+          </router-link>
 
           <button
             type="button"
             class="flex w-full items-center gap-3 rounded-lg border border-[#0c66e4] bg-[#dce4f0] px-3 py-2 text-[#0c66e4]"
           >
+            <svg
+              class="h-[18px] w-[18px]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <rect
+                x="4.5"
+                y="4.5"
+                width="15"
+                height="15"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path d="M10 4.5V19.5" stroke="currentColor" stroke-width="1.8" />
+            </svg>
             <span class="text-[15px] font-semibold">Bảng</span>
           </button>
 
@@ -111,6 +133,27 @@
             to="/workspace/members"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <circle cx="9" cy="8.5" r="3" stroke="currentColor" stroke-width="1.8" />
+              <path
+                d="M4.5 18C4.5 15.7 6.4 13.8 8.7 13.8H9.3C11.6 13.8 13.5 15.7 13.5 18"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+              <path
+                d="M16 9V15M13 12H19"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
             <span class="text-[15px] font-semibold">Thành viên</span>
           </router-link>
 
@@ -118,6 +161,21 @@
             to="/workspace/settings"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 8.5V6M12 18V15.5M8.5 12H6M18 12H15.5M9.2 9.2L7.4 7.4M16.6 16.6L14.8 14.8M14.8 9.2L16.6 7.4M7.4 16.6L9.2 14.8"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
+            </svg>
             <span class="text-[15px] font-semibold">Cài đặt</span>
           </router-link>
 
@@ -125,6 +183,29 @@
             type="button"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-[#e9ebef]"
           >
+            <svg
+              class="h-[18px] w-[18px] text-[#2c2f36]"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <rect
+                x="4.5"
+                y="5"
+                width="15"
+                height="14"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path
+                d="M8 9H16M8 13H16"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
             <span class="text-[15px] font-semibold">Nâng cấp Không gian làm việc</span>
           </button>
         </div>
@@ -136,7 +217,20 @@
           class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] hover:bg-[#d0d4db]"
           aria-label="Đóng"
         >
-          ×
+          <svg
+            class="h-[18px] w-[18px]"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 6L18 18M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          </svg>
         </router-link>
 
         <div class="max-w-[1180px]">
@@ -315,12 +409,12 @@
 
             <button
               type="button"
-              class="flex h-8 w-8 items-center justify-center rounded-md text-[#626f86] hover:bg-[#e9ebef]"
+              class="flex h-10 w-10 items-center justify-center rounded-full text-[#172b4d] hover:bg-[#f1f2f4]"
               aria-label="Đóng"
               @click="closeCreateBoardModal"
             >
               <svg
-                class="h-4 w-4"
+                class="h-6 w-6"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -369,11 +463,11 @@
                 v-for="(bg, idx) in createBoardImageBackgrounds"
                 :key="`img-${idx}`"
                 type="button"
-                class="h-10 rounded-md border transition-colors"
+                class="h-10 rounded-md border-2 transition-[border-color,filter]"
                 :class="
                   selectedBoardBackground === bg
                     ? 'border-[#0c66e4]'
-                    : 'border-transparent hover:border-[#c7cdd8]'
+                    : 'border-transparent hover:brightness-[1.03]'
                 "
                 :style="{ background: bg }"
                 @click="selectedBoardBackground = bg"
@@ -385,11 +479,11 @@
                 v-for="(bg, idx) in createBoardColorBackgrounds"
                 :key="`color-${idx}`"
                 type="button"
-                class="h-8 rounded-md border transition-colors"
+                class="h-8 rounded-md border-2 transition-[border-color,filter]"
                 :class="
                   selectedBoardBackground === bg
                     ? 'border-[#0c66e4]'
-                    : 'border-transparent hover:border-[#c7cdd8]'
+                    : 'border-transparent hover:brightness-[1.03]'
                 "
                 :style="{ background: bg }"
                 @click="selectedBoardBackground = bg"
@@ -415,8 +509,9 @@
               class="mt-1 h-10 w-full rounded-md border bg-white px-3 text-[14px] outline-none"
               :class="
                 newBoardTitle.trim().length === 0
-                  ? 'focus:ring-2 '
-                  : 'focus:ring-1 '
+
+                  ? 'border-[#0c66e4] focus:ring-1 focus:ring-[#0c66e4]'
+                  : 'border-[#c7cdd8] focus:ring-1 focus:ring-[#0c66e4]'
               "
             />
           </label>
@@ -510,11 +605,13 @@
 <script setup>
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useResponsiveSidebarCollapse } from "@/composables/useResponsiveSidebarCollapse.js";
 import { useWorkspaceBoardsState } from "@/composables/stages/useWorkspaceBoardsState.js";
 
 const router = useRouter();
 
 const isSidebarCollapsed = ref(false);
+useResponsiveSidebarCollapse(isSidebarCollapsed);
 
 const sortOptions = [
   { id: "recent-desc", label: "Hoạt động gần đây nhất" },

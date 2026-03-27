@@ -45,22 +45,6 @@
             to="/personal/profile"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
-              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8" />
-              <path
-                d="M7.5 18C8.2 16.1 10 14.8 12 14.8C14 14.8 15.8 16.1 16.5 18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
             <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
           </router-link>
 
@@ -68,21 +52,6 @@
             to="/personal/activity"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M6 8H18M6 12H14M6 16H18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-              <circle cx="16.5" cy="12" r="1.5" fill="currentColor" />
-            </svg>
             <span class="text-[15px] font-semibold">Hoạt động</span>
           </router-link>
 
@@ -90,24 +59,6 @@
             to="/workspace/cards"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <rect
-                x="4.5"
-                y="7"
-                width="15"
-                height="10"
-                rx="2"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <path d="M9 7V17" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Thẻ</span>
           </router-link>
 
@@ -115,21 +66,6 @@
             to="/personal/settings"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 8.5V6M12 18V15.5M8.5 12H6M18 12H15.5M9.2 9.2L7.4 7.4M16.6 16.6L14.8 14.8M14.8 9.2L16.6 7.4M7.4 16.6L9.2 14.8"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-              <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Cài đặt</span>
           </router-link>
         </div>
@@ -137,14 +73,18 @@
         <div class="mt-8 border-t border-[#d0d4db] pt-7">
           <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
-          <div class="mb-2 flex items-center gap-3 px-2 py-2">
+          <router-link
+            to="/"
+            class="mb-2 flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-[#e9ebef]"
+            aria-label="Về trang chủ Trello"
+          >
             <div
               class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
             >
               T
             </div>
             <span class="text-[15px]">Trello Không gian làm việc</span>
-          </div>
+          </router-link>
 
           <router-link
             to="/workspace/boards"
@@ -253,7 +193,7 @@
         </div>
       </aside>
 
-      <main class="relative flex-1 px-6 py-6 lg:px-8 lg:py-8">
+      <main class="relative min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <router-link
           to="/workspace/boards"
           class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] hover:bg-[#d0d4db]"
@@ -275,14 +215,14 @@
           </svg>
         </router-link>
 
-        <div class="max-w-[1180px]">
-          <div class="mb-5 flex items-center gap-3">
+        <div class="max-w-[1180px] pr-12 sm:pr-0">
+          <div class="mb-5 flex flex-wrap items-center gap-3">
             <h1 class="text-[28px] font-semibold">Người cộng tác</h1>
             <span class="rounded-full bg-[#dfe1e6] px-2 py-0.5 text-[13px]">1 / 10</span>
           </div>
 
           <div
-            class="relative mb-6 overflow-hidden rounded-lg border border-[#d0d4db] bg-[#f7f8fa] px-5 py-4"
+            class="relative mb-6 overflow-hidden rounded-lg border border-[#d0d4db] bg-[#f7f8fa] px-4 py-4 sm:px-5"
           >
             <h2 class="text-[20px] font-semibold">Nâng cấp để kiểm soát nhiều quyền hơn</h2>
             <p class="mt-2 text-[15px] text-[#44546f]">
@@ -293,7 +233,7 @@
               Dùng thử Premium miễn phí trong 14 ngày
             </a>
             <div
-              class="absolute bottom-3 right-4 flex h-9 w-9 items-center justify-center rounded-lg bg-[#8f5fd3] text-sm font-semibold text-white"
+              class="mt-4 flex h-9 w-9 items-center justify-center rounded-lg bg-[#8f5fd3] text-sm font-semibold text-white sm:absolute sm:bottom-3 sm:right-4 sm:mt-0"
             >
               T
             </div>
@@ -320,7 +260,7 @@
           </div>
 
           <template v-if="selectedMemberTab === 'members'">
-            <div class="flex items-start justify-between gap-6 border-b border-[#d0d4db] py-5">
+            <div class="flex flex-col gap-4 border-b border-[#d0d4db] py-5 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
               <p class="max-w-[900px] text-[15px] leading-[1.45]">
                 Các thành viên trong Không gian làm việc có thể xem và tham gia tất cả các bảng Không gian
                 làm việc hiển thị và tạo ra các bảng mới trong Không gian làm việc.
@@ -328,7 +268,7 @@
 
               <button
                 type="button"
-                class="h-9 shrink-0 rounded-md bg-[#0c66e4] px-4 text-[13px] font-semibold text-white hover:bg-[#0055cc]"
+                class="h-9 w-full rounded-md bg-[#0c66e4] px-4 text-[13px] font-semibold text-white hover:bg-[#0055cc] sm:w-auto sm:shrink-0"
                 @click="showInviteMemberModal = true"
               >
                 Mời các thành viên Không gian làm việc
@@ -339,28 +279,28 @@
               <input
                 type="text"
                 placeholder="Lọc theo tên"
-                class="h-9 w-[320px] rounded-md border border-[#9fadbc] bg-white px-3.5 text-[13px] placeholder:text-[#7a869a] outline-none"
+                class="h-9 w-full rounded-md border border-[#9fadbc] bg-white px-3.5 text-[13px] placeholder:text-[#7a869a] outline-none sm:w-[320px]"
               />
             </div>
 
-            <div class="flex items-center gap-5 border-b border-[#d0d4db] py-4">
+            <div class="flex flex-col gap-4 border-b border-[#d0d4db] py-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
               <div
-                class="flex h-9 w-9 items-center justify-center rounded-full bg-[#de350b] text-[16px] font-bold text-white"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#de350b] text-[16px] font-bold text-white"
               >
                 {{ memberProfile.initials }}
               </div>
 
-              <div class="text-[14px] font-semibold">
-                {{ memberProfile.name }}
-                <span class="font-normal text-[#44546f]">{{ memberProfile.handle }}</span>
+              <div class="min-w-0 text-[14px] font-semibold">
+                <span class="break-words">{{ memberProfile.name }}</span>
+                <span class="break-all font-normal text-[#44546f]">{{ memberProfile.handle }}</span>
               </div>
 
-              <div class="ml-auto text-[13px] text-[#2c2f36]">{{ memberProfile.lastActivity }}</div>
+              <div class="text-[13px] text-[#2c2f36] sm:ml-auto sm:text-right">{{ memberProfile.lastActivity }}</div>
 
-              <div class="relative z-20">
+              <div class="relative z-20 w-full sm:w-auto">
                 <button
                   type="button"
-                  class="flex h-9 items-center gap-2 rounded-md bg-[#e6e7ea] px-3.5 text-[13px] font-semibold hover:bg-[#d9dbe0]"
+                  class="flex h-9 w-full items-center justify-between gap-2 rounded-md bg-[#e6e7ea] px-3.5 text-[13px] font-semibold hover:bg-[#d9dbe0] sm:w-auto"
                   @click="showMemberBoardsPanel = !showMemberBoardsPanel"
                 >
                   <span>Bảng ({{ memberBoardsCount }})</span>
@@ -392,7 +332,7 @@
 
                 <div
                   v-if="showMemberBoardsPanel"
-                  class="absolute left-0 top-[calc(100%+10px)] z-20 w-[320px] overflow-hidden rounded-xl border border-[#d0d4db] bg-white shadow-[0_8px_24px_rgba(9,30,66,0.22)]"
+                  class="absolute left-0 top-[calc(100%+10px)] z-20 w-[calc(100vw-2rem)] max-w-[320px] overflow-hidden rounded-xl border border-[#d0d4db] bg-white shadow-[0_8px_24px_rgba(9,30,66,0.22)] sm:w-[320px]"
                 >
                   <div class="flex items-center justify-between border-b border-[#ebecf0] px-4 py-3">
                     <h3 class="truncate pr-3 text-[15px] font-semibold">
@@ -460,14 +400,14 @@
 
               <button
                 type="button"
-                class="h-9 rounded-md bg-[#e6e7ea] px-3.5 text-[13px] font-semibold hover:bg-[#d9dbe0]"
+                class="h-9 w-full rounded-md bg-[#e6e7ea] px-3.5 text-[13px] font-semibold hover:bg-[#d9dbe0] sm:w-auto"
               >
                 Quản trị viên
               </button>
 
               <button
                 type="button"
-                class="h-9 rounded-md bg-[#e6e7ea] px-5 text-[13px] font-semibold hover:bg-[#d9dbe0]"
+                class="h-9 w-full rounded-md bg-[#e6e7ea] px-5 text-[13px] font-semibold hover:bg-[#d9dbe0] sm:w-auto"
               >
                 Rời đi
               </button>
@@ -492,7 +432,7 @@
 
       <div
         v-if="showInviteMemberModal"
-        class="fixed inset-0 z-40 flex items-center justify-center px-4"
+        class="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto px-4 py-6 sm:items-center"
         role="dialog"
         aria-modal="true"
         aria-label="Mời vào Không gian làm việc"
@@ -505,7 +445,7 @@
         />
 
         <section
-          class="relative z-10 w-full max-w-[730px] rounded-[18px] bg-white px-8 py-7 shadow-[0_18px_40px_rgba(9,30,66,0.32)]"
+          class="relative z-10 w-full max-w-[730px] rounded-[18px] bg-white px-4 py-6 shadow-[0_18px_40px_rgba(9,30,66,0.32)] sm:px-8 sm:py-7"
         >
           <div class="mb-6 flex items-center justify-between gap-4">
             <h2 class="text-[20px] font-medium text-[#172b4d]">Mời vào Không gian làm việc</h2>
@@ -540,7 +480,7 @@
             class="h-12 w-full rounded-md border border-[#0c66e4] px-3.5 text-[15px] outline-none ring-1 ring-[#0c66e4]/20 placeholder:text-[#7a869a]"
           />
 
-          <div class="mt-8 flex items-end justify-between gap-6">
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
             <div>
               <p class="text-[16px] leading-[1.45] text-[#172b4d]">
                 Mời ai đó vào Không gian làm việc này bằng liên kết:
@@ -555,7 +495,7 @@
 
             <button
               type="button"
-              class="flex h-10 shrink-0 items-center gap-2 rounded-md bg-[#e9ebef] px-4 text-[14px] font-semibold text-[#172b4d] hover:bg-[#dfe1e6]"
+              class="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-[#e9ebef] px-4 text-[14px] font-semibold text-[#172b4d] hover:bg-[#dfe1e6] sm:w-auto sm:shrink-0"
               @click="copyInviteLink"
             >
               <svg
@@ -584,9 +524,11 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useResponsiveSidebarCollapse } from "@/composables/useResponsiveSidebarCollapse.js";
 import { useWorkspaceBoardsState } from "@/composables/stages/useWorkspaceBoardsState.js";
 
 const isSidebarCollapsed = ref(false);
+useResponsiveSidebarCollapse(isSidebarCollapsed);
 const showMemberBoardsPanel = ref(false);
 const showInviteMemberModal = ref(false);
 const inviteMemberQuery = ref("");

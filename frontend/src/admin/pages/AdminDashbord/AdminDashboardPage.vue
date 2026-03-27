@@ -1,18 +1,5 @@
 <template>
   <section class="space-y-8">
-    <div class="rounded-[30px] border border-slate-200 bg-white px-7 py-7 shadow-sm">
-      <div class="text-xs font-bold uppercase tracking-[0.24em] text-sky-600">
-        Admin dashboard
-      </div>
-      <h1 class="mt-3 text-3xl font-black tracking-tight text-slate-950">
-        Tong quan he thong
-      </h1>
-      <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-        Bieu do tong hop duoc dua len dau trang. Nhan vao tung cot hoac tung khung
-        trang thai de di toi khu vuc quan ly lien quan.
-      </p>
-    </div>
-
     <div
       v-if="adminStore.isLoadingStats"
       class="rounded-3xl border border-slate-200 bg-white px-6 py-14 text-center text-slate-600 shadow-sm"
