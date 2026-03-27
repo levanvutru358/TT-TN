@@ -108,8 +108,8 @@
         {{ createButtonText }}
       </button>
 
-      <div class="ml-auto hidden items-center gap-1 text-[#44546f] md:flex">
-        <div class="relative z-40">
+      <div class="ml-auto flex items-center gap-1 text-[#44546f]">
+        <div class="relative z-40 hidden md:block">
         <button
           type="button"
           @click="toggleBroadcastMenu"
@@ -156,7 +156,7 @@
           </div>
         </div>
 
-        <div class="relative z-40">
+        <div class="relative z-40 hidden md:block">
           <button
             type="button"
             class="flex h-7 w-7 items-center justify-center rounded-md border transition-colors"
@@ -298,7 +298,7 @@
           </div>
         </div>
 
-        <div class="relative z-40">
+        <div class="relative z-40 hidden md:block">
         <button
           type="button"
           @click="toggleHelpMenu"

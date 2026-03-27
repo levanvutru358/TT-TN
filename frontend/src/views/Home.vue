@@ -14,7 +14,7 @@
             type="button"
             class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-[15px]"
             :class="
-              activeMenu === item.id
+              isMainMenuActive(item.id)
                 ? 'bg-[var(--workspace-accent-subtle)] text-[var(--workspace-accent)] font-semibold'
                 : 'hover:bg-[#ebedf1]'
             "
@@ -617,7 +617,7 @@
         <div class="mb-2.5 flex items-center">
           <button
             type="button"
-            class="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--workspace-accent)] text-[#44546f] hover:bg-[var(--workspace-accent-subtle)]"
+            class="flex h-9 w-9 items-center justify-center rounded-xl border border-[#0c66e4] text-[#44546f] hover:bg-[#e9ebef]"
             aria-label="Quay lại"
             @click="closeCreateBoardModal"
           >
@@ -644,12 +644,12 @@
 
           <button
             type="button"
-            class="flex h-8 w-8 items-center justify-center rounded-md text-[#626f86] hover:bg-[#e9ebef]"
+            class="flex h-10 w-10 items-center justify-center rounded-full text-[#172b4d] hover:bg-[#f1f2f4]"
             aria-label="Đóng"
             @click="closeCreateBoardModal"
           >
             <svg
-              class="h-4 w-4"
+              class="h-6 w-6"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -698,11 +698,11 @@
               v-for="(bg, idx) in createBoardImageBackgrounds"
               :key="`img-${idx}`"
               type="button"
-              class="h-10 rounded-md border transition-colors"
+              class="h-10 rounded-md border-2 transition-[border-color,filter]"
               :class="
                 selectedBoardBackground === bg
-                  ? 'border-[var(--workspace-accent)]'
-                  : 'border-transparent hover:border-[#c7cdd8]'
+                  ? 'border-[#0c66e4]'
+                  : 'border-transparent hover:brightness-[1.03]'
               "
               :style="{ background: bg }"
               @click="selectedBoardBackground = bg"
@@ -714,11 +714,11 @@
               v-for="(bg, idx) in createBoardColorBackgrounds"
               :key="`color-${idx}`"
               type="button"
-              class="h-8 rounded-md border transition-colors"
+              class="h-8 rounded-md border-2 transition-[border-color,filter]"
               :class="
                 selectedBoardBackground === bg
-                  ? 'border-[var(--workspace-accent)]'
-                  : 'border-transparent hover:border-[#c7cdd8]'
+                  ? 'border-[#0c66e4]'
+                  : 'border-transparent hover:brightness-[1.03]'
               "
               :style="{ background: bg }"
               @click="selectedBoardBackground = bg"
@@ -744,8 +744,8 @@
             class="mt-1 h-10 w-full rounded-md border bg-white px-3 text-[14px] outline-none"
             :class="
               newBoardTitle.trim().length === 0
-                ? 'border-[#e2483d] focus:ring-1 focus:ring-[#e2483d]'
-                : 'border-[#c7cdd8] focus:ring-1 focus:ring-[var(--workspace-accent)]'
+                ? 'border-[#0c66e4] focus:ring-1 focus:ring-[#0c66e4]'
+                : 'border-[#c7cdd8] focus:ring-1 focus:ring-[#0c66e4]'
             "
           />
         </label>
@@ -1024,7 +1024,18 @@ const selectMainMenu = (menuId) => {
   activeMenu.value = menuId;
   if (menuId === "boards") {
     activeWorkspaceSection.value = "home";
+    return;
   }
+
+  activeWorkspaceSection.value = "";
+};
+
+const isMainMenuActive = (menuId) => {
+  if (menuId === "boards") {
+    return activeMenu.value === "boards" && activeWorkspaceSection.value !== "board";
+  }
+
+  return activeMenu.value === menuId;
 };
 
 const openWorkspaceBoards = () => {
