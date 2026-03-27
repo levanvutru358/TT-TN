@@ -77,7 +77,7 @@
               T
             </div>
             <span class="text-[14px] font-medium text-[#172b4d]">
-              Trello Không gian làm việc
+              {{ workspaceName }}
             </span>
             <svg
               class="w-4 h-4 ml-auto text-[#172b4d] transition-transform"
@@ -401,35 +401,67 @@
 
               <div>
                 <div class="flex items-center gap-2">
-                  <h2 class="text-[21px] font-semibold text-[#2c2f36]">
-                    Trello Không gian làm việc
-                  </h2>
-                  <button
-                    type="button"
-                    class="p-1 rounded hover:bg-[#e9ebef]"
-                    aria-label="Sửa tên không gian làm việc"
-                  >
-                    <svg
-                      class="w-4 h-4 text-[#2c2f36]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
+                  <!-- Hiển thị tên hoặc input edit -->
+                  <div v-if="!isEditingWorkspaceName" class="flex items-center gap-2">
+                    <h2 class="text-[21px] font-semibold text-[#2c2f36]">
+                      {{ workspaceName }}
+                    </h2>
+                    <button
+                      type="button"
+                      class="p-1 rounded hover:bg-[#e9ebef] transition-colors"
+                      aria-label="Sửa tên không gian làm việc"
+                      @click="startEditingWorkspaceName"
                     >
-                      <path
-                        d="M4 20H8L18 10L14 6L4 16V20Z"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M12.5 7.5L16.5 11.5"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                  </button>
+                      <svg
+                        class="w-4 h-4 text-[#44546f]"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M4 20H8L18 10L14 6L4 16V20Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M12.5 7.5L16.5 11.5"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <!-- Input chỉnh sửa -->
+                  <div v-else class="relative">
+                    <input
+                      ref="workspaceNameInputRef"
+                      v-model="editWorkspaceName"
+                      type="text"
+                      class="w-[320px] rounded border border-[#388bff] px-3 py-1.5 text-[21px] font-semibold outline-none focus:border-[#388bff] focus:ring-1 focus:ring-[#388bff]"
+                      @keyup.enter="saveWorkspaceName"
+                      @keyup.escape="cancelEditingWorkspaceName"
+                    />
+                    <div class="mt-2 flex gap-2">
+                      <button
+                        type="button"
+                        class="rounded bg-[#0c66e4] px-3 py-1.5 text-[13px] font-semibold text-white hover:bg-[#0055cc] transition-colors"
+                        @click="saveWorkspaceName"
+                      >
+                        Lưu
+                      </button>
+                      <button
+                        type="button"
+                        class="rounded px-3 py-1.5 text-[13px] font-semibold text-[#44546f] hover:bg-[#e9ebef] transition-colors"
+                        @click="cancelEditingWorkspaceName"
+                      >
+                        Hủy
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="mt-1 flex items-center gap-1.5 text-[14px] text-[#44546f]">
@@ -590,7 +622,7 @@
                     T
                   </div>
                   <h3 class="text-[21px] font-semibold">
-                    Trello Không gian làm việc
+                    {{ workspaceName }}
                   </h3>
                 </div>
 
@@ -967,6 +999,12 @@ const createBoardModalStyle = ref({
 const isSidebarCollapsed = ref(false);
 const isMobile = ref(false);
 
+// State cho chức năng chỉnh sửa tên workspace
+const workspaceName = ref("Trello Không gian làm việc");
+const isEditingWorkspaceName = ref(false);
+const editWorkspaceName = ref("");
+const workspaceNameInputRef = ref(null);
+
 const checkMobile = () => {
   isMobile.value = window.innerWidth < 1024;
   if (isMobile.value) {
@@ -980,13 +1018,55 @@ const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;
 };
 
+// Hàm xử lý chỉnh sửa tên workspace
+const startEditingWorkspaceName = () => {
+  editWorkspaceName.value = workspaceName.value;
+  isEditingWorkspaceName.value = true;
+  nextTick(() => {
+    if (workspaceNameInputRef.value) {
+      workspaceNameInputRef.value.focus();
+      workspaceNameInputRef.value.select();
+    }
+  });
+};
+
+const saveWorkspaceName = () => {
+  const trimmedName = editWorkspaceName.value.trim();
+  if (trimmedName && trimmedName !== workspaceName.value) {
+    workspaceName.value = trimmedName;
+    console.log("Đã đổi tên workspace thành:", trimmedName);
+  }
+  cancelEditingWorkspaceName();
+};
+
+const cancelEditingWorkspaceName = () => {
+  isEditingWorkspaceName.value = false;
+  editWorkspaceName.value = "";
+};
+
+// Xử lý click ra ngoài để đóng edit
+const handleDocumentClick = (event) => {
+  if (
+    isEditingWorkspaceName.value &&
+    workspaceNameInputRef.value &&
+    !workspaceNameInputRef.value.contains(event.target)
+  ) {
+    const editButton = event.target.closest('button[aria-label="Sửa tên không gian làm việc"]');
+    if (!editButton) {
+      saveWorkspaceName();
+    }
+  }
+};
+
 onMounted(() => {
   checkMobile();
   window.addEventListener('resize', checkMobile);
+  document.addEventListener('click', handleDocumentClick);
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', checkMobile);
+  document.removeEventListener('click', handleDocumentClick);
 });
 
 const pageThemeStyle = computed(() => ({
