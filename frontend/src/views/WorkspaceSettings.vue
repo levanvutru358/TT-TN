@@ -225,35 +225,67 @@
               T
             </div>
 
-            <div>
+            <div class="relative">
               <div class="flex flex-wrap items-center gap-2">
-                <h2 class="text-[21px] font-semibold leading-none">Trello Không gian làm việc</h2>
-                <button
-                  type="button"
-                  class="rounded p-1 hover:bg-[#e9ebef]"
-                  aria-label="Sửa tên"
-                >
-                  <svg
-                    class="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
+                <!-- Hiển thị tên hoặc input edit -->
+                <div v-if="!isEditingName" class="flex items-center gap-2">
+                  <h2 class="text-[21px] font-semibold leading-none">{{ workspaceName }}</h2>
+                  <button
+                    type="button"
+                    class="rounded p-1 hover:bg-[#e9ebef] transition-colors"
+                    aria-label="Sửa tên"
+                    @click="startEditing"
                   >
-                    <path
-                      d="M4 20H8L18 10L14 6L4 16V20Z"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M12.5 7.5L16.5 11.5"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      class="h-4 w-4 text-[#44546f]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M4 20H8L18 10L14 6L4 16V20Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M12.5 7.5L16.5 11.5"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Input chỉnh sửa -->
+                <div v-else class="relative">
+                  <input
+                    ref="nameInputRef"
+                    v-model="editName"
+                    type="text"
+                    class="w-[280px] rounded border border-[#388bff] px-3 py-2 text-[21px] font-semibold leading-none outline-none focus:border-[#388bff] focus:ring-1 focus:ring-[#388bff]"
+                    @keyup.enter="saveName"
+                    @keyup.escape="cancelEditing"
+                  />
+                  <div class="mt-2 flex gap-2">
+                    <button
+                      type="button"
+                      class="rounded bg-[#0c66e4] px-3 py-1.5 text-[13px] font-semibold text-white hover:bg-[#0055cc] transition-colors"
+                      @click="saveName"
+                    >
+                      Lưu
+                    </button>
+                    <button
+                      type="button"
+                      class="rounded px-3 py-1.5 text-[13px] font-semibold text-[#44546f] hover:bg-[#e9ebef] transition-colors"
+                      @click="cancelEditing"
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                </div>
               </div>
 
               <div class="mt-1 flex items-center gap-1.5 text-[14px] text-[#44546f]">
@@ -390,7 +422,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, nextTick } from "vue";
 import { useResponsiveSidebarCollapse } from "@/composables/useResponsiveSidebarCollapse.js";
 
 const LockIcon = {
@@ -479,6 +511,12 @@ const showVisibilityPanel = ref(false);
 const selectedVisibility = ref("private");
 const visibilityPanelRef = ref(null);
 
+// Thêm các state cho chức năng chỉnh sửa tên
+const workspaceName = ref("Trello Không gian làm việc");
+const isEditingName = ref(false);
+const editName = ref("");
+const nameInputRef = ref(null);
+
 const currentVisibility = computed(
   () => visibilityOptions.find((option) => option.id === selectedVisibility.value) ?? visibilityOptions[0]
 );
@@ -492,6 +530,33 @@ const selectVisibility = (visibilityId) => {
   showVisibilityPanel.value = false;
 };
 
+// Các hàm xử lý chỉnh sửa tên
+const startEditing = () => {
+  editName.value = workspaceName.value;
+  isEditingName.value = true;
+  nextTick(() => {
+    if (nameInputRef.value) {
+      nameInputRef.value.focus();
+      nameInputRef.value.select();
+    }
+  });
+};
+
+const saveName = () => {
+  const trimmedName = editName.value.trim();
+  if (trimmedName && trimmedName !== workspaceName.value) {
+    workspaceName.value = trimmedName;
+    // Có thể thêm logic lưu vào API ở đây
+    console.log("Đã đổi tên thành:", trimmedName);
+  }
+  cancelEditing();
+};
+
+const cancelEditing = () => {
+  isEditingName.value = false;
+  editName.value = "";
+};
+
 const handleDocumentClick = (event) => {
   const target = event.target;
 
@@ -501,6 +566,15 @@ const handleDocumentClick = (event) => {
     !visibilityPanelRef.value.contains(target)
   ) {
     showVisibilityPanel.value = false;
+  }
+  
+  // Đóng panel chỉnh sửa khi click ra ngoài
+  if (isEditingName.value && nameInputRef.value && !nameInputRef.value.contains(target)) {
+    // Kiểm tra xem click có phải là vào button chỉnh sửa không
+    const editButton = event.target.closest('button[aria-label="Sửa tên"]');
+    if (!editButton) {
+      saveName();
+    }
   }
 };
 
