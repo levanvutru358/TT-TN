@@ -45,22 +45,6 @@
             to="/personal/profile"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
-              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8" />
-              <path
-                d="M7.5 18C8.2 16.1 10 14.8 12 14.8C14 14.8 15.8 16.1 16.5 18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
             <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
           </router-link>
 
@@ -68,21 +52,6 @@
             to="/personal/activity"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M6 8H18M6 12H14M6 16H18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-              <circle cx="16.5" cy="12" r="1.5" fill="currentColor" />
-            </svg>
             <span class="text-[15px] font-semibold">Hoạt động</span>
           </router-link>
 
@@ -90,24 +59,6 @@
             to="/workspace/cards"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <rect
-                x="4.5"
-                y="7"
-                width="15"
-                height="10"
-                rx="2"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <path d="M9 7V17" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Thẻ</span>
           </router-link>
 
@@ -115,21 +66,6 @@
             to="/personal/settings"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 8.5V6M12 18V15.5M8.5 12H6M18 12H15.5M9.2 9.2L7.4 7.4M16.6 16.6L14.8 14.8M14.8 9.2L16.6 7.4M7.4 16.6L9.2 14.8"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-              <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Cài đặt</span>
           </router-link>
         </div>
@@ -137,14 +73,18 @@
         <div class="mt-8 border-t border-[#d0d4db] pt-7">
           <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
-          <div class="mb-2 flex items-center gap-3 px-2 py-2">
+          <router-link
+            to="/"
+            class="mb-2 flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-[#e9ebef]"
+            aria-label="Về trang chủ Trello"
+          >
             <div
               class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
             >
               T
             </div>
             <span class="text-[15px]">Trello Không gian làm việc</span>
-          </div>
+          </router-link>
 
           <router-link
             to="/workspace/boards"
@@ -253,7 +193,7 @@
         </div>
       </aside>
 
-      <main class="relative flex-1 px-6 py-6 lg:px-8 lg:py-8">
+      <main class="relative min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <router-link
           to="/workspace/boards"
           class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] hover:bg-[#d0d4db]"
@@ -275,10 +215,10 @@
           </svg>
         </router-link>
 
-        <div class="max-w-[1180px]">
+        <div class="max-w-[1180px] pr-12 sm:pr-0">
           <h1 class="mb-5 text-[28px] font-semibold">Các cài đặt Không gian làm việc</h1>
 
-          <div class="mb-8 flex items-start gap-4">
+          <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start">
             <div
               class="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-lg font-semibold text-white"
             >
@@ -286,7 +226,7 @@
             </div>
 
             <div>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
                 <h2 class="text-[21px] font-semibold leading-none">Trello Không gian làm việc</h2>
                 <button
                   type="button"
@@ -326,7 +266,7 @@
           <section ref="visibilityPanelRef" class="relative mb-8 border-b border-[#d0d4db] pb-6">
             <h3 class="mb-4 text-[20px] font-semibold">Khả năng hiển thị trong Không gian làm việc</h3>
 
-            <div class="flex items-start justify-between gap-6">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
               <p class="max-w-[840px] text-[15px] leading-[1.5]">
                 <component :is="currentVisibility.inlineIcon" class="mr-1 inline h-4 w-4" />
                 <span class="font-medium">{{ currentVisibility.label }}</span>
@@ -335,7 +275,7 @@
 
               <button
                 type="button"
-                class="h-9 shrink-0 rounded-md bg-[#dfe1e6] px-3.5 text-[13px] font-semibold hover:bg-[#d0d4db]"
+                class="h-9 w-full rounded-md bg-[#dfe1e6] px-3.5 text-[13px] font-semibold hover:bg-[#d0d4db] sm:w-auto sm:shrink-0"
                 @click="toggleVisibilityPanel"
               >
                 Thay đổi
@@ -344,7 +284,7 @@
 
             <div
               v-if="showVisibilityPanel"
-              class="absolute right-0 top-14 z-30 w-[368px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-[16px] border border-[#d0d4db] bg-white shadow-[0_12px_24px_rgba(9,30,66,0.22)]"
+              class="absolute left-0 top-14 z-30 w-full max-w-[calc(100vw-2rem)] overflow-hidden rounded-[16px] border border-[#d0d4db] bg-white shadow-[0_12px_24px_rgba(9,30,66,0.22)] sm:left-auto sm:right-0 sm:w-[368px]"
             >
               <div class="flex items-start justify-between gap-4 border-b border-[#ebecf0] px-6 py-5">
                 <h4 class="max-w-[250px] text-[18px] font-semibold leading-[1.3]">
@@ -415,7 +355,7 @@
           <section>
             <h3 class="mb-4 text-[20px] font-semibold">Đang liên kết các Không gian làm việc Slack</h3>
 
-            <div class="flex items-start justify-between gap-6 border-t border-[#d0d4db] pt-4">
+            <div class="flex flex-col gap-4 border-t border-[#d0d4db] pt-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
               <div>
                 <p class="text-[15px] leading-[1.5]">
                   Liên kết các Không gian làm việc Slack và Trello với nhau để cộng tác trong các dự án
@@ -428,7 +368,7 @@
 
               <button
                 type="button"
-                class="h-9 shrink-0 rounded-md bg-[#dfe1e6] px-4 text-[13px] font-semibold hover:bg-[#d0d4db]"
+                class="h-9 w-full rounded-md bg-[#dfe1e6] px-4 text-[13px] font-semibold hover:bg-[#d0d4db] sm:w-auto sm:shrink-0"
               >
                 Thêm vào Slack
               </button>
@@ -451,6 +391,7 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useResponsiveSidebarCollapse } from "@/composables/useResponsiveSidebarCollapse.js";
 
 const LockIcon = {
   template: `
@@ -533,6 +474,7 @@ const visibilityOptions = [
 ];
 
 const isSidebarCollapsed = ref(false);
+useResponsiveSidebarCollapse(isSidebarCollapsed);
 const showVisibilityPanel = ref(false);
 const selectedVisibility = ref("private");
 const visibilityPanelRef = ref(null);

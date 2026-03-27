@@ -45,22 +45,6 @@
             to="/personal/profile"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
-              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8" />
-              <path
-                d="M7.5 18C8.2 16.1 10 14.8 12 14.8C14 14.8 15.8 16.1 16.5 18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
             <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
           </router-link>
 
@@ -68,21 +52,6 @@
             to="/personal/activity"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M6 8H18M6 12H14M6 16H18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-              <circle cx="16.5" cy="12" r="1.5" fill="currentColor" />
-            </svg>
             <span class="text-[15px] font-semibold">Hoạt động</span>
           </router-link>
 
@@ -90,24 +59,6 @@
             type="button"
             class="flex w-full items-center gap-3 rounded-lg border border-[#0c66e4] bg-[#dce4f0] px-3 py-2 text-[#0c66e4]"
           >
-            <svg
-              class="h-[18px] w-[18px]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <rect
-                x="4.5"
-                y="7"
-                width="15"
-                height="10"
-                rx="2"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <path d="M9 7V17" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Thẻ</span>
           </button>
 
@@ -115,21 +66,6 @@
             to="/personal/settings"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 8.5V6M12 18V15.5M8.5 12H6M18 12H15.5M9.2 9.2L7.4 7.4M16.6 16.6L14.8 14.8M14.8 9.2L16.6 7.4M7.4 16.6L9.2 14.8"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-              <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Cài đặt</span>
           </router-link>
         </div>
@@ -137,14 +73,18 @@
         <div class="mt-8 border-t border-[#d0d4db] pt-7">
           <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
-          <div class="mb-2 flex items-center gap-3 px-2 py-2">
+          <router-link
+            to="/"
+            class="mb-2 flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-[#e9ebef]"
+            aria-label="Về trang chủ Trello"
+          >
             <div
               class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
             >
               T
             </div>
             <span class="text-[15px]">Trello Không gian làm việc</span>
-          </div>
+          </router-link>
 
           <router-link
             to="/workspace/boards"
@@ -253,7 +193,7 @@
         </div>
       </aside>
 
-      <main class="relative flex-1 px-6 py-6 lg:px-8 lg:py-8">
+      <main class="relative min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <router-link
           to="/workspace/boards"
           class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] hover:bg-[#d0d4db]"
@@ -275,14 +215,14 @@
           </svg>
         </router-link>
 
-        <div class="max-w-[1180px] pt-4">
+        <div class="max-w-[1180px] pt-4 pr-12 sm:pr-0">
           <h1 class="mb-5 text-[28px] font-semibold">Thẻ</h1>
 
-          <div class="relative mb-6 flex flex-wrap items-start justify-end gap-3">
-            <div ref="sortMenuRef" class="relative">
+          <div class="relative mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-end">
+            <div ref="sortMenuRef" class="relative w-full sm:w-auto">
               <button
                 type="button"
-                class="flex min-h-10 min-w-[290px] items-center justify-between rounded-md border bg-white px-4 py-2 text-[13px] font-medium transition-colors"
+                class="flex min-h-10 w-full items-center justify-between rounded-md border bg-white px-4 py-2 text-[13px] font-medium transition-colors sm:w-auto sm:min-w-[290px]"
                 :class="
                   showSortMenu
                     ? 'border-[#0c66e4] text-[#0c66e4] shadow-[inset_0_0_0_1px_#0c66e4]'
@@ -311,7 +251,7 @@
 
               <div
                 v-if="showSortMenu"
-                class="absolute left-0 top-[calc(100%+10px)] z-30 w-[290px] overflow-hidden rounded-md border border-[#d0d4db] bg-white shadow-[0_8px_16px_rgba(9,30,66,0.15)]"
+                class="absolute left-0 top-[calc(100%+10px)] z-30 w-full overflow-hidden rounded-md border border-[#d0d4db] bg-white shadow-[0_8px_16px_rgba(9,30,66,0.15)] sm:w-[290px]"
               >
                 <button
                   v-for="option in sortOptions"
@@ -330,10 +270,10 @@
               </div>
             </div>
 
-            <div ref="filterPanelRef" class="relative">
+            <div ref="filterPanelRef" class="relative w-full sm:w-auto">
               <button
                 type="button"
-                class="flex h-10 items-center gap-2 rounded-md border px-3.5 text-[13px] font-medium transition-colors"
+                class="flex h-10 w-full items-center justify-between gap-2 rounded-md border px-3.5 text-[13px] font-medium transition-colors sm:w-auto"
                 :class="
                   showFilterPanel
                     ? 'border-[#0c66e4] bg-white text-[#0c66e4] shadow-[inset_0_0_0_1px_#0c66e4]'
@@ -360,7 +300,7 @@
 
               <div
                 v-if="showFilterPanel"
-                class="absolute right-0 top-[calc(100%+12px)] z-30 w-[360px] max-w-[calc(100vw-3rem)] rounded-xl border border-[#d0d4db] bg-white px-5 py-5 shadow-[0_12px_24px_rgba(9,30,66,0.22)]"
+                class="absolute left-0 right-0 top-[calc(100%+12px)] z-30 w-auto rounded-xl border border-[#d0d4db] bg-white px-5 py-5 shadow-[0_12px_24px_rgba(9,30,66,0.22)] sm:left-auto sm:right-0 sm:w-[360px] sm:max-w-[calc(100vw-3rem)]"
               >
                 <div class="mb-5 flex items-center justify-between">
                   <h2 class="text-[18px] font-semibold">Lọc thẻ</h2>
@@ -541,7 +481,7 @@
 
             <button
               type="button"
-              class="h-10 rounded-md border px-3.5 text-[13px] font-medium transition-colors"
+              class="h-10 w-full rounded-md border px-3.5 text-[13px] font-medium transition-colors sm:w-auto"
               :class="
                 hasActiveFilters
                   ? 'border-[#d0d4db] bg-white text-[#172b4d] hover:bg-[#f7f8fa]'
@@ -556,10 +496,10 @@
 
           <div
             v-if="displayedCards.length"
-            class="overflow-hidden rounded-lg border border-[#d0d4db] bg-white"
+            class="overflow-x-auto rounded-lg border border-[#d0d4db] bg-white"
           >
             <div
-              class="grid grid-cols-[minmax(0,2.2fr)_1fr_1fr_1.25fr_1.45fr] gap-4 border-b border-[#dfe1e6] px-5 py-3 text-[14px] font-medium text-[#44546f]"
+              class="grid min-w-[700px] grid-cols-[minmax(0,2.2fr)_1fr_1fr_1.25fr_1.45fr] gap-4 border-b border-[#dfe1e6] px-5 py-3 text-[14px] font-medium text-[#44546f]"
             >
               <div>Thẻ</div>
               <div>Danh sách</div>
@@ -571,7 +511,7 @@
             <div
               v-for="card in displayedCards"
               :key="card.id"
-              class="grid grid-cols-[minmax(0,2.2fr)_1fr_1fr_1.25fr_1.45fr] items-center gap-4 border-b border-[#dfe1e6] px-5 py-3 text-[14px] last:border-b-0"
+              class="grid min-w-[700px] grid-cols-[minmax(0,2.2fr)_1fr_1fr_1.25fr_1.45fr] items-center gap-4 border-b border-[#dfe1e6] px-5 py-3 text-[14px] last:border-b-0"
             >
               <div class="flex min-w-0 items-center gap-3">
                 <span
@@ -659,8 +599,10 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import { useResponsiveSidebarCollapse } from "@/composables/useResponsiveSidebarCollapse.js";
 
 const isSidebarCollapsed = ref(false);
+useResponsiveSidebarCollapse(isSidebarCollapsed);
 const sortMenuRef = ref(null);
 const filterPanelRef = ref(null);
 const showSortMenu = ref(false);

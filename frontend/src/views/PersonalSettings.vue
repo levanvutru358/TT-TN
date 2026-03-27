@@ -62,22 +62,6 @@
             to="/personal/profile"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
-              <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8" />
-              <path
-                d="M7.5 18C8.2 16.1 10 14.8 12 14.8C14 14.8 15.8 16.1 16.5 18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
             <span class="text-[15px] font-semibold">Hồ sơ và hiển thị</span>
           </router-link>
 
@@ -85,21 +69,6 @@
             to="/personal/activity"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M6 8H18M6 12H14M6 16H18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-              <circle cx="16.5" cy="12" r="1.5" fill="currentColor" />
-            </svg>
             <span class="text-[15px] font-semibold">Hoạt động</span>
           </router-link>
 
@@ -107,24 +76,6 @@
             to="/workspace/cards"
             class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-[#e9ebef]"
           >
-            <svg
-              class="h-[18px] w-[18px] text-[#2c2f36]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <rect
-                x="4.5"
-                y="7"
-                width="15"
-                height="10"
-                rx="2"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <path d="M9 7V17" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Thẻ</span>
           </router-link>
 
@@ -132,21 +83,6 @@
             type="button"
             class="flex w-full items-center gap-3 rounded-lg border border-[#0c66e4] bg-[#dce4f0] px-3 py-2 text-[#0c66e4]"
           >
-            <svg
-              class="h-[18px] w-[18px]"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 8.5V6M12 18V15.5M8.5 12H6M18 12H15.5M9.2 9.2L7.4 7.4M16.6 16.6L14.8 14.8M14.8 9.2L16.6 7.4M7.4 16.6L9.2 14.8"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-              />
-              <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
-            </svg>
             <span class="text-[15px] font-semibold">Cài đặt</span>
           </button>
         </div>
@@ -154,14 +90,18 @@
         <div class="mt-7 border-t border-[#d0d4db] pt-6">
           <h3 class="mb-3 text-[20px] font-semibold">Không gian làm việc</h3>
 
-          <div class="mb-2 flex items-center gap-3 px-2 py-2">
+          <router-link
+            to="/"
+            class="mb-2 flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-[#e9ebef]"
+            aria-label="Về trang chủ Trello"
+          >
             <div
               class="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#8f5fd3] to-[#1669e2] text-sm font-semibold text-white"
             >
               T
             </div>
             <span class="text-[15px]">Trello Không gian làm việc</span>
-          </div>
+          </router-link>
 
           <router-link
             to="/workspace/boards"
@@ -743,8 +683,10 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useResponsiveSidebarCollapse } from "@/composables/useResponsiveSidebarCollapse.js";
 
 const isSidebarCollapsed = ref(false);
+useResponsiveSidebarCollapse(isSidebarCollapsed);
 const emailFrequency = ref("scheduled");
 
 const emailFrequencyOptions = [
