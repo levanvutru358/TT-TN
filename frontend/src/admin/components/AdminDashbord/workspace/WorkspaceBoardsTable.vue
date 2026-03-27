@@ -20,8 +20,9 @@
           <tr
             v-for="board in boards"
             :key="board.id"
-            class="cursor-pointer border-t border-slate-100 transition hover:bg-slate-50"
-            @click="goToBoardDetail(board.id)"
+            class="border-t border-slate-100 transition hover:bg-slate-50"
+            :class="{ 'cursor-pointer': !disableNavigation }"
+            @click="handleRowClick(board.id)"
           >
             <td class="px-5 py-4">
               <div class="min-w-0">
@@ -77,10 +78,14 @@ import type { WorkspaceBoardItem } from '@/admin/types/admin'
 import AppBadge from '@/admin/components/AdminDashbord/common/AppBadge.vue'
 import EmptyState from '@/admin/components/AdminDashbord/common/EmptyState.vue'
 
-defineProps({
+const props = defineProps({
   boards: {
     type: Array as PropType<WorkspaceBoardItem[]>,
     default: () => [],
+  },
+  disableNavigation: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -88,7 +93,9 @@ const router = useRouter()
 
 const formatDate = (date: string) => dayjs(date).format('DD/MM/YYYY')
 
-const goToBoardDetail = (boardId: string) => {
-  router.push(`/admin/boards/${boardId}`)
+const handleRowClick = (boardId: string) => {
+  if (!props.disableNavigation) {
+    router.push(`/admin/boards/${boardId}`)
+  }
 }
 </script>

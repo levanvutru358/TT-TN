@@ -18,8 +18,9 @@
           <tr
             v-for="member in members"
             :key="member.id"
-            class="cursor-pointer border-t border-slate-100 transition hover:bg-slate-50"
-            @click="$emit('select-member', member)"
+            class="border-t border-slate-100 transition hover:bg-slate-50"
+            :class="{ 'cursor-pointer': !disableNavigation }"
+            @click="handleRowClick(member)"
           >
             <td class="px-5 py-4 font-semibold text-slate-950">{{ member.name }}</td>
             <td class="px-5 py-4 text-slate-700">{{ member.email }}</td>
@@ -52,14 +53,24 @@ import type { WorkspaceMemberItem } from '@/admin/types/admin'
 import AppBadge from '@/admin/components/AdminDashbord/common/AppBadge.vue'
 import EmptyState from '@/admin/components/AdminDashbord/common/EmptyState.vue'
 
-defineProps({
+const props = defineProps({
   members: {
     type: Array as PropType<WorkspaceMemberItem[]>,
     default: () => [],
   },
+  disableNavigation: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'select-member', member: WorkspaceMemberItem): void
 }>()
+
+const handleRowClick = (member: WorkspaceMemberItem) => {
+  if (!props.disableNavigation) {
+    emit('select-member', member)
+  }
+}
 </script>

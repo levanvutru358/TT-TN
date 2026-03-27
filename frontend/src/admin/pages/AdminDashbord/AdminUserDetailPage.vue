@@ -182,7 +182,10 @@
             </button>
           </div>
         </div>
-        <WorkspaceTable :workspaces="relatedWorkspaces" />
+        <WorkspaceTable 
+          :workspaces="relatedWorkspaces" 
+          :disable-navigation="true"
+        />
       </div>
 
       <!-- Board Section -->
@@ -202,7 +205,10 @@
             </button>
           </div>
         </div>
-        <BoardTable :boards="relatedBoards" />
+        <BoardTable 
+          :boards="relatedBoards" 
+          :disable-navigation="true"
+        />
       </div>
     </template>
 

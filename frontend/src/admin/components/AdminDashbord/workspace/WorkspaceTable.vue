@@ -27,8 +27,9 @@
           <tr
             v-for="(workspace, index) in workspaces"
             :key="workspace.id"
-            class="cursor-pointer border-t border-slate-100 transition hover:bg-slate-50"
-            @click="goToDetail(workspace.id)"
+            class="border-t border-slate-100 transition hover:bg-slate-50"
+            :class="{ 'cursor-pointer': !disableNavigation }"
+            @click="handleRowClick(workspace.id)"
           >
             <td class="px-4 py-4 text-center font-medium text-slate-700">
               {{ index + 1 }}
@@ -93,6 +94,10 @@
         </tbody>
       </table>
     </div>
+
+    <div v-if="disableNavigation" class="border-t border-slate-100 bg-slate-50 px-6 py-3 text-center">
+      <p class="text-xs text-slate-500"></p>
+    </div>
   </div>
 </template>
 
@@ -104,10 +109,14 @@ import type { WorkspaceItem } from '@/admin/types/admin'
 import AppBadge from '@/admin/components/AdminDashbord/common/AppBadge.vue'
 import EmptyState from '@/admin/components/AdminDashbord/common/EmptyState.vue'
 
-defineProps({
+const props = defineProps({
   workspaces: {
     type: Array as PropType<WorkspaceItem[]>,
     default: () => [],
+  },
+  disableNavigation: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -115,7 +124,9 @@ const router = useRouter()
 
 const formatDate = (date: string) => dayjs(date).format('DD/MM/YYYY')
 
-const goToDetail = (workspaceId: string) => {
-  router.push(`/admin/workspaces/${workspaceId}`)
+const handleRowClick = (workspaceId: string) => {
+  if (!props.disableNavigation) {
+    router.push(`/admin/workspaces/${workspaceId}`)
+  }
 }
 </script>

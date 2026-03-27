@@ -120,11 +120,17 @@
       </div>
 
       <div v-if="showMembersSection" class="rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <WorkspaceMembersTable :members="workspaceDetail.members" />
+        <WorkspaceMembersTable 
+          :members="workspaceDetail.members" 
+          :disable-navigation="true"
+        />
       </div>
 
       <div v-if="showBoardsSection" class="rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <WorkspaceBoardsTable :boards="workspaceDetail.boards" />
+        <WorkspaceBoardsTable 
+          :boards="workspaceDetail.boards" 
+          :disable-navigation="true"
+        />
       </div>
     </template>
   </section>

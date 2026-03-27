@@ -6,7 +6,6 @@
     >
       Dang tai dashboard...
     </div>
-
     <template v-else>
       <section class="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -17,28 +16,7 @@
             <h2 class="mt-2 text-[30px] font-black tracking-tight text-slate-950">
               User, workspace, board va card
             </h2>
-          </div>
-
-          <div class="flex flex-wrap gap-2">
-            <RouterLink
-              to="/admin/users"
-              class="rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-100"
-            >
-              Quan ly user
-            </RouterLink>
-            <RouterLink
-              to="/admin/workspaces"
-              class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 transition hover:bg-sky-100"
-            >
-              Quan ly workspace
-            </RouterLink>
-            <RouterLink
-              to="/admin/boards"
-              class="rounded-full border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-semibold text-violet-700 transition hover:bg-violet-100"
-            >
-              Quan ly board
-            </RouterLink>
-          </div>
+                </div>
         </div>
 
         <div class="mt-8 flex items-end gap-4 lg:gap-6">
