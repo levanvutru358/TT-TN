@@ -7,9 +7,9 @@
     />
 
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-      <SummaryMiniCard label="Tong user" :value="adminStore.users.length" />
-      <SummaryMiniCard label="Hoat dong" :value="activeCount" />
-      <SummaryMiniCard label="Da khoa" :value="lockedCount" />
+      <SummaryMiniCard label="Tổng user" :value="adminStore.users.length" />
+      <SummaryMiniCard label="Hoạt động" :value="activeCount" />
+      <SummaryMiniCard label="Đã khóa" :value="lockedCount" />
       <SummaryMiniCard label="Admin" :value="adminCount" />
     </div>
 
@@ -28,8 +28,8 @@
             class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-900 md:w-48"
           >
             <option value="">All status</option>
-            <option value="active">Hoat dong</option>
-            <option value="locked">Da khoa</option>
+            <option value="active">Hoạt động</option>
+            <option value="locked">Đã khóa</option>
           </select>
 
           <select
@@ -38,7 +38,7 @@
           >
             <option value="">All role</option>
             <option value="admin">Admin</option>
-            <option value="member">Member</option>
+            <option value="user">User</option>
           </select>
         </div>
       </div>
@@ -57,7 +57,7 @@
       <button
         type="button"
         class="absolute inset-0 bg-slate-950/55 backdrop-blur-[3px]"
-        aria-label="Dong xac nhan thao tac tai khoan"
+        aria-label="Đóng xác nhận thao tác tài khoản"
         @click="closeToggleConfirmation"
       ></button>
 
@@ -75,13 +75,13 @@
                     : 'bg-emerald-100 text-emerald-700'
                 "
               >
-                {{ confirmTargetUser.status === 'active' ? 'Khoa tai khoan' : 'Mo tai khoan' }}
+                {{ confirmTargetUser.status === 'active' ? 'Khóa tài khoản' : 'Mở tài khoản' }}
               </div>
               <h3 class="mt-4 text-2xl font-black tracking-tight text-slate-950">
                 {{
                   confirmTargetUser.status === 'active'
-                    ? 'Xac nhan khoa tai khoan'
-                    : 'Xac nhan mo tai khoan'
+                    ? 'Xác nhận khóa tài khoản'
+                    : 'Xác nhận mở tài khoản'
                 }}
               </h3>
             </div>
@@ -89,7 +89,7 @@
             <button
               type="button"
               class="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
-              aria-label="Dong"
+              aria-label="Đóng"
               @click="closeToggleConfirmation"
             >
               <svg
@@ -112,8 +112,8 @@
           <p class="mt-4 text-sm leading-7 text-slate-600">
             {{
               confirmTargetUser.status === 'active'
-                ? `Ban co chac muon khoa tai khoan ${confirmTargetUser.name}? User se khong the truy cap he thong cho den khi duoc mo lai.`
-                : `Ban co chac muon mo tai khoan ${confirmTargetUser.name}? User se duoc phep dang nhap va su dung he thong tro lai.`
+                ? `Bạn có chắc muốn khóa tài khoản ${confirmTargetUser.name}? User sẽ không thể truy cập hệ thống cho đến khi được mở lại.`
+                : `Bạn có chắc muốn mở tài khoản ${confirmTargetUser.name}? User sẽ được phép đăng nhập và sử dụng hệ thống trở lại.`
             }}
           </p>
 
@@ -123,7 +123,7 @@
               class="rounded-2xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
               @click="closeToggleConfirmation"
             >
-              Huy
+              Hủy
             </button>
             <button
               type="button"
@@ -136,7 +136,7 @@
               :disabled="adminStore.isUpdatingUser"
               @click="confirmToggleLock"
             >
-              {{ confirmTargetUser.status === 'active' ? 'Xac nhan khoa' : 'Xac nhan mo' }}
+              {{ confirmTargetUser.status === 'active' ? 'Xác nhận khóa' : 'Xác nhận mở' }}
             </button>
           </div>
         </div>
