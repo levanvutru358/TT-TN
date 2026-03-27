@@ -415,8 +415,8 @@
               class="mt-1 h-10 w-full rounded-md border bg-white px-3 text-[14px] outline-none"
               :class="
                 newBoardTitle.trim().length === 0
-                  ? 'border-[#e2483d] focus:ring-1 focus:ring-[#e2483d]'
-                  : 'border-[#c7cdd8] focus:ring-1 focus:ring-[#0c66e4]'
+                  ? 'focus:ring-2 '
+                  : 'focus:ring-1 '
               "
             />
           </label>

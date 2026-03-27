@@ -105,10 +105,8 @@
       </section>
 
       <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <RouterLink
-          to="/admin/users"
-          class="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-        >
+        <!-- User status card - no click, no route display -->
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div class="flex items-start justify-between gap-4">
             <div>
               <div class="text-xs font-bold uppercase tracking-[0.22em] text-emerald-600">
@@ -120,10 +118,6 @@
               <p class="mt-2 text-sm leading-6 text-slate-500">
                 Nhan vao khung nay de den trang quan ly user.
               </p>
-            </div>
-
-            <div class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              /admin/users
             </div>
           </div>
 
@@ -146,7 +140,7 @@
               <div
                 v-for="item in userStatusItems"
                 :key="item.label"
-                class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-100 transition group-hover:bg-white"
+                class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-100"
               >
                 <div class="flex items-center justify-between gap-3">
                   <div class="flex items-center gap-3">
@@ -165,12 +159,10 @@
               </div>
             </div>
           </div>
-        </RouterLink>
+        </div>
 
-        <RouterLink
-          to="/admin/workspaces"
-          class="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-        >
+        <!-- Workspace status card - no click, no route display -->
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div class="flex items-start justify-between gap-4">
             <div>
               <div class="text-xs font-bold uppercase tracking-[0.22em] text-sky-600">
@@ -182,10 +174,6 @@
               <p class="mt-2 text-sm leading-6 text-slate-500">
                 Nhan vao khung nay de den trang quan ly workspace.
               </p>
-            </div>
-
-            <div class="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
-              /admin/workspaces
             </div>
           </div>
 
@@ -208,7 +196,7 @@
               <div
                 v-for="item in workspaceStatusItems"
                 :key="item.label"
-                class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-100 transition group-hover:bg-white"
+                class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-100"
               >
                 <div class="flex items-center justify-between gap-3">
                   <div class="flex items-center gap-3">
@@ -227,7 +215,7 @@
               </div>
             </div>
           </div>
-        </RouterLink>
+        </div>
       </div>
     </template>
   </section>
