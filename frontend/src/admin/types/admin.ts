@@ -8,7 +8,7 @@ export interface AdminStats {
   archivedWorkspaces: number
 }
 
-export type UserRole = 'admin' | 'member'
+export type UserRole = 'admin' | 'user'  // Đã đổi từ 'member' thành 'user'
 export type UserStatus = 'active' | 'locked'
 export type WorkspaceStatus = 'active' | 'archived'
 export type BoardVisibility = 'public' | 'private'
@@ -35,7 +35,7 @@ export interface WorkspaceItem {
   memberIds: string[]
   totalMembers: number
   totalAdmins: number
-  totalMemberUsers: number
+  totalUsers: number  // Đã đổi từ totalMemberUsers thành totalUsers
   totalBoards: number
   status: WorkspaceStatus
   createdAt: string
@@ -68,7 +68,7 @@ export interface WorkspaceDetail {
   status: WorkspaceStatus
   totalMembers: number
   totalAdmins: number
-  totalMemberUsers: number
+  totalUsers: number  // Đã đổi từ totalMemberUsers thành totalUsers
   totalBoards: number
   createdAt: string
   members: WorkspaceMemberItem[]
