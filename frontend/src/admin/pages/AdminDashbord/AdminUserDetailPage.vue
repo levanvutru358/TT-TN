@@ -65,28 +65,28 @@
             <div class="rounded-2xl bg-slate-50 p-4">
               <p class="text-sm font-medium text-slate-500">Chuc danh</p>
               <p class="mt-2 text-base font-semibold text-slate-950">
-                {{ user.jobTitle }}
+                {{ user.jobTitle || '--' }}
               </p>
             </div>
 
             <div class="rounded-2xl bg-slate-50 p-4">
               <p class="text-sm font-medium text-slate-500">Phong ban</p>
               <p class="mt-2 text-base font-semibold text-slate-950">
-                {{ user.department }}
+                {{ user.department || '--' }}
               </p>
             </div>
 
             <div class="rounded-2xl bg-slate-50 p-4">
               <p class="text-sm font-medium text-slate-500">Vi tri</p>
               <p class="mt-2 text-base font-semibold text-slate-950">
-                {{ user.location }}
+                {{ user.location || '--' }}
               </p>
             </div>
 
             <div class="rounded-2xl bg-slate-50 p-4">
               <p class="text-sm font-medium text-slate-500">So dien thoai</p>
               <p class="mt-2 text-base font-semibold text-slate-950">
-                {{ user.phone }}
+                {{ user.phone || '--' }}
               </p>
             </div>
 
@@ -114,18 +114,44 @@
             </div>
 
             <div class="grid grid-cols-2 gap-4">
+              <!-- Workspace Card -->
               <div class="rounded-2xl border border-slate-200 p-4">
-                <p class="text-sm font-medium text-slate-500">Workspace</p>
-                <p class="mt-2 text-2xl font-bold text-slate-950">
-                  {{ relatedWorkspaces.length }}
-                </p>
+                <div class="flex flex-col gap-2">
+                  <div>
+                    <p class="text-sm font-medium text-slate-500">Workspace</p>
+                    <p class="mt-2 text-2xl font-bold text-slate-950">
+                      {{ relatedWorkspaces.length }}
+                    </p>
+                  </div>
+                  <button
+                    v-if="relatedWorkspaces.length > 0"
+                    type="button"
+                    class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300"
+                    @click="toggleWorkspaceSection"
+                  >
+                    {{ showWorkspaceSection ? 'Đóng' : 'Xem tất cả' }}
+                  </button>
+                </div>
               </div>
 
+              <!-- Board Card -->
               <div class="rounded-2xl border border-slate-200 p-4">
-                <p class="text-sm font-medium text-slate-500">Board</p>
-                <p class="mt-2 text-2xl font-bold text-slate-950">
-                  {{ relatedBoards.length }}
-                </p>
+                <div class="flex flex-col gap-2">
+                  <div>
+                    <p class="text-sm font-medium text-slate-500">Board</p>
+                    <p class="mt-2 text-2xl font-bold text-slate-950">
+                      {{ relatedBoards.length }}
+                    </p>
+                  </div>
+                  <button
+                    v-if="relatedBoards.length > 0"
+                    type="button"
+                    class="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300"
+                    @click="toggleBoardSection"
+                  >
+                    {{ showBoardSection ? 'Đóng' : 'Xem tất cả' }}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -139,8 +165,51 @@
         </div>
       </div>
 
-      <WorkspaceTable :workspaces="relatedWorkspaces" />
-      <BoardTable :boards="relatedBoards" />
+      <!-- Workspace Section -->
+      <div v-if="showWorkspaceSection" class="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-base font-bold text-slate-950">Danh sach workspace</h4>
+              <p class="text-xs text-slate-500">Tong so: {{ relatedWorkspaces.length }} workspace</p>
+            </div>
+            <button
+              type="button"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+              @click="toggleWorkspaceSection"
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
+        <WorkspaceTable 
+          :workspaces="relatedWorkspaces" 
+          :disable-navigation="true"
+        />
+      </div>
+
+      <!-- Board Section -->
+      <div v-if="showBoardSection" class="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <div class="border-b border-slate-200 bg-slate-50 px-6 py-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-base font-bold text-slate-950">Danh sach board</h4>
+              <p class="text-xs text-slate-500">Tong so: {{ relatedBoards.length }} board</p>
+            </div>
+            <button
+              type="button"
+              class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+              @click="toggleBoardSection"
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
+        <BoardTable 
+          :boards="relatedBoards" 
+          :disable-navigation="true"
+        />
+      </div>
     </template>
 
     <div
@@ -259,6 +328,10 @@ const adminStore = useAdminStore()
 const isBootstrapping = ref(true)
 const isConfirmOpen = ref(false)
 
+// Section toggle states
+const showWorkspaceSection = ref(false)
+const showBoardSection = ref(false)
+
 const userId = computed(() => String(route.params.id || ''))
 
 onMounted(async () => {
@@ -287,12 +360,12 @@ const user = computed(() => adminStore.users.find((item) => item.id === userId.v
 const relatedWorkspaces = computed(() =>
   adminStore.workspaces.filter(
     (workspace) =>
-      workspace.ownerId === userId.value || workspace.memberIds.includes(userId.value)
+      workspace.ownerId === userId.value || workspace.memberIds?.includes(userId.value)
   )
 )
 
 const relatedBoards = computed(() =>
-  adminStore.boards.filter((board) => board.memberIds.includes(userId.value))
+  adminStore.boards.filter((board) => board.memberIds?.includes(userId.value))
 )
 
 const closeConfirm = () => {
@@ -306,6 +379,14 @@ const confirmToggleLock = async () => {
 
   await adminStore.toggleUserLock(user.value.id)
   closeConfirm()
+}
+
+const toggleWorkspaceSection = () => {
+  showWorkspaceSection.value = !showWorkspaceSection.value
+}
+
+const toggleBoardSection = () => {
+  showBoardSection.value = !showBoardSection.value
 }
 
 const formatDate = (date: string) => dayjs(date).format('DD/MM/YYYY')

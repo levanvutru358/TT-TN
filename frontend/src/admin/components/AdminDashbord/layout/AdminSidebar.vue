@@ -9,7 +9,7 @@
     />
 
     <aside
-      class="fixed inset-y-0 left-0 z-40 flex min-h-screen flex-col border-r border-slate-800 bg-slate-950 text-white transition-[transform,width] duration-200 lg:relative lg:translate-x-0"
+      class="fixed inset-y-0 left-0 z-40 flex h-full min-h-screen flex-col border-r border-slate-800 bg-slate-950 text-white transition-[transform,width] duration-200 lg:relative lg:translate-x-0"
       :class="sidebarClass"
     >
       <div
@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <nav class="flex-1 space-y-2 px-3 py-6">
+      <nav class="flex-1 overflow-y-auto space-y-2 px-3 py-6">
         <RouterLink
           v-for="item in menuItems"
           :key="item.to"

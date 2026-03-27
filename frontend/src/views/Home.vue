@@ -1,12 +1,46 @@
 ﻿<template>
-  <div class="min-h-screen text-[#172b4d]" :style="pageThemeStyle">
+  <div class="min-h-screen bg-[#f1f2f4] text-[#172b4d]">
     <WorkspaceHeader
       v-model="searchKeyword"
       @create-click="openCreateBoardModal"
     />
 
-    <div class="max-w-[1760px] mx-auto flex">
-      <aside class="hidden lg:block w-[288px] px-6 py-8">
+    <div class="relative flex min-h-screen">
+      <!-- Toggle button (chevron) -->
+      <button
+        type="button"
+        class="absolute top-16 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] transition-[left] duration-200 hover:bg-[#d0d4db]"
+        :class="isSidebarCollapsed ? 'left-3' : 'left-[274px]'"
+        :aria-label="isSidebarCollapsed ? 'Mở sidebar' : 'Thu gọn sidebar'"
+        @click="toggleSidebar"
+      >
+        <svg
+          class="h-4 w-4 transition-transform duration-200"
+          :class="{ 'rotate-180': isSidebarCollapsed }"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            d="M14 6L8 12L14 18"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+
+      <!-- Sidebar -->
+      <aside
+        class="relative shrink-0 overflow-hidden bg-[#f5f6f8] transition-[width,padding,border] duration-200"
+        :class="
+          isSidebarCollapsed
+            ? 'w-0 border-r-0 px-0 py-0 pointer-events-none'
+            : 'w-[288px] border-r border-[#d0d4db] px-6 py-8'
+        "
+      >
         <nav class="space-y-2">
           <button
             v-for="item in mainMenus"
@@ -149,7 +183,7 @@
         </div>
       </aside>
 
-      <main class="flex-1 px-6 py-6 lg:px-8">
+      <main class="relative min-w-0 flex-1 overflow-hidden px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <template v-if="activeMenu === 'home'">
           <div class="relative mx-auto w-full xl:pr-[264px]">
             <section
@@ -496,46 +530,48 @@
                 <h2 class="text-[20px] font-bold text-[#172b4d]">Đã xem gần đây</h2>
               </div>
 
-              <router-link
-                :to="{
-                  path: '/projects/1',
-                  query: {
-                    title: 'Premortem',
-                    bg: 'linear-gradient(135deg,#d8f0f7_0%,#d4eef6_50%,#c8e9f2_100%)'
-                  }
-                }"
-                class="group block w-[288px] overflow-hidden rounded-xl border border-[#c8ced8] bg-white shadow-sm transition-shadow hover:shadow-md"
-              >
-                <div
-                  class="h-24 bg-[linear-gradient(135deg,#d8f0f7_0%,#d4eef6_50%,#c8e9f2_100%)] relative overflow-hidden"
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <router-link
+                  :to="{
+                    path: '/projects/1',
+                    query: {
+                      title: 'Premortem',
+                      bg: 'linear-gradient(135deg,#d8f0f7_0%,#d4eef6_50%,#c8e9f2_100%)'
+                    }
+                  }"
+                  class="group block overflow-hidden rounded-xl border border-[#c8ced8] bg-white shadow-sm transition-shadow hover:shadow-md"
                 >
-                  <div class="absolute inset-0 opacity-90">
-                    <div
-                      class="absolute left-4 top-6 w-20 h-6 border border-dashed border-[#ffab00] rounded-full"
-                    ></div>
-                    <div
-                      class="absolute left-9 top-14 w-28 h-6 border border-dashed border-[#ff7452] rounded-full"
-                    ></div>
-                    <div
-                      class="absolute right-4 top-6 h-10 w-10 rounded-lg border-2 border-[var(--workspace-accent)]"
-                    ></div>
-                    <div
-                      class="absolute left-2 top-2 h-3 w-3 rounded-full border-2 border-[var(--workspace-accent)]"
-                    ></div>
-                    <div
-                      class="absolute right-3 top-2 h-3 w-3 rounded-full border-2 border-[var(--workspace-accent)]"
-                    ></div>
-                  </div>
-                  <span
-                    class="absolute right-3 bottom-3 text-xs px-2 py-0.5 rounded bg-[#1d2125] text-white font-semibold"
+                  <div
+                    class="h-24 bg-[linear-gradient(135deg,#d8f0f7_0%,#d4eef6_50%,#c8e9f2_100%)] relative overflow-hidden"
                   >
-                    MẪU
-                  </span>
-                </div>
-                <div class="px-3 py-2 text-[16px] font-medium text-[#172b4d]">
-                  Premortem
-                </div>
-              </router-link>
+                    <div class="absolute inset-0 opacity-90">
+                      <div
+                        class="absolute left-4 top-6 w-20 h-6 border border-dashed border-[#ffab00] rounded-full"
+                      ></div>
+                      <div
+                        class="absolute left-9 top-14 w-28 h-6 border border-dashed border-[#ff7452] rounded-full"
+                      ></div>
+                      <div
+                        class="absolute right-4 top-6 h-10 w-10 rounded-lg border-2 border-[var(--workspace-accent)]"
+                      ></div>
+                      <div
+                        class="absolute left-2 top-2 h-3 w-3 rounded-full border-2 border-[var(--workspace-accent)]"
+                      ></div>
+                      <div
+                        class="absolute right-3 top-2 h-3 w-3 rounded-full border-2 border-[var(--workspace-accent)]"
+                      ></div>
+                    </div>
+                    <span
+                      class="absolute right-3 bottom-3 text-xs px-2 py-0.5 rounded bg-[#1d2125] text-white font-semibold"
+                    >
+                      MẪU
+                    </span>
+                  </div>
+                  <div class="px-3 py-2 text-[16px] font-medium text-[#172b4d]">
+                    Premortem
+                  </div>
+                </router-link>
+              </div>
             </section>
 
             <section class="max-w-[1180px]">
@@ -544,7 +580,7 @@
               </h2>
 
               <div
-                class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 mb-5"
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5"
               >
                 <div class="flex items-center gap-3">
                   <div
@@ -906,7 +942,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import WorkspaceHeader from "@/components/common/WorkspaceHeader.vue";
 
@@ -927,6 +963,30 @@ const createBoardModalStyle = ref({
   top: "56px",
   left: "8px",
   width: "320px",
+});
+const isSidebarCollapsed = ref(false);
+const isMobile = ref(false);
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 1024;
+  if (isMobile.value) {
+    isSidebarCollapsed.value = true;
+  } else {
+    isSidebarCollapsed.value = false;
+  }
+};
+
+const toggleSidebar = () => {
+  isSidebarCollapsed.value = !isSidebarCollapsed.value;
+};
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
 });
 
 const pageThemeStyle = computed(() => ({
@@ -1026,7 +1086,6 @@ const selectMainMenu = (menuId) => {
     activeWorkspaceSection.value = "home";
     return;
   }
-
   activeWorkspaceSection.value = "";
 };
 
@@ -1034,7 +1093,6 @@ const isMainMenuActive = (menuId) => {
   if (menuId === "boards") {
     return activeMenu.value === "boards" && activeWorkspaceSection.value !== "board";
   }
-
   return activeMenu.value === menuId;
 };
 

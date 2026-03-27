@@ -1,108 +1,88 @@
 <template>
-  <section class="space-y-6 lg:space-y-8">
-    <div class="rounded-[30px] border border-slate-200 bg-white px-5 py-6 shadow-sm sm:px-7 sm:py-7">
-      <div class="text-xs font-bold uppercase tracking-[0.24em] text-sky-600">
-        Admin dashboard
-      </div>
-      <h1 class="mt-3 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
-        Tong quan he thong
-      </h1>
-      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600 sm:leading-7">
-        Bieu do tong hop duoc dua len dau trang. Nhan vao tung cot de di toi khu vuc
-        quan ly lien quan.
-      </p>
-    </div>
-
+  <section class="space-y-8">
     <div
       v-if="adminStore.isLoadingStats"
       class="rounded-3xl border border-slate-200 bg-white px-6 py-14 text-center text-slate-600 shadow-sm"
     >
       Dang tai dashboard...
     </div>
-
     <template v-else>
-      <section class="rounded-[32px] border border-slate-200 bg-white p-4 shadow-sm sm:p-6 lg:p-8">
+      <section class="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div class="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">
               Bieu do tong hop
             </div>
-            <h2 class="mt-2 text-[24px] font-black tracking-tight text-slate-950 sm:text-[30px]">
+            <h2 class="mt-2 text-[30px] font-black tracking-tight text-slate-950">
               User, workspace, board va card
             </h2>
-          </div>
-
+                </div>
         </div>
 
-        <div class="mt-8 overflow-x-auto pb-2">
-          <div class="flex min-w-[640px] items-end gap-4 lg:gap-6">
-            <div class="flex h-[300px] w-10 shrink-0 flex-col justify-between text-[11px] font-semibold text-slate-400 sm:h-[340px] sm:w-12">
-              <span>{{ totalBarMax }}</span>
-              <span>{{ Math.ceil(totalBarMax * 0.75) }}</span>
-              <span>{{ Math.ceil(totalBarMax * 0.5) }}</span>
-              <span>{{ Math.ceil(totalBarMax * 0.25) }}</span>
-              <span>0</span>
+        <div class="mt-8 flex items-end gap-4 lg:gap-6">
+          <div class="flex h-[340px] w-12 flex-col justify-between text-[11px] font-semibold text-slate-400">
+            <span>{{ totalBarMax }}</span>
+            <span>{{ Math.ceil(totalBarMax * 0.75) }}</span>
+            <span>{{ Math.ceil(totalBarMax * 0.5) }}</span>
+            <span>{{ Math.ceil(totalBarMax * 0.25) }}</span>
+            <span>0</span>
+          </div>
+
+          <div class="relative flex-1">
+            <div class="absolute inset-0 flex flex-col justify-between">
+              <div
+                v-for="line in 5"
+                :key="line"
+                class="border-t border-dashed border-slate-200"
+              ></div>
             </div>
 
-            <div class="relative flex-1">
-              <div class="absolute inset-0 flex flex-col justify-between">
+            <div class="relative flex h-[340px] items-end justify-around gap-3 px-1 sm:gap-5">
+              <RouterLink
+                v-for="item in totalChartItems"
+                :key="item.label"
+                :to="item.to"
+                class="group flex h-full flex-1 flex-col items-center justify-end"
+              >
+                <div class="mb-3 text-lg font-black text-slate-700 transition group-hover:text-slate-950">
+                  {{ item.value }}
+                </div>
                 <div
-                  v-for="line in 5"
-                  :key="line"
-                  class="border-t border-dashed border-slate-200"
+                  class="w-full max-w-[120px] rounded-t-[30px] shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] transition duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_18px_32px_rgba(15,23,42,0.14)]"
+                  :class="item.colorClass"
+                  :style="{ height: `${item.height}%` }"
                 ></div>
-              </div>
-
-              <div class="relative flex h-[300px] items-end justify-around gap-3 px-1 sm:h-[340px] sm:gap-5">
-                <RouterLink
-                  v-for="item in totalChartItems"
-                  :key="item.label"
-                  :to="item.to"
-                  class="group flex h-full min-w-0 flex-1 flex-col items-center justify-end"
-                >
-                  <div class="mb-3 truncate text-lg font-black text-slate-700 transition group-hover:text-slate-950">
-                    {{ item.value }}
+                <div class="mt-4 text-center">
+                  <div class="text-sm font-black uppercase tracking-[0.16em] text-slate-700">
+                    {{ item.label }}
                   </div>
-                  <div
-                    class="w-full max-w-[120px] rounded-t-[24px] shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] transition duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_18px_32px_rgba(15,23,42,0.14)] sm:rounded-t-[30px]"
-                    :class="item.colorClass"
-                    :style="{ height: `${item.height}%` }"
-                  ></div>
-                  <div class="mt-4 w-full px-1 text-center">
-                    <div class="truncate text-sm font-black uppercase tracking-[0.16em] text-slate-700">
-                      {{ item.label }}
-                    </div>
-                    <div class="mt-1 truncate text-xs font-medium text-slate-500">
-                      {{ item.helper }}
-                    </div>
-                    <div class="mt-2 truncate text-[11px] font-semibold text-sky-600 opacity-0 transition group-hover:opacity-100">
-                      Nhan de mo
-                    </div>
+                  <div class="mt-1 text-xs font-medium text-slate-500">
+                    {{ item.helper }}
                   </div>
-                </RouterLink>
-              </div>
+                  <div class="mt-2 text-[11px] font-semibold text-sky-600 opacity-0 transition group-hover:opacity-100">
+                    Nhan de mo
+                  </div>
+                </div>
+              </RouterLink>
             </div>
           </div>
         </div>
       </section>
 
       <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-          <div class="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-            <div class="min-w-0">
+        <!-- User status card - no click, no route display -->
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div class="flex items-start justify-between gap-4">
+            <div>
               <div class="text-xs font-bold uppercase tracking-[0.22em] text-emerald-600">
                 Trang thai user
               </div>
-              <h2 class="mt-2 text-xl font-black tracking-tight text-slate-950 sm:text-2xl">
+              <h2 class="mt-2 text-2xl font-black tracking-tight text-slate-950">
                 User hoat dong va bi khoa
               </h2>
               <p class="mt-2 text-sm leading-6 text-slate-500">
-                Tong hop tinh trang user hien tai.
+                Nhan vao khung nay de den trang quan ly user.
               </p>
-            </div>
-
-            <div class="max-w-full truncate rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              /admin/users
             </div>
           </div>
 
@@ -128,9 +108,9 @@
                 class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-100"
               >
                 <div class="flex items-center justify-between gap-3">
-                  <div class="flex min-w-0 items-center gap-3">
+                  <div class="flex items-center gap-3">
                     <span class="h-3 w-3 rounded-full" :class="item.dotClass"></span>
-                    <span class="truncate text-sm font-semibold text-slate-700">{{ item.label }}</span>
+                    <span class="text-sm font-semibold text-slate-700">{{ item.label }}</span>
                   </div>
                   <span class="text-base font-black text-slate-950">{{ item.value }}</span>
                 </div>
@@ -146,22 +126,19 @@
           </div>
         </div>
 
-        <div class="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-          <div class="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-            <div class="min-w-0">
+        <!-- Workspace status card - no click, no route display -->
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div class="flex items-start justify-between gap-4">
+            <div>
               <div class="text-xs font-bold uppercase tracking-[0.22em] text-sky-600">
                 Trang thai workspace
               </div>
-              <h2 class="mt-2 text-xl font-black tracking-tight text-slate-950 sm:text-2xl">
+              <h2 class="mt-2 text-2xl font-black tracking-tight text-slate-950">
                 Workspace hoat dong va luu tru
               </h2>
               <p class="mt-2 text-sm leading-6 text-slate-500">
-                Tong hop tinh trang workspace hien tai.
+                Nhan vao khung nay de den trang quan ly workspace.
               </p>
-            </div>
-
-            <div class="max-w-full truncate rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
-              /admin/workspaces
             </div>
           </div>
 
@@ -187,9 +164,9 @@
                 class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-100"
               >
                 <div class="flex items-center justify-between gap-3">
-                  <div class="flex min-w-0 items-center gap-3">
+                  <div class="flex items-center gap-3">
                     <span class="h-3 w-3 rounded-full" :class="item.dotClass"></span>
-                    <span class="truncate text-sm font-semibold text-slate-700">{{ item.label }}</span>
+                    <span class="text-sm font-semibold text-slate-700">{{ item.label }}</span>
                   </div>
                   <span class="text-base font-black text-slate-950">{{ item.value }}</span>
                 </div>

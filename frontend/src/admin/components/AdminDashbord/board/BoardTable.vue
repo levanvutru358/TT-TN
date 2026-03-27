@@ -27,8 +27,9 @@
           <tr
             v-for="(board, index) in boards"
             :key="board.id"
-            class="cursor-pointer border-t border-slate-100 transition hover:bg-slate-50"
-            @click="goToDetail(board.id)"
+            class="border-t border-slate-100 transition hover:bg-slate-50"
+            :class="{ 'cursor-pointer': !disableNavigation }"
+            @click="!disableNavigation && goToDetail(board.id)"
           >
             <td class="px-4 py-4 text-center font-medium text-slate-700">
               {{ index + 1 }}
@@ -106,10 +107,14 @@ import type { BoardItem } from '@/admin/types/admin'
 import AppBadge from '@/admin/components/AdminDashbord/common/AppBadge.vue'
 import EmptyState from '@/admin/components/AdminDashbord/common/EmptyState.vue'
 
-defineProps({
+const props = defineProps({
   boards: {
     type: Array as PropType<BoardItem[]>,
     default: () => [],
+  },
+  disableNavigation: {
+    type: Boolean,
+    default: false,
   },
 })
 
