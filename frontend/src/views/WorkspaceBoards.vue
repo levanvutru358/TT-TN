@@ -466,7 +466,7 @@
                 class="h-10 rounded-md border-2 transition-[border-color,filter]"
                 :class="
                   selectedBoardBackground === bg
-                    ? 'border-[#0c66e4]'
+                    ? 'border-transparent brightness-[1.04] shadow-[0_8px_18px_rgba(9,30,66,0.18)]'
                     : 'border-transparent hover:brightness-[1.03]'
                 "
                 :style="{ background: bg }"
@@ -482,7 +482,7 @@
                 class="h-8 rounded-md border-2 transition-[border-color,filter]"
                 :class="
                   selectedBoardBackground === bg
-                    ? 'border-[#0c66e4]'
+                    ? 'border-transparent brightness-[1.04] shadow-[0_8px_18px_rgba(9,30,66,0.18)]'
                     : 'border-transparent hover:brightness-[1.03]'
                 "
                 :style="{ background: bg }"
