@@ -99,16 +99,51 @@
         </label>
       </div>
 
-      <button
-        v-if="showCreateButton"
-        type="button"
-        class="h-8 rounded-md bg-[var(--workspace-accent)] px-3.5 text-xs font-semibold text-white hover:bg-[var(--workspace-accent-hover)]"
-        @click="handleCreateClick"
-      >
-        {{ createButtonText }}
-      </button>
+      <div class="relative">
+        <button
+          v-if="showCreateButton"
+          ref="createButtonRef"
+          type="button"
+          class="h-8 rounded-md bg-[var(--workspace-accent)] px-3.5 text-xs font-semibold text-white hover:bg-[var(--workspace-accent-hover)]"
+          @click="toggleCreateMenu"
+        >
+          {{ createButtonText }}
+        </button>
+
+        <!-- Create Menu - Chỉ còn Tạo bảng -->
+        <div
+          v-if="showCreateMenu"
+          class="absolute right-0 top-11 z-50 w-[304px] overflow-hidden rounded-[12px] border border-[#d0d4db] bg-white py-2 shadow-[0_12px_24px_rgba(9,30,66,0.25)]"
+        >
+          <div class="px-4 pb-2 pt-3">
+            <p class="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#626f86]">
+              TẠO
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="flex w-full items-center gap-3 px-4 py-2.5 transition-colors hover:bg-[#f1f2f4]"
+            @click="handleCreateBoard"
+          >
+            <div class="flex h-8 w-8 items-center justify-center rounded-md bg-[#1e8c5e] text-white">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="4" width="16" height="16" rx="3" fill="currentColor" />
+                <rect x="7" y="7" width="3" height="10" rx="1" fill="white" />
+                <rect x="12" y="7" width="3" height="7" rx="1" fill="white" />
+                <rect x="17" y="7" width="3" height="4" rx="1" fill="white" />
+              </svg>
+            </div>
+            <div class="flex-1 text-left">
+              <p class="text-[14px] font-semibold text-[#172b4d]">Tạo bảng</p>
+              <p class="text-[12px] text-[#626f86]">Bảng Trello là nơi mọi người cùng làm việc</p>
+            </div>
+          </button>
+        </div>
+      </div>
 
       <div class="ml-auto flex items-center gap-1 text-[#44546f]">
+        <!-- Phần còn lại giữ nguyên không thay đổi -->
         <div class="relative z-40 hidden md:block">
         <button
           type="button"
@@ -603,6 +638,7 @@
             <button
               type="button"
               class="flex items-center gap-3 text-[14px] text-[#172b4d] hover:underline"
+              @click="handleGoToHome"
             >
               <svg
                 class="h-[18px] w-[18px]"
@@ -640,18 +676,27 @@
     </div>
 
     <button
-      v-if="showAccountMenu || showBroadcastMenu || showNotificationMenu || showHelpMenu"
+      v-if="showAccountMenu || showBroadcastMenu || showNotificationMenu || showHelpMenu || showCreateMenu"
       type="button"
       class="fixed inset-0 z-30 cursor-default"
       aria-label="Đóng menu"
       @click="closeFloatingMenus"
+    />
+
+    <!-- CreateBoardModal Component -->
+    <CreateBoardModal
+      :show="showCreateBoardModal"
+      :anchor-element="createButtonRef"
+      @close="showCreateBoardModal = false"
     />
   </header>
 </template>
 
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import AppLauncherMenu from "@/components/common/AppLauncherMenu.vue";
+import CreateBoardModal from "@/components/common/CreateBoardModal.vue";
 
 defineProps({
   modelValue: {
@@ -673,6 +718,7 @@ defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "create-click"]);
+const router = useRouter();
 
 const isLauncherOpen = ref(false);
 const showAccountMenu = ref(false);
@@ -680,12 +726,15 @@ const showBroadcastMenu = ref(false);
 const showNotificationMenu = ref(false);
 const showHelpMenu = ref(false);
 const showThemeMenu = ref(false);
+const showCreateMenu = ref(false);
+const showCreateBoardModal = ref(false);
 const notificationUnreadOnly = ref(true);
 const currentTheme = ref("system");
 const currentAccent = ref("blue");
 const accountMenuAnchor = ref(null);
 const accountMenuPanel = ref(null);
 const themeMenuTrigger = ref(null);
+const createButtonRef = ref(null);
 const themeMenuStyle = ref({
   right: "calc(100% + 12px)",
   top: "44px",
@@ -959,6 +1008,7 @@ const toggleLauncher = () => {
     showNotificationMenu.value = false;
     showHelpMenu.value = false;
     showThemeMenu.value = false;
+    showCreateMenu.value = false;
   }
 };
 
@@ -974,6 +1024,7 @@ const toggleAccountMenu = () => {
   showBroadcastMenu.value = false;
   showNotificationMenu.value = false;
   showHelpMenu.value = false;
+  showCreateMenu.value = false;
 };
 
 const toggleBroadcastMenu = () => {
@@ -984,6 +1035,7 @@ const toggleBroadcastMenu = () => {
     showNotificationMenu.value = false;
     showHelpMenu.value = false;
     showThemeMenu.value = false;
+    showCreateMenu.value = false;
   }
 };
 
@@ -995,6 +1047,7 @@ const toggleNotificationMenu = () => {
     showBroadcastMenu.value = false;
     showHelpMenu.value = false;
     showThemeMenu.value = false;
+    showCreateMenu.value = false;
   }
 };
 
@@ -1006,6 +1059,7 @@ const toggleHelpMenu = () => {
     showBroadcastMenu.value = false;
     showNotificationMenu.value = false;
     showThemeMenu.value = false;
+    showCreateMenu.value = false;
   }
 };
 
@@ -1017,12 +1071,35 @@ const toggleThemeMenu = () => {
   }
 };
 
+const toggleCreateMenu = () => {
+  showCreateMenu.value = !showCreateMenu.value;
+  if (showCreateMenu.value) {
+    isLauncherOpen.value = false;
+    showAccountMenu.value = false;
+    showBroadcastMenu.value = false;
+    showNotificationMenu.value = false;
+    showHelpMenu.value = false;
+    showThemeMenu.value = false;
+  }
+};
+
+const handleCreateBoard = () => {
+  showCreateMenu.value = false;
+  showCreateBoardModal.value = true;
+};
+
+const handleGoToHome = () => {
+  router.push("/");
+  closeFloatingMenus();
+};
+
 const closeFloatingMenus = () => {
   showAccountMenu.value = false;
   showBroadcastMenu.value = false;
   showNotificationMenu.value = false;
   showHelpMenu.value = false;
   showThemeMenu.value = false;
+  showCreateMenu.value = false;
 };
 
 const handleCreateClick = (event) => {
