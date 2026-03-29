@@ -47,13 +47,6 @@
       >
         🔽 Lọc
       </button>
-
-      <button
-        class="px-3 py-2 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40"
-      >
-        Chia sẻ
-      </button>
-
       <button
         class="w-9 h-9 rounded-lg bg-black/30 border border-white/15 hover:bg-black/40 flex items-center justify-center"
         type="button"

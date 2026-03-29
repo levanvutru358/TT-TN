@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute left-0 top-full z-50 mt-2 w-[360px] max-w-[calc(100vw-16px)] overflow-hidden rounded-xl border border-white/10 bg-[#1f2128] text-white shadow-[0_20px_60px_rgba(0,0,0,0.38)]"
+    class="absolute left-0 top-full z-[100] mt-2 w-[360px] max-w-[calc(100vw-16px)] overflow-hidden rounded-xl border border-white/10 bg-[#1f2128] text-white shadow-[0_20px_60px_rgba(0,0,0,0.38)]"
   >
     <div class="max-h-[74vh] overflow-y-auto">
       <div class="px-2 py-2">
