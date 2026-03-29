@@ -95,7 +95,7 @@
 
               <div class="rounded-2xl border border-slate-200 p-4">
                 <p class="text-sm font-medium text-slate-500">Member</p>
-                <p class="mt-2 text-2xl font-bold text-slate-950">{{ workspaceDetail.totalMemberUsers }}</p>
+                <p class="mt-2 text-2xl font-bold text-slate-950">{{ workspaceDetail.totalUsers }}</p>
               </div>
             </div>
 

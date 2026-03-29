@@ -3,7 +3,7 @@
     <div class="border-b border-slate-200 px-6 py-5">
       <h3 class="text-xl font-bold text-slate-950">User Table</h3>
       <p class="mt-1 text-sm text-slate-600">
-        Quan ly user, vai tro, trang thai va hoat dong gan day.
+        Quản lý user, vai trò, trạng thái và hoạt động gần đây.
       </p>
     </div>
 
@@ -12,14 +12,14 @@
         <thead class="bg-slate-50">
           <tr class="text-left font-semibold text-slate-700">
             <th class="w-16 px-4 py-4 text-center">STT</th>
-            <th class="w-[18%] px-4 py-4">Ten user</th>
+            <th class="w-[18%] px-4 py-4">Tên user</th>
             <th class="w-[20%] px-4 py-4">Email</th>
-            <th class="w-[10%] px-4 py-4 text-center">Vai tro</th>
-            <th class="w-[12%] px-4 py-4 text-center">Trang thai</th>
-            <th class="w-[14%] px-4 py-4">Phong ban</th>
-            <th class="w-[14%] px-4 py-4 text-center">Lan hoat dong</th>
-            <th class="w-[12%] px-4 py-4 text-center">Hanh dong</th>
-          </tr>
+            <th class="w-[10%] px-4 py-4 text-center">Vai trò</th>
+            <th class="w-[12%] px-4 py-4 text-center">Trạng thái</th>
+            <th class="w-[14%] px-4 py-4">Phòng ban</th>
+            <th class="w-[14%] px-4 py-4 text-center">Lần hoạt động</th>
+            <th class="w-[12%] px-4 py-4 text-center">Hành động</th>
+           </tr>
         </thead>
 
         <tbody>
@@ -58,15 +58,18 @@
             </td>
 
             <td class="px-4 py-4 text-center">
-              <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-700">
-                {{ user.role }}
+              <span 
+                class="inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.14em]"
+                :class="user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'"
+              >
+                {{ user.role === 'admin' ? 'Admin' : 'User' }}
               </span>
             </td>
 
             <td class="px-4 py-4 text-center">
               <div class="flex justify-center">
                 <AppBadge
-                  :label="user.status === 'active' ? 'Hoat dong' : 'Da khoa'"
+                  :label="user.status === 'active' ? 'Hoạt động' : 'Đã khóa'"
                   :variant="user.status === 'active' ? 'success' : 'warning'"
                 />
               </div>
@@ -92,7 +95,7 @@
                 :disabled="isUpdatingUser"
                 @click.stop="$emit('toggle-lock', user.id)"
               >
-                {{ user.status === 'active' ? 'Khoa' : 'Mo khoa' }}
+                {{ user.status === 'active' ? 'Khóa' : 'Mở khóa' }}
               </button>
             </td>
           </tr>
@@ -100,8 +103,8 @@
           <tr v-if="users.length === 0">
             <td colspan="8" class="px-5 py-10">
               <EmptyState
-                title="Khong co user"
-                description="Khong tim thay user phu hop."
+                title="Không có user"
+                description="Không tìm thấy user phù hợp."
               />
             </td>
           </tr>
