@@ -20,7 +20,7 @@
             <th class="w-[10%] px-4 py-4 text-center">Board</th>
             <th class="w-[12%] px-4 py-4 text-center">Trạng thái</th>
             <th class="w-[12%] px-4 py-4 text-center">Ngày tạo</th>
-          </tr>
+           </tr>
         </thead>
 
         <tbody>
@@ -60,7 +60,7 @@
             </td>
 
             <td class="px-4 py-4 text-center text-slate-700">
-              {{ workspace.totalMemberUsers }}
+              {{ workspace.totalUsers }}
             </td>
 
             <td class="px-4 py-4 text-center text-slate-700">
