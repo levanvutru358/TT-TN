@@ -379,10 +379,10 @@
           class="absolute max-h-[calc(100vh-16px)] overflow-y-auto rounded-xl border border-[#d0d4db] bg-[#f1f2f4] p-3 shadow-[0_8px_24px_rgba(9,30,66,0.25)]"
           :style="createBoardModalStyle"
         >
-          <div class="mb-2.5 flex items-center">
+          <div class="relative mb-2.5 flex items-center justify-center">
             <button
               type="button"
-              class="flex h-9 w-9 items-center justify-center rounded-xl border border-[#0c66e4] text-[#44546f] hover:bg-[#e9ebef]"
+              class="hidden"
               aria-label="Quay lại"
               @click="closeCreateBoardModal"
             >
@@ -403,13 +403,13 @@
               </svg>
             </button>
 
-            <h2 class="flex-1 text-center text-[18px] font-semibold leading-none text-[#44546f]">
+            <h2 class="text-center text-[18px] font-semibold leading-none text-[#44546f]">
               Tạo bảng
             </h2>
 
             <button
               type="button"
-              class="flex h-10 w-10 items-center justify-center rounded-full text-[#172b4d] hover:bg-[#f1f2f4]"
+              class="absolute right-0 flex h-10 w-10 items-center justify-center rounded-full text-[#172b4d] hover:bg-[#f1f2f4]"
               aria-label="Đóng"
               @click="closeCreateBoardModal"
             >
