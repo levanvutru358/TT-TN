@@ -688,38 +688,14 @@
         "
         :style="isCreateBoardModalCentered ? undefined : createBoardModalStyle"
       >
-        <!-- Giữ nguyên nội dung modal -->
-        <div class="mb-2.5 flex items-center">
-          <button
-            type="button"
-            class="flex h-9 w-9 items-center justify-center rounded-xl border border-[#0c66e4] text-[#44546f] hover:bg-[#e9ebef]"
-            aria-label="Quay lại"
-            @click="closeCreateBoardModal"
-          >
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M14 6L8 12L14 18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
-
-          <h2 class="flex-1 text-center text-[18px] font-semibold leading-none text-[#44546f]">
+        <div class="relative mb-2.5 flex items-center justify-center">
+          <h2 class="text-center text-[18px] font-semibold leading-none text-[#44546f]">
             Tạo bảng
           </h2>
 
           <button
             type="button"
-            class="flex h-10 w-10 items-center justify-center rounded-full text-[#172b4d] hover:bg-[#f1f2f4]"
+            class="absolute right-0 flex h-10 w-10 items-center justify-center rounded-full text-[#172b4d] hover:bg-[#f1f2f4]"
             aria-label="Đóng"
             @click="closeCreateBoardModal"
           >
