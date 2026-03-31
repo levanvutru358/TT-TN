@@ -588,8 +588,6 @@
 
             <div class="my-5 border-t border-[#d0d4db]" />
 
-            <p class="text-[12px] font-semibold text-[#626f86]">TRELLO</p>
-
             <div class="mt-4 space-y-4 text-[14px] text-[#172b4d]">
               <router-link
                 v-for="item in accountLinks"
