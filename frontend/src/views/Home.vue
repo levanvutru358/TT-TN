@@ -54,13 +54,13 @@
             "
             @click="selectMainMenu(item.id)"
           >
-            <span class="text-base">{{ item.icon }}</span>
-            <span>{{ item.label }}</span>
+            <span class="text-base shrink-0">{{ item.icon }}</span>
+            <span class="truncate">{{ item.label }}</span>
           </button>
         </nav>
 
         <div class="border-t border-[#d0d4db] mt-6 pt-7">
-          <p class="mb-3 px-2 text-[15px] font-semibold text-[#44546f]">
+          <p class="mb-3 px-2 text-[15px] font-semibold text-[#44546f] truncate">
             Các Không gian làm việc
           </p>
 
@@ -71,16 +71,16 @@
             :aria-expanded="workspaceOpen"
           >
             <div
-              class="flex h-7 w-7 items-center justify-center rounded-md text-sm font-semibold text-white"
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-sm font-semibold text-white"
               :style="workspaceBadgeStyle"
             >
               T
             </div>
-            <span class="text-[14px] font-medium text-[#172b4d]">
+            <span class="text-[14px] font-medium text-[#172b4d] truncate">
               {{ workspaceName }}
             </span>
             <svg
-              class="w-4 h-4 ml-auto text-[#172b4d] transition-transform"
+              class="w-4 h-4 ml-auto shrink-0 text-[#172b4d] transition-transform"
               :class="{ 'rotate-180': workspaceOpen }"
               viewBox="0 0 24 24"
               fill="none"
@@ -109,7 +109,7 @@
               @click="openWorkspaceBoards"
             >
               <svg
-                class="w-4 h-4"
+                class="w-4 h-4 shrink-0"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +126,7 @@
                 />
                 <path d="M10 4V20" stroke="currentColor" stroke-width="1.8" />
               </svg>
-              <span class="text-[15px]">Bảng</span>
+              <span class="text-[15px] truncate">Bảng</span>
             </button>
 
             <router-link
@@ -134,7 +134,7 @@
               class="w-full flex items-center gap-3 rounded-lg py-2 pl-12 pr-3 text-left transition-colors hover:bg-[#e9ebef]"
             >
               <svg
-                class="w-4 h-4 text-[#2c2f36]"
+                class="w-4 h-4 shrink-0 text-[#2c2f36]"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -154,8 +154,8 @@
                   stroke-linecap="round"
                 />
               </svg>
-              <span class="text-[15px] text-[#172b4d]">Thành viên</span>
-              <span class="ml-auto text-[20px] leading-none text-[#172b4d]">+</span>
+              <span class="text-[15px] text-[#172b4d] truncate">Thành viên</span>
+              <span class="ml-auto text-[20px] leading-none text-[#172b4d] shrink-0">+</span>
             </router-link>
 
             <router-link
@@ -163,7 +163,7 @@
               class="w-full flex items-center gap-3 rounded-lg py-2 pl-12 pr-3 text-left transition-colors hover:bg-[#e9ebef]"
             >
               <svg
-                class="w-4 h-4 text-[#2c2f36]"
+                class="w-4 h-4 shrink-0 text-[#2c2f36]"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -177,7 +177,7 @@
                 />
                 <circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.8" />
               </svg>
-              <span class="text-[15px] text-[#172b4d]">Cài đặt</span>
+              <span class="text-[15px] text-[#172b4d] truncate">Cài đặt</span>
             </router-link>
           </div>
         </div>
@@ -322,7 +322,7 @@
               <section>
                 <h2 class="mb-4 flex items-center gap-2 text-[15px] font-semibold text-[#44546f]">
                   <svg
-                    class="h-[18px] w-[18px]"
+                    class="h-[18px] w-[18px] shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -337,7 +337,7 @@
                       stroke-linejoin="round"
                     />
                   </svg>
-                  <span>Đã xem gần đây</span>
+                  <span class="truncate">Đã xem gần đây</span>
                 </h2>
 
                 <div class="space-y-2">
@@ -353,11 +353,11 @@
                     }"
                     class="flex items-center gap-3 rounded-md px-1.5 py-1.5 hover:bg-[#ebedf0]"
                   >
-                    <div class="h-9 w-11 rounded-md" :style="{ background: item.background }"></div>
-                    <span class="text-[14px] text-[#172b4d]">{{ item.name }}</span>
+                    <div class="h-9 w-11 rounded-md shrink-0" :style="{ background: item.background }"></div>
+                    <span class="text-[14px] text-[#172b4d] truncate">{{ item.name }}</span>
                     <span
                       v-if="item.template"
-                      class="ml-auto rounded bg-[#1d2125] px-1.5 py-0.5 text-xs font-semibold text-white"
+                      class="ml-auto rounded bg-[#1d2125] px-1.5 py-0.5 text-xs font-semibold text-white shrink-0"
                     >
                       MẪU
                     </span>
@@ -366,7 +366,7 @@
               </section>
 
               <section class="mt-12">
-                <h3 class="mb-4 text-[15px] font-semibold text-[#44546f]">Liên kết</h3>
+                <h3 class="mb-4 text-[15px] font-semibold text-[#44546f] truncate">Liên kết</h3>
 
                 <button
                   type="button"
@@ -374,11 +374,11 @@
                   @click="openCreateBoardModalAtTarget('link', $event)"
                 >
                   <span
-                    class="flex h-9 w-9 items-center justify-center rounded-md border border-[#c1c7d0] bg-[#dfe1e6] text-[24px] leading-none text-[#626f86]"
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[#c1c7d0] bg-[#dfe1e6] text-[24px] leading-none text-[#626f86]"
                   >
                     +
                   </span>
-                  <span>Tạo bảng mới</span>
+                  <span class="truncate">Tạo bảng mới</span>
                 </button>
               </section>
             </aside>
@@ -393,7 +393,7 @@
           <section v-if="activeWorkspaceSection === 'board'" class="mx-auto w-full max-w-[1080px]">
             <div class="flex flex-wrap items-start gap-3">
               <div
-                class="flex h-14 w-14 items-center justify-center rounded-md text-[40px] font-semibold text-white"
+                class="flex h-14 w-14 shrink-0 items-center justify-center rounded-md text-[40px] font-semibold text-white"
                 :style="workspaceBadgeStyle"
               >
                 T
@@ -408,7 +408,7 @@
                     </h2>
                     <button
                       type="button"
-                      class="p-1 rounded hover:bg-[#e9ebef] transition-colors"
+                      class="p-1 rounded hover:bg-[#e9ebef] transition-colors shrink-0"
                       aria-label="Sửa tên không gian làm việc"
                       @click="startEditingWorkspaceName"
                     >
@@ -466,7 +466,7 @@
 
                 <div class="mt-1 flex items-center gap-1.5 text-[14px] text-[#44546f]">
                   <svg
-                    class="w-4 h-4"
+                    class="w-4 h-4 shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -488,7 +488,7 @@
                       stroke-linecap="round"
                     />
                   </svg>
-                  <span>Riêng tư</span>
+                  <span class="truncate">Riêng tư</span>
                 </div>
               </div>
             </div>
@@ -558,8 +558,8 @@
           <template v-else>
             <section class="mb-12">
               <div class="mb-5 flex items-center gap-3">
-                <span class="text-xl">◷</span>
-                <h2 class="text-[20px] font-bold text-[#172b4d]">Đã xem gần đây</h2>
+                <span class="text-xl shrink-0">◷</span>
+                <h2 class="text-[20px] font-bold text-[#172b4d] truncate">Đã xem gần đây</h2>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -599,7 +599,7 @@
                       MẪU
                     </span>
                   </div>
-                  <div class="px-3 py-2 text-[16px] font-medium text-[#172b4d]">
+                  <div class="px-3 py-2 text-[16px] font-medium text-[#172b4d] truncate">
                     Premortem
                   </div>
                 </router-link>
@@ -607,21 +607,21 @@
             </section>
 
             <section class="max-w-[1180px]">
-              <h2 class="mb-5 text-[21px] font-bold uppercase text-[#44546f]">
+              <h2 class="mb-5 text-[21px] font-bold uppercase text-[#44546f] truncate">
                 Các không gian làm việc của bạn
               </h2>
 
               <div
                 class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5"
               >
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 min-w-0">
                   <div
-                    class="flex h-8 w-8 items-center justify-center rounded-md text-lg font-semibold text-white"
+                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-lg font-semibold text-white"
                     :style="workspaceBadgeStyle"
                   >
                     T
                   </div>
-                  <h3 class="text-[21px] font-semibold">
+                  <h3 class="text-[21px] font-semibold truncate">
                     {{ workspaceName }}
                   </h3>
                 </div>
@@ -639,8 +639,8 @@
                     "
                     @click="onWorkspaceActionClick(action)"
                   >
-                    <span>{{ action.icon }}</span>
-                    <span>{{ action.label }}</span>
+                    <span class="shrink-0">{{ action.icon }}</span>
+                    <span class="truncate">{{ action.label }}</span>
                   </button>
                 </div>
               </div>
@@ -668,6 +668,7 @@
       </main>
     </div>
 
+    <!-- Modal tạo board (giữ nguyên) -->
     <div
       v-if="showCreateBoardModal"
       class="fixed inset-0 z-40"
@@ -687,6 +688,7 @@
         "
         :style="isCreateBoardModalCentered ? undefined : createBoardModalStyle"
       >
+        <!-- Giữ nguyên nội dung modal -->
         <div class="mb-2.5 flex items-center">
           <button
             type="button"
@@ -873,72 +875,22 @@
             >
               <div class="flex items-start gap-2.5">
                 <span class="mt-1 text-[#44546f]">
-                  <svg
-                    v-if="option.id === 'private'"
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <rect
-                      x="6.5"
-                      y="10.5"
-                      width="11"
-                      height="9"
-                      rx="2"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                    />
-                    <path
-                      d="M8.5 10.5V8.2C8.5 6.32223 10.0222 4.8 11.9 4.8C13.7778 4.8 15.3 6.32223 15.3 8.2V10.5"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                    />
+                  <!-- Icon SVG giữ nguyên -->
+                  <svg v-if="option.id === 'private'" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                    <rect x="6.5" y="10.5" width="11" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M8.5 10.5V8.2C8.5 6.32223 10.0222 4.8 11.9 4.8C13.7778 4.8 15.3 6.32223 15.3 8.2V10.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                   </svg>
-
-                  <svg
-                    v-else-if="option.id === 'workspace'"
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <circle cx="8.5" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8" />
-                    <circle cx="15.7" cy="9.2" r="1.9" stroke="currentColor" stroke-width="1.8" />
-                    <path
-                      d="M4.5 18C4.5 15.7909 6.29086 14 8.5 14H10.5C12.7091 14 14.5 15.7909 14.5 18"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M14 17.8C14.2 16.2 15.4 15 16.9 15H17.4C18.9 15 20.1 16.2 20.3 17.8"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                    />
+                  <svg v-else-if="option.id === 'workspace'" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                    <circle cx="8.5" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8"/>
+                    <circle cx="15.7" cy="9.2" r="1.9" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M4.5 18C4.5 15.7909 6.29086 14 8.5 14H10.5C12.7091 14 14.5 15.7909 14.5 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M14 17.8C14.2 16.2 15.4 15 16.9 15H17.4C18.9 15 20.1 16.2 20.3 17.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                   </svg>
-
-                  <svg
-                    v-else
-                    class="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8" />
-                    <path
-                      d="M4 12H20M12 4C14.8 6.4 16.2 9.2 16.2 12C16.2 14.8 14.8 17.6 12 20M12 4C9.2 6.4 7.8 9.2 7.8 12C7.8 14.8 9.2 17.6 12 20"
-                      stroke="currentColor"
-                      stroke-width="1.4"
-                    />
+                  <svg v-else class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M4 12H20M12 4C14.8 6.4 16.2 9.2 16.2 12C16.2 14.8 14.8 17.6 12 20M12 4C9.2 6.4 7.8 9.2 7.8 12C7.8 14.8 9.2 17.6 12 20" stroke="currentColor" stroke-width="1.4"/>
                   </svg>
                 </span>
-
                 <div>
                   <p class="text-[14px] font-semibold text-[#172b4d]">{{ option.label }}</p>
                   <p class="text-[12px] leading-[1.35] text-[#44546f]">{{ option.description }}</p>
@@ -1040,7 +992,6 @@ const saveWorkspaceName = () => {
   const trimmedName = editWorkspaceName.value.trim();
   if (trimmedName && trimmedName !== workspaceName.value) {
     workspaceName.value = trimmedName;
-    console.log("Đã đổi tên workspace thành:", trimmedName);
   }
   cancelEditingWorkspaceName();
 };
@@ -1074,10 +1025,6 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkMobile);
   document.removeEventListener('click', handleDocumentClick);
 });
-
-const pageThemeStyle = computed(() => ({
-  background: "var(--workspace-page-bg, #f1f2f4)",
-}));
 
 const workspaceBadgeStyle = computed(() => ({
   background: "var(--workspace-badge-gradient, linear-gradient(135deg,#8f5fd3 0%,#1669e2 100%))",

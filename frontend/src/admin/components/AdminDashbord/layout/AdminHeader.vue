@@ -24,14 +24,6 @@
       </div>
 
       <div class="flex items-center gap-2 sm:gap-3">
-        <div class="hidden xl:flex">
-          <input
-            type="text"
-            placeholder="Search anything..."
-            class="w-72 rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-slate-900"
-          />
-        </div>
-
         <button
           type="button"
           class="hidden rounded-2xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-50 sm:inline-flex"
