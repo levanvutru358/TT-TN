@@ -239,12 +239,14 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-5 overflow-x-auto border-b border-[#d0d4db]">
+          <div
+            class="grid grid-cols-1 gap-x-5 gap-y-2 border-b border-[#d0d4db] sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-end"
+          >
             <button
               v-for="tab in memberTabs"
               :key="tab.id"
               type="button"
-              class="whitespace-nowrap border-b-2 pb-3 text-[15px]"
+              class="min-w-0 border-b-2 pb-3 text-left text-[15px] leading-[1.35]"
               :class="
                 selectedMemberTab === tab.id
                   ? 'border-[#0c66e4] font-semibold text-[#0c66e4]'

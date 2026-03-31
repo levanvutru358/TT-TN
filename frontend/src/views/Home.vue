@@ -10,7 +10,7 @@
       <button
         type="button"
         class="absolute top-16 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] transition-[left] duration-200 hover:bg-[#d0d4db]"
-        :class="isSidebarCollapsed ? 'left-3' : 'left-[274px]'"
+        :class="isSidebarCollapsed ? 'left-3' : 'left-[258px] lg:left-[274px]'"
         :aria-label="isSidebarCollapsed ? 'Mở sidebar' : 'Thu gọn sidebar'"
         @click="toggleSidebar"
       >
@@ -390,8 +390,8 @@
         </template>
 
         <template v-else>
-          <section v-if="activeWorkspaceSection === 'board'" class="mx-auto max-w-[1080px]">
-            <div class="flex items-center gap-3">
+          <section v-if="activeWorkspaceSection === 'board'" class="mx-auto w-full max-w-[1080px]">
+            <div class="flex flex-wrap items-start gap-3">
               <div
                 class="flex h-14 w-14 items-center justify-center rounded-md text-[40px] font-semibold text-white"
                 :style="workspaceBadgeStyle"
@@ -399,11 +399,11 @@
                 T
               </div>
 
-              <div>
-                <div class="flex items-center gap-2">
+              <div class="min-w-0 flex-1">
+                <div class="flex min-w-0 flex-wrap items-start gap-2">
                   <!-- Hiển thị tên hoặc input edit -->
-                  <div v-if="!isEditingWorkspaceName" class="flex items-center gap-2">
-                    <h2 class="text-[21px] font-semibold text-[#2c2f36]">
+                  <div v-if="!isEditingWorkspaceName" class="flex min-w-0 items-start gap-2">
+                    <h2 class="min-w-0 break-words text-[21px] font-semibold text-[#2c2f36]">
                       {{ workspaceName }}
                     </h2>
                     <button
@@ -436,12 +436,12 @@
                   </div>
 
                   <!-- Input chỉnh sửa -->
-                  <div v-else class="relative">
+                  <div v-else class="relative w-full max-w-[320px] min-w-0">
                     <input
                       ref="workspaceNameInputRef"
                       v-model="editWorkspaceName"
                       type="text"
-                      class="w-[320px] rounded border border-[#388bff] px-3 py-1.5 text-[21px] font-semibold outline-none focus:border-[#388bff] focus:ring-1 focus:ring-[#388bff]"
+                      class="w-full max-w-full rounded border border-[#388bff] px-3 py-1.5 text-[21px] font-semibold outline-none focus:border-[#388bff] focus:ring-1 focus:ring-[#388bff]"
                       @keyup.enter="saveWorkspaceName"
                       @keyup.escape="cancelEditingWorkspaceName"
                     />
@@ -547,7 +547,7 @@
                 <button
                   type="button"
                   class="inline-flex h-10 items-center justify-center rounded-lg border border-[var(--workspace-accent-hover)] bg-[var(--workspace-accent)] px-6 text-[15px] font-semibold text-white hover:bg-[var(--workspace-accent-hover)]"
-                  @click="openCreateBoardModal('header')"
+                  @click="openCreateBoardModal('empty-state')"
                 >
                   Tạo bảng đầu tiên của bạn
                 </button>
@@ -680,7 +680,12 @@
       <section
         ref="createBoardModalRef"
         class="absolute max-h-[calc(100vh-16px)] overflow-y-auto rounded-xl border border-[#d0d4db] bg-[#f1f2f4] p-3 shadow-[0_8px_24px_rgba(9,30,66,0.25)]"
-        :style="createBoardModalStyle"
+        :class="
+          isCreateBoardModalCentered
+            ? 'left-1/2 top-1/2 w-[calc(100vw-16px)] max-w-[320px] -translate-x-1/2 -translate-y-1/2'
+            : ''
+        "
+        :style="isCreateBoardModalCentered ? undefined : createBoardModalStyle"
       >
         <div class="mb-2.5 flex items-center">
           <button
@@ -996,6 +1001,7 @@ const createBoardModalStyle = ref({
   left: "8px",
   width: "320px",
 });
+const isCreateBoardModalCentered = ref(false);
 const isSidebarCollapsed = ref(false);
 const isMobile = ref(false);
 
@@ -1188,9 +1194,11 @@ const onWorkspaceActionClick = (action) => {
 };
 
 const clampValue = (value, min, max) => Math.min(Math.max(value, min), max);
+const isCenteredCreateBoardSource = (source) => source === "hero" || source === "empty-state";
 
 const positionCreateBoardModal = (source, anchorRect) => {
   if (typeof window === "undefined") return;
+  if (isCenteredCreateBoardSource(source)) return;
 
   const modalWidth = 320;
   const screenPadding = 8;
@@ -1206,9 +1214,6 @@ const positionCreateBoardModal = (source, anchorRect) => {
     if (left < screenPadding) {
       left = anchorRect.right + 12;
     }
-  } else if (source === "hero") {
-    top = anchorRect.top;
-    left = anchorRect.right + 16;
   }
 
   const boundedLeft = clampValue(
@@ -1245,11 +1250,17 @@ const openCreateBoardModalAtTarget = (source, event) => {
 const openCreateBoardModal = async (payload = "header") => {
   const source = typeof payload === "string" ? payload : payload?.source ?? "header";
   const anchorRect = typeof payload === "object" ? payload?.anchorRect : null;
+  isCreateBoardModalCentered.value = isCenteredCreateBoardSource(source);
 
   resetCreateBoardState();
 
   const buttonEl = source === "tile" ? createBoardTileRef.value : null;
   const triggerRect = anchorRect ?? buttonEl?.getBoundingClientRect?.() ?? null;
+
+  if (isCenteredCreateBoardSource(source)) {
+    showCreateBoardModal.value = true;
+    return;
+  }
 
   if (triggerRect && typeof window !== "undefined") {
     positionCreateBoardModal(source, triggerRect);
@@ -1270,6 +1281,7 @@ const openCreateBoardModal = async (payload = "header") => {
 
 const closeCreateBoardModal = () => {
   showCreateBoardModal.value = false;
+  isCreateBoardModalCentered.value = false;
   resetCreateBoardState();
 };
 

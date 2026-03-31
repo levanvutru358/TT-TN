@@ -260,12 +260,13 @@
                 </div>
 
                 <!-- Input chỉnh sửa -->
-                <div v-else class="relative">
+                <div v-else class="relative inline-flex max-w-full flex-col items-start">
                   <input
                     ref="nameInputRef"
                     v-model="editName"
                     type="text"
-                    class="w-[280px] rounded border border-[#388bff] px-3 py-2 text-[21px] font-semibold leading-none outline-none focus:border-[#388bff] focus:ring-1 focus:ring-[#388bff]"
+                    :style="{ width: `${nameInputWidthCh}ch` }"
+                    class="max-w-full min-w-[10ch] rounded border border-[#388bff] px-3 py-2 text-[21px] font-semibold leading-none outline-none focus:border-[#388bff] focus:ring-1 focus:ring-[#388bff]"
                     @keyup.enter="saveName"
                     @keyup.escape="cancelEditing"
                   />
@@ -520,6 +521,11 @@ const nameInputRef = ref(null);
 const currentVisibility = computed(
   () => visibilityOptions.find((option) => option.id === selectedVisibility.value) ?? visibilityOptions[0]
 );
+
+const nameInputWidthCh = computed(() => {
+  const charCount = editName.value.length || workspaceName.value.length || 10;
+  return Math.min(Math.max(charCount + 1, 10), 28);
+});
 
 const toggleVisibilityPanel = () => {
   showVisibilityPanel.value = !showVisibilityPanel.value;
