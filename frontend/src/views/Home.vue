@@ -9,7 +9,7 @@
       <!-- Toggle button (chevron) -->
       <button
         type="button"
-        class="absolute top-16 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] transition-[left] duration-200 hover:bg-[#d0d4db]"
+        class="absolute top-16 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-[#dfe1e6] text-[#2c2f36] transition-[left] duration-200 hover:bg-[#d0d4db]"
         :class="isSidebarCollapsed ? 'left-3' : 'left-[258px] lg:left-[274px]'"
         :aria-label="isSidebarCollapsed ? 'Mở sidebar' : 'Thu gọn sidebar'"
         @click="toggleSidebar"
