@@ -545,7 +545,7 @@
                 <button
                   type="button"
                   class="inline-flex h-10 items-center justify-center rounded-lg border border-[var(--workspace-accent-hover)] bg-[var(--workspace-accent)] px-6 text-[15px] font-semibold text-white hover:bg-[var(--workspace-accent-hover)]"
-                  @click="openCreateBoardModal('header')"
+                  @click="openCreateBoardModal('empty-state')"
                 >
                   Tạo bảng đầu tiên của bạn
                 </button>
@@ -679,40 +679,21 @@
       <section
         ref="createBoardModalRef"
         class="absolute max-h-[calc(100vh-16px)] overflow-y-auto rounded-xl border border-[#d0d4db] bg-[#f1f2f4] p-3 shadow-[0_8px_24px_rgba(9,30,66,0.25)]"
-        :style="createBoardModalStyle"
+        :class="
+          isCreateBoardModalCentered
+            ? 'left-1/2 top-1/2 w-[calc(100vw-16px)] max-w-[320px] -translate-x-1/2 -translate-y-1/2'
+            : ''
+        "
+        :style="isCreateBoardModalCentered ? undefined : createBoardModalStyle"
       >
-        <!-- Giữ nguyên nội dung modal -->
-        <div class="mb-2.5 flex items-center">
-          <button
-            type="button"
-            class="flex h-9 w-9 items-center justify-center rounded-xl border border-[#0c66e4] text-[#44546f] hover:bg-[#e9ebef]"
-            aria-label="Quay lại"
-            @click="closeCreateBoardModal"
-          >
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M14 6L8 12L14 18"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
-
-          <h2 class="flex-1 text-center text-[18px] font-semibold leading-none text-[#44546f]">
+        <div class="relative mb-2.5 flex items-center justify-center">
+          <h2 class="text-center text-[18px] font-semibold leading-none text-[#44546f]">
             Tạo bảng
           </h2>
 
           <button
             type="button"
-            class="flex h-10 w-10 items-center justify-center rounded-full text-[#172b4d] hover:bg-[#f1f2f4]"
+            class="absolute right-0 flex h-10 w-10 items-center justify-center rounded-full text-[#172b4d] hover:bg-[#f1f2f4]"
             aria-label="Đóng"
             @click="closeCreateBoardModal"
           >
@@ -941,6 +922,7 @@ const createBoardTileRef = ref(null);
 const createBoardModalRef = ref(null);
 const showVisibilityDropdown = ref(false);
 const selectedVisibility = ref("workspace");
+const isCreateBoardModalCentered = ref(false);
 const createBoardModalStyle = ref({
   top: "56px",
   left: "8px",
@@ -1133,6 +1115,7 @@ const onWorkspaceActionClick = (action) => {
 };
 
 const clampValue = (value, min, max) => Math.min(Math.max(value, min), max);
+const isCenteredCreateBoardSource = (source) => source === "hero" || source === "empty-state";
 
 const positionCreateBoardModal = (source, anchorRect) => {
   if (typeof window === "undefined") return;
@@ -1190,11 +1173,17 @@ const openCreateBoardModalAtTarget = (source, event) => {
 const openCreateBoardModal = async (payload = "header") => {
   const source = typeof payload === "string" ? payload : payload?.source ?? "header";
   const anchorRect = typeof payload === "object" ? payload?.anchorRect : null;
+  isCreateBoardModalCentered.value = isCenteredCreateBoardSource(source);
 
   resetCreateBoardState();
 
   const buttonEl = source === "tile" ? createBoardTileRef.value : null;
   const triggerRect = anchorRect ?? buttonEl?.getBoundingClientRect?.() ?? null;
+
+  if (isCreateBoardModalCentered.value) {
+    showCreateBoardModal.value = true;
+    return;
+  }
 
   if (triggerRect && typeof window !== "undefined") {
     positionCreateBoardModal(source, triggerRect);
@@ -1215,6 +1204,7 @@ const openCreateBoardModal = async (payload = "header") => {
 
 const closeCreateBoardModal = () => {
   showCreateBoardModal.value = false;
+  isCreateBoardModalCentered.value = false;
   resetCreateBoardState();
 };
 
