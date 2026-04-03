@@ -200,12 +200,13 @@
   </teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import BoardMenuItem from "@/modules/kanban/board/components/menus/BoardMenuItem.vue";
 import BoardBackgroundPanel from "@/modules/kanban/board/components/menus/BoardBackgroundPanel.vue";
 import BoardMenuFeaturePanel from "@/modules/kanban/board/components/menus/BoardMenuFeaturePanel.vue";
-import { BOARD_MENU_SCREENS } from "@/modules/kanban/board/components/menus/data/boardMenuScreens.js";
+import { BOARD_MENU_SCREENS } from "@/modules/kanban/board/components/menus/data/boardMenuScreens";
 
 const DEFAULT_BACKGROUND = "linear-gradient(135deg,#4b3f72,#7b3ea8,#c1558b)";
 

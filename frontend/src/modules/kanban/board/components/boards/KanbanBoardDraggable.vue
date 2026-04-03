@@ -170,7 +170,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, ref } from "vue";
 import TaskCard from "@/modules/kanban/card/components/cards/TaskCard.vue";
 import ListActionsMenu from "@/modules/kanban/board/components/menus/ListActionsMenu.vue";

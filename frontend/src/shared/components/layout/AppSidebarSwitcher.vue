@@ -148,7 +148,8 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, ref } from "vue";
 
 defineProps({

@@ -96,7 +96,8 @@
   </aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { nextTick, ref } from "vue";
 
 const emit = defineEmits(["add-card"]);

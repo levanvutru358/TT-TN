@@ -602,11 +602,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useResponsiveSidebarCollapse } from "@/shared/composables/useResponsiveSidebarCollapse.js";
-import { useWorkspaceBoardsState } from "@/modules/kanban/board/composables/useWorkspaceBoardsState.js";
+import { useResponsiveSidebarCollapse } from "@/shared/composables/useResponsiveSidebarCollapse";
+import { useWorkspaceBoardsState } from "@/modules/kanban/board/composables/useWorkspaceBoardsState";
 
 const router = useRouter();
 

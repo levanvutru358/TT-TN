@@ -203,7 +203,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "@/modules/auth/composables/useAuth";

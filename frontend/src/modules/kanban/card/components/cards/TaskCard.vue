@@ -137,7 +137,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import TaskModal from "@/modules/kanban/card/components/task-modal/TaskModal.vue";
 import TaskActionsMenu from "@/modules/kanban/board/components/menus/TaskActionsMenu.vue";

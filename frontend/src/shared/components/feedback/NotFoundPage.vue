@@ -14,6 +14,7 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup lang="ts">
+// @ts-nocheck</script>
 
 <style scoped></style>

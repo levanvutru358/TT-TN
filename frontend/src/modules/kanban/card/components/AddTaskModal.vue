@@ -46,7 +46,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref, watchEffect } from "vue";
 
 const props = defineProps({

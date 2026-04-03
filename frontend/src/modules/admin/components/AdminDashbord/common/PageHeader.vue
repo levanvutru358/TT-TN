@@ -19,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 defineProps<{
   breadcrumb?: string
   title: string

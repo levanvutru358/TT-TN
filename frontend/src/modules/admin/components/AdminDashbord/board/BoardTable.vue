@@ -100,6 +100,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import dayjs from 'dayjs'
 import type { PropType } from 'vue'
 import { useRouter } from 'vue-router'

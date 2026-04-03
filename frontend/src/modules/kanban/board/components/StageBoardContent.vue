@@ -31,7 +31,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import ProjectMembers from "@/modules/workspace/components/project/ProjectMembers.vue";
 import KanbanBoard from "@/modules/kanban/board/components/boards/KanbanBoard.vue";
 

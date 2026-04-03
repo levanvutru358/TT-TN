@@ -82,7 +82,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, ref, watch } from "vue";
 import WorkspaceHeader from "@/shared/components/layout/WorkspaceHeader.vue";
 import AppSidebarInbox from "@/shared/components/layout/AppSidebarInbox.vue";
@@ -94,7 +95,7 @@ import StageBoardContent from "@/modules/kanban/board/components/StageBoardConte
 import StageBoardHeader from "@/modules/kanban/board/components/StageBoardHeader.vue";
 import FilterPanel from "@/shared/components/filters/FilterPanel.vue";
 import BoardMenu from "@/modules/kanban/board/components/menus/BoardMenu.vue";
-import { useStageProject } from "@/modules/kanban/board/composables/useStageProject.js";
+import { useStageProject } from "@/modules/kanban/board/composables/useStageProject";
 
 const DEFAULT_BACKGROUND = {
   type: "color",

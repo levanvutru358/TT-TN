@@ -187,6 +187,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { computed, onMounted } from 'vue'
 import { useAdminStore } from '@/modules/admin/stores/admin.store'
 

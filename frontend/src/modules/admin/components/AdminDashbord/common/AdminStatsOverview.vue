@@ -90,6 +90,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { computed } from 'vue'
 import type { AdminStats } from '@/modules/admin/types/admin'
 

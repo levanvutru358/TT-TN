@@ -66,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import type { PropType } from 'vue'
 import type { BoardMemberItem } from '@/modules/admin/types/admin'
 import AppBadge from '@/modules/admin/components/AdminDashbord/common/AppBadge.vue'

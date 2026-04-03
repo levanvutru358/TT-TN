@@ -1,4 +1,25 @@
-export const BOARD_MENU_SCREENS = {
+export interface BoardMenuItem {
+  type: string;
+  label: string;
+  sub?: string;
+  placeholder?: string;
+  options?: string[];
+  color?: string;
+  defaultValue?: boolean;
+}
+
+export interface BoardMenuSection {
+  title: string;
+  items: BoardMenuItem[];
+}
+
+export interface BoardMenuScreen {
+  title: string;
+  subtitle: string;
+  sections: BoardMenuSection[];
+}
+
+export const BOARD_MENU_SCREENS: Record<string, BoardMenuScreen> = {
   share: {
     title: "Chia sẻ",
     subtitle: "Mời thành viên, sao chép liên kết và thiết lập quyền truy cập cho bảng.",

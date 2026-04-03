@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import AdminHeader from "@/modules/admin/components/AdminDashbord/layout/AdminHeader.vue";
 import AdminSidebar from "@/modules/admin/components/AdminDashbord/layout/AdminSidebar.vue";

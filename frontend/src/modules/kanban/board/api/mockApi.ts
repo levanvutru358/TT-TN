@@ -1,5 +1,56 @@
 // mockApi.js
-export const getProjectDetail = () => {
+export interface ProjectMember {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  avatar: string;
+}
+
+export type ProjectTaskPriority = "High" | "Medium" | "Low";
+export type ProjectTaskStatus = "Todo" | "In Progress" | "Done";
+
+export interface ProjectTask {
+  id: number;
+  title: string;
+  description: string;
+  priority: ProjectTaskPriority;
+  assignee: string;
+  dueDate: string;
+  status: ProjectTaskStatus;
+  createdAt: string;
+  progress?: number;
+}
+
+export interface ProjectListCard extends Record<string, unknown> {
+  id?: number | string;
+  title?: string;
+  description?: string;
+}
+
+export interface ProjectList extends Record<string, unknown> {
+  id?: number | string;
+  cards?: ProjectListCard[];
+}
+
+export interface ProjectDetail extends Record<string, unknown> {
+  id: number;
+  name: string;
+  description: string;
+  createdAt: string;
+  members: ProjectMember[];
+  tasks: ProjectTask[];
+  labels?: Array<string | number | Record<string, unknown>>;
+  lists?: ProjectList[];
+  title?: string;
+  project_name?: string;
+}
+
+export interface MockApiResponse<T> {
+  data: T;
+}
+
+export const getProjectDetail = (): Promise<MockApiResponse<ProjectDetail>> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({

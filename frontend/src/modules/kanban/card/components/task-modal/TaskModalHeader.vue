@@ -60,7 +60,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 defineProps({
   title: { type: String, default: "" },
   status: { type: String, default: "Todo" },

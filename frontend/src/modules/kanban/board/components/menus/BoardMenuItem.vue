@@ -18,7 +18,8 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 defineProps({
   label: { type: String, required: true },
   sub: { type: String, default: "" },

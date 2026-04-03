@@ -78,7 +78,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import dayjs from "dayjs";
 import EmptyState from "@/modules/admin/components/AdminDashbord/common/EmptyState.vue";
 

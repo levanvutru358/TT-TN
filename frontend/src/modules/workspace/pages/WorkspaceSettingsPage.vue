@@ -422,9 +422,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, onBeforeUnmount, onMounted, ref, nextTick } from "vue";
-import { useResponsiveSidebarCollapse } from "@/shared/composables/useResponsiveSidebarCollapse.js";
+import { useResponsiveSidebarCollapse } from "@/shared/composables/useResponsiveSidebarCollapse";
 
 const LockIcon = {
   template: `

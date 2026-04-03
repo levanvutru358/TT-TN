@@ -83,7 +83,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import dayjs from "dayjs";
 import AppBadge from "@/modules/admin/components/AdminDashbord/common/AppBadge.vue";
 import EmptyState from "@/modules/admin/components/AdminDashbord/common/EmptyState.vue";

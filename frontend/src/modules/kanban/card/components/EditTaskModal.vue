@@ -141,7 +141,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref, computed, watchEffect } from "vue";
 import SubtaskList from "@/modules/kanban/card/components/cards/SubtaskList.vue";
 import CommentsSection from "@/modules/kanban/card/components/cards/CommentsSection.vue";

@@ -421,9 +421,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref } from "vue";
-import { useResponsiveSidebarCollapse } from "@/shared/composables/useResponsiveSidebarCollapse.js";
+import { useResponsiveSidebarCollapse } from "@/shared/composables/useResponsiveSidebarCollapse";
 
 
 const isSidebarCollapsed = ref(false);

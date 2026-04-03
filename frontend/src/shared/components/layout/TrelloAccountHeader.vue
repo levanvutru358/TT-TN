@@ -92,7 +92,8 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref } from "vue";
 
 const showAccountMenu = ref(false);

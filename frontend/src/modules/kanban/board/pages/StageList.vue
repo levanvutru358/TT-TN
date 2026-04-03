@@ -110,7 +110,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { onMounted } from "vue";
 import { useStageStore } from "@/modules/kanban/board/stores/stageStore";
 import { useUIStore } from "@/modules/notification/stores/uiStore";

@@ -29,7 +29,8 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 const props = defineProps({
   modelValue: {
     type: String,

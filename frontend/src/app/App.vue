@@ -37,7 +37,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import Notification from "@/modules/notification/components/Notification.vue";

@@ -14,7 +14,8 @@
   </TaskModalPopover>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import TaskModalPopover from "./TaskModalPopover.vue";
 
 defineProps({

@@ -1,8 +1,11 @@
-import { onBeforeUnmount, onMounted } from "vue";
+import { onBeforeUnmount, onMounted, type Ref } from "vue";
 
 const DEFAULT_BREAKPOINT = 1024;
 
-export function useResponsiveSidebarCollapse(sidebarCollapsedRef, breakpoint = DEFAULT_BREAKPOINT) {
+export function useResponsiveSidebarCollapse(
+  sidebarCollapsedRef: Ref<boolean>,
+  breakpoint = DEFAULT_BREAKPOINT
+): void {
   let wasAutoCollapsed = false;
 
   const syncSidebarCollapse = () => {

@@ -33,7 +33,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 defineProps({
   open: {
     type: Boolean,

@@ -57,7 +57,8 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 defineProps({
   checklists: { type: Array, default: () => [] },
 });

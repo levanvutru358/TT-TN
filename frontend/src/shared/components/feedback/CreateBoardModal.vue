@@ -207,10 +207,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref, computed, nextTick, watch } from "vue";
 import { useRouter } from "vue-router";
-import { useWorkspaceBoardsState } from "@/modules/kanban/board/composables/useWorkspaceBoardsState.js";
+import { useWorkspaceBoardsState } from "@/modules/kanban/board/composables/useWorkspaceBoardsState";
 
 const props = defineProps({
   show: {

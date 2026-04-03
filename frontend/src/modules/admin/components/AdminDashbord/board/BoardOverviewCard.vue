@@ -7,7 +7,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import SummaryMiniCard from '@/modules/admin/components/AdminDashbord/common/SummaryMiniCard.vue'
 
 defineProps({

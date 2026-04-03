@@ -44,7 +44,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, h } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "@/modules/auth/composables/useAuth";

@@ -60,7 +60,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { nextTick, ref, watch } from "vue";
 import ViewSwitcher from "@/modules/kanban/board/components/ViewSwitcher.vue";
 

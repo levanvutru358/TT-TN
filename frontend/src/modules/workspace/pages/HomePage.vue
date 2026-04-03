@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="min-h-screen bg-[#f1f2f4] text-[#172b4d]">
     <WorkspaceHeader
       v-model="searchKeyword"
@@ -904,7 +904,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, nextTick, ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import WorkspaceHeader from "@/shared/components/layout/WorkspaceHeader.vue";

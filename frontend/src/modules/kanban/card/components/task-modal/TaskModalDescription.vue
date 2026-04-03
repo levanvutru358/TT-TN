@@ -21,7 +21,8 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 defineProps({
   modelValue: { type: String, default: "" },
 });

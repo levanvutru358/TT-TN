@@ -524,10 +524,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, ref } from "vue";
-import { useResponsiveSidebarCollapse } from "@/shared/composables/useResponsiveSidebarCollapse.js";
-import { useWorkspaceBoardsState } from "@/modules/kanban/board/composables/useWorkspaceBoardsState.js";
+import { useResponsiveSidebarCollapse } from "@/shared/composables/useResponsiveSidebarCollapse";
+import { useWorkspaceBoardsState } from "@/modules/kanban/board/composables/useWorkspaceBoardsState";
 
 const isSidebarCollapsed = ref(false);
 useResponsiveSidebarCollapse(isSidebarCollapsed);

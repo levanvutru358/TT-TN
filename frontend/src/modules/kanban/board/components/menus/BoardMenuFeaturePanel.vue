@@ -143,7 +143,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { reactive, watch } from "vue";
 
 const props = defineProps({

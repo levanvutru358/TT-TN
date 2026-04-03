@@ -24,7 +24,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 defineProps({
   search: { type: String, default: '' },
   status: { type: String, default: '' },

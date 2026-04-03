@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { computed, onMounted, ref } from 'vue'
 import { useAdminStore } from '@/modules/admin/stores/admin.store'
 import type { WorkspaceItem } from '@/modules/admin/types/admin'

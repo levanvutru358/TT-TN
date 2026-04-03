@@ -20,7 +20,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 // This component expects the project image to be placed at public/images/landing.png
 </script>
 

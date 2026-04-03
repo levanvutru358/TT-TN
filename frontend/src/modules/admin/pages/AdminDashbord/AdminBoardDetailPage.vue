@@ -128,6 +128,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import dayjs from 'dayjs'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'

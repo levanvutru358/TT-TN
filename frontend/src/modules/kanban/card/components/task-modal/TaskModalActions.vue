@@ -18,7 +18,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 defineProps({
   activePopover: {
     type: String,

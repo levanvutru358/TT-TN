@@ -690,7 +690,8 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import AppLauncherMenu from "@/shared/components/layout/AppLauncherMenu.vue";

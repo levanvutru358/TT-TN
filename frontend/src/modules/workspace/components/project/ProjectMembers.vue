@@ -83,7 +83,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref } from "vue";
 import MemberManageModal from "@/modules/workspace/components/MemberManageModal.vue";
 

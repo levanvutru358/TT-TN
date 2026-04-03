@@ -1,20 +1,39 @@
-import { computed, nextTick, onMounted, ref } from "vue";
-import { getProjectDetail } from "@/modules/kanban/board/api/mockApi";
+import { computed, nextTick, onMounted, ref, type Ref } from "vue";
+import {
+  getProjectDetail,
+  type ProjectDetail,
+  type ProjectMember,
+} from "@/modules/kanban/board/api/mockApi";
+
+type FilterValue = string | number;
+
+export interface StageProjectFilters {
+  members: FilterValue[];
+  labels: FilterValue[];
+  cardStatus: FilterValue[];
+  dueDate: FilterValue[];
+  activity: FilterValue[];
+  searchQuery: string;
+}
+
+type BottomNavTab = "board" | "inbox" | "planner" | "switch";
+type EditableInputElement = HTMLInputElement | HTMLTextAreaElement;
+type StageProjectModel = Partial<ProjectDetail> & Record<string, unknown>;
 
 export function useStageProject() {
-  const project = ref(null);
+  const project = ref<StageProjectModel | null>(null);
   const loading = ref(true);
-  const boardWrapper = ref(null);
+  const boardWrapper = ref<HTMLElement | null>(null);
   const showBoardMenu = ref(false);
 
   const currentView = ref("board");
-  const bottomNavTab = ref("board");
+  const bottomNavTab = ref<BottomNavTab>("board");
   const showInboxSidebar = computed(() => bottomNavTab.value === "inbox");
 
   const showMembers = ref(false);
   const showFilter = ref(false);
 
-  const activeFilters = ref({
+  const activeFilters = ref<StageProjectFilters>({
     members: [],
     labels: [],
     cardStatus: [],
@@ -25,7 +44,7 @@ export function useStageProject() {
 
   const isEditingTitle = ref(false);
   const titleDraft = ref("");
-  const titleInputRef = ref(null);
+  const titleInputRef: Ref<EditableInputElement | null> = ref(null);
 
   const boardTitle = computed(() => {
     const p = project.value;
@@ -68,14 +87,14 @@ export function useStageProject() {
 
     const p = project.value || {};
     project.value = {
-      ...p,
+      ...(p as StageProjectModel),
       name: nextTitle,
     };
 
     isEditingTitle.value = false;
   }
 
-  function updateMembers(updatedMembers) {
+  function updateMembers(updatedMembers: ProjectMember[]): void {
     if (!project.value) return;
 
     project.value = {
@@ -84,11 +103,11 @@ export function useStageProject() {
     };
   }
 
-  function updateFilters(newFilters) {
+  function updateFilters(newFilters: StageProjectFilters): void {
     activeFilters.value = newFilters;
   }
 
-  function closeFilter() {
+  function closeFilter(): void {
     showFilter.value = false;
   }
 
@@ -105,7 +124,7 @@ export function useStageProject() {
       : "bg-black/30 border border-white/15 hover:bg-black/40";
   });
 
-  async function fetchProject() {
+  async function fetchProject(): Promise<void> {
     try {
       loading.value = true;
       const res = await getProjectDetail();

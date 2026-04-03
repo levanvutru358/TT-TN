@@ -386,7 +386,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { computed, nextTick, onBeforeUnmount, ref } from "vue";
 import TrelloAccountHeader from "@/shared/components/layout/TrelloAccountHeader.vue";
 

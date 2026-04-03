@@ -239,7 +239,8 @@
   </Teleport>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { onBeforeUnmount, ref, watch } from "vue";
 import TaskModalHeader from "./TaskModalHeader.vue";
 import TaskModalActions from "./TaskModalActions.vue";

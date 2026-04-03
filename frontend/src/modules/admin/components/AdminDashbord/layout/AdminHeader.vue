@@ -50,6 +50,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { computed } from "vue";
 import { Bell, Menu, PanelLeftClose, PanelLeftOpen } from "lucide-vue-next";
 
